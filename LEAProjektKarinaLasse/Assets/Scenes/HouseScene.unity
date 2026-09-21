@@ -442,7 +442,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1132045431455018993, guid: 1830a1f50f969064688a4cc8120ab670, type: 3}
       propertyPath: clearColorMode
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1132045431455018993, guid: 1830a1f50f969064688a4cc8120ab670, type: 3}
       propertyPath: backgroundColorHDR.b
@@ -456,10 +456,6 @@ PrefabInstance:
       propertyPath: backgroundColorHDR.r
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1132045431455018993, guid: 1830a1f50f969064688a4cc8120ab670, type: 3}
-      propertyPath: allowDynamicResolution
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1653299209913287319, guid: 1830a1f50f969064688a4cc8120ab670, type: 3}
       propertyPath: m_LocalPosition.y
       value: 2.5
@@ -468,13 +464,9 @@ PrefabInstance:
       propertyPath: playerSpeed
       value: 10
       objectReference: {fileID: 0}
-    - target: {fileID: 3745317101660893261, guid: 1830a1f50f969064688a4cc8120ab670, type: 3}
-      propertyPath: m_AllowDynamicResolution
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6195235833716347159, guid: 1830a1f50f969064688a4cc8120ab670, type: 3}
-      propertyPath: m_Enabled
-      value: 1
+      propertyPath: m_Intensity
+      value: 32773.023
       objectReference: {fileID: 0}
     - target: {fileID: 6559141041655854659, guid: 1830a1f50f969064688a4cc8120ab670, type: 3}
       propertyPath: m_LocalPosition.x
@@ -515,10 +507,6 @@ PrefabInstance:
     - target: {fileID: 6559141041655854659, guid: 1830a1f50f969064688a4cc8120ab670, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6703130423870889596, guid: 1830a1f50f969064688a4cc8120ab670, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -691,8 +679,8 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 34713445}
   - {fileID: 326446983}
   - {fileID: 1923284485}
   - {fileID: 2078165026}
   - {fileID: 1974982605}
+  - {fileID: 34713445}
