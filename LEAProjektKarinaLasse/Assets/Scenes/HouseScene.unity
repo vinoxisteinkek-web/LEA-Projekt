@@ -464,6 +464,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 2.5
       objectReference: {fileID: 0}
+    - target: {fileID: 3180871136461219171, guid: 1830a1f50f969064688a4cc8120ab670, type: 3}
+      propertyPath: playerSpeed
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 3745317101660893261, guid: 1830a1f50f969064688a4cc8120ab670, type: 3}
       propertyPath: m_AllowDynamicResolution
       value: 0
