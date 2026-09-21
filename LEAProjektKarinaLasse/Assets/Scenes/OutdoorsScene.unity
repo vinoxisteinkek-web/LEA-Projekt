@@ -119,6 +119,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!108 &106590922 stripped
+Light:
+  m_CorrespondingSourceObject: {fileID: 6195235833716347159, guid: 1830a1f50f969064688a4cc8120ab670, type: 3}
+  m_PrefabInstance: {fileID: 7825595251664840347}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &432432459
 GameObject:
   m_ObjectHideFlags: 0
@@ -1015,9 +1020,29 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 1048267066131091051, guid: 1830a1f50f969064688a4cc8120ab670, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1048267066131091051, guid: 1830a1f50f969064688a4cc8120ab670, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1048267066131091051, guid: 1830a1f50f969064688a4cc8120ab670, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3180871136461219171, guid: 1830a1f50f969064688a4cc8120ab670, type: 3}
+      propertyPath: spotlight
+      value: 
+      objectReference: {fileID: 106590922}
     - target: {fileID: 6195235833716347159, guid: 1830a1f50f969064688a4cc8120ab670, type: 3}
       propertyPath: m_LightUnit
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6195235833716347159, guid: 1830a1f50f969064688a4cc8120ab670, type: 3}
+      propertyPath: m_Lightmapping
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6559141041655854659, guid: 1830a1f50f969064688a4cc8120ab670, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1058,6 +1083,10 @@ PrefabInstance:
     - target: {fileID: 6559141041655854659, guid: 1830a1f50f969064688a4cc8120ab670, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6703130423870889596, guid: 1830a1f50f969064688a4cc8120ab670, type: 3}
+      propertyPath: m_Name
+      value: spotlight
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
