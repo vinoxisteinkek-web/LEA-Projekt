@@ -4,8 +4,8 @@ public class CameraController : MonoBehaviour
 {
     public Transform _camera;
     public Transform hand;
+
     public float cameraSensitivity = 200f;
-    public float cameraAcceleration = 5f;
 
     private float rotation_x_axis;
     private float rotation_y_axis;
@@ -13,21 +13,29 @@ public class CameraController : MonoBehaviour
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     void Update()
     {
-        rotation_x_axis += Input.GetAxis("Mouse Y") * cameraSensitivity * Time.deltaTime;
-        rotation_y_axis += Input.GetAxis("Mouse X") * cameraSensitivity * Time.deltaTime;
+        // Mausbewegung
+        float mouseX = Input.GetAxisRaw("Mouse X") * cameraSensitivity * Time.deltaTime;
+        float mouseY = Input.GetAxisRaw("Mouse Y") * cameraSensitivity * Time.deltaTime;
 
+        // Rotation speichern
+        rotation_y_axis += mouseX;
+        rotation_x_axis -= mouseY;
+
+        // Nach oben/unten begrenzen
         rotation_x_axis = Mathf.Clamp(rotation_x_axis, -90f, 90f);
 
-        hand.localRotation = Quaternion.Euler(-rotation_x_axis, rotation_y_axis, 0);
+        // Spieler drehen (links/rechts)
+        transform.localRotation = Quaternion.Euler(0f, rotation_y_axis, 0f);
 
-        transform.localRotation = Quaternion.Lerp(transform.localRotation,
-            Quaternion.Euler(0, rotation_y_axis, 0), cameraAcceleration * Time.deltaTime);
+        // Kamera drehen (hoch/runter)
+        _camera.localRotation = Quaternion.Euler(rotation_x_axis, 0f, 0f);
 
-        _camera.localRotation = Quaternion.Lerp(_camera.localRotation,
-            Quaternion.Euler(-rotation_x_axis, 0, 0), cameraAcceleration * Time.deltaTime);
+        // Hand/Kamera-Objekt ebenfalls ausrichten
+        hand.localRotation = Quaternion.Euler(rotation_x_axis, rotation_y_axis, 0f);
     }
 }

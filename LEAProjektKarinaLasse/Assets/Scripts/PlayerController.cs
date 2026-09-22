@@ -4,11 +4,9 @@ public class PlayerController : MonoBehaviour
 {
     public Transform head;
     public float playerSpeed = 5f;
-    public float playerAcceleration = 10f;
     public Light spotlight;
+
     private Rigidbody rb;
-    private Vector3 direction;
-    private Vector3 targetVelocity;
 
     void Start()
     {
@@ -17,20 +15,27 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        direction = Input.GetAxis("Horizontal") * head.right + Input.GetAxis("Vertical") * head.forward;
-        
-        targetVelocity = direction.normalized * playerSpeed + rb.linearVelocity.y * Vector3.up;
-        
-        if (direction.magnitude > 0.01f)
-        {
-            rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, targetVelocity, playerAcceleration * Time.deltaTime);
-        }
-        else
-        {
-            Vector3 stoppedVelocity = new Vector3(0, rb.linearVelocity.y, 0);
-            rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, stoppedVelocity, playerAcceleration * Time.deltaTime);
-        }
+        // Eingabe holen
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical = Input.GetAxisRaw("Vertical");
 
+        // Richtung anhand der Kamera
+        Vector3 direction = head.right * horizontal + head.forward * vertical;
+
+        // Y-Richtung entfernen, damit wir nicht nach oben/unten laufen
+        direction.y = 0f;
+
+        // Diagonale Bewegung nicht schneller machen
+        direction = direction.normalized;
+
+        // Bewegung direkt setzen
+        rb.linearVelocity = new Vector3(
+            direction.x * playerSpeed,
+            rb.linearVelocity.y,
+            direction.z * playerSpeed
+        );
+
+        // Taschenlampe mit F
         if (Input.GetKeyDown(KeyCode.F))
         {
             spotlight.enabled = !spotlight.enabled;
