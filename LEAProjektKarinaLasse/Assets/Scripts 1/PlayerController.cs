@@ -42,14 +42,5 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void onTriggerStay(Collider other)
-    {
-        if (other.tag == "Door")
-        {
-            if(other.GetComponent<DoorController>().Moving == false)
-            {
-                other.GetComponent<DoorController>().Moving = true;
-            }
-        }
-    }
+   
 }

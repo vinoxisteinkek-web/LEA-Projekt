@@ -2,66 +2,66 @@ using UnityEngine;
 
 public class DoorController : MonoBehaviour
 {
-    public Vector3 endPos;
-    public float speed = 1f;
+    [SerializeField] private Transform doorLeft;
+    [SerializeField] private Transform doorRight;
+    [SerializeField] private float openDistance = 1.5f;
+    [SerializeField] private float doorSpeed = 2f;
+    [SerializeField] private float sensorCloseDelay = 2f;
 
-    private bool moving = false;
-    private bool opening = true;
-    private Vector3 startPos;
-    private float delay = 0.0f;
+    private bool isOpen = false;
+    private float closeTimer = 0f;
 
-    
+    private Vector3 doorLeftClosedPos;
+    private Vector3 doorRightClosedPos;
+
     void Start()
     {
-        startPos = transform.position;
+        doorLeftClosedPos = doorLeft.localPosition;
+        doorRightClosedPos = doorRight.localPosition;
     }
 
     void Update()
     {
-        if (moving)
-        {
-            if (opening)
-            {
-                MoveDoor(endPos);
-            }
-            else
-            {
-                MoveDoor(startPos);
-            }
-        }
-    }
+        Vector3 leftTarget;
+        Vector3 rightTarget;
 
-    void MoveDoor(Vector3 goalPos)
-    {
-        float dist = Vector3.Distance(transform.position, goalPos);
-
-        if (dist > .1f)
+        if (isOpen)
         {
-            transform.position = Vector3.Lerp(transform.position, goalPos, speed * Time.deltaTime);
+            // Linke Tür nach links
+            leftTarget = doorLeftClosedPos + Vector3.left * openDistance;
+
+            // Rechte Tür nach rechts
+            rightTarget = doorRightClosedPos + Vector3.right * openDistance;
+
+            closeTimer -= Time.deltaTime;
+
+            if (closeTimer <= 0f)
+            {
+                isOpen = false;
+            }
         }
         else
         {
-            if (opening)
-            {
-                delay += Time.deltaTime;
-                if (delay > 1.5f)
-                {
-                    opening = false;
-                }
-
-            }
-            else
-            {
-                moving = false;
-                opening = true;
-            }
+            leftTarget = doorLeftClosedPos;
+            rightTarget = doorRightClosedPos;
         }
+
+        doorLeft.localPosition = Vector3.MoveTowards(
+            doorLeft.localPosition,
+            leftTarget,
+            doorSpeed * Time.deltaTime
+        );
+
+        doorRight.localPosition = Vector3.MoveTowards(
+            doorRight.localPosition,
+            rightTarget,
+            doorSpeed * Time.deltaTime
+        );
     }
-    
-    public bool Moving
+
+    public void OnMotionDetected()
     {
-        get { return moving; }
-        set { moving = value; }
+        isOpen = true;
+        closeTimer = sensorCloseDelay;
     }
-       
 }
