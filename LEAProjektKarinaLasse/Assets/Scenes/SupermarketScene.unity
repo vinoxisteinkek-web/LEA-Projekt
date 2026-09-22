@@ -2369,7 +2369,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6148459763962343392, guid: 2c247c8ff2b6d504bbc79cc739fe5028, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -8.68
+      value: -8.1
       objectReference: {fileID: 0}
     - target: {fileID: 6276744446535830121, guid: 2c247c8ff2b6d504bbc79cc739fe5028, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -2817,7 +2817,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 37706234}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0df80275760baae4f9cdb0af9db4314a, type: 3}
+  m_Script: {fileID: 11500000, guid: 7d9f7ceb3fbf4d34ca770bfa2fcc377f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MotionSensor
 --- !u!65 &37706237
@@ -2835,11 +2835,11 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 3, y: 0.5, z: 3}
+  m_Size: {x: 3, y: 0.5, z: 5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &37706238
 MonoBehaviour:
@@ -2853,12 +2853,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3cbec2eeba3ee64487df584e3ae7881, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorController
-  endPos: {x: 0, y: 0, z: 0}
-  speed: 1
+  doorLeft: {fileID: 1571828677}
+  doorRight: {fileID: 89922974}
+  openDistance: 1.5
+  doorSpeed: 4
+  sensorCloseDelay: 2
 --- !u!1 &49812815 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 7748e96efbc8bfd4b9bd170e08910606, type: 3}
   m_PrefabInstance: {fileID: 936665913}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &89922974 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4283339721404396910, guid: 2c247c8ff2b6d504bbc79cc739fe5028, type: 3}
+  m_PrefabInstance: {fileID: 37706233}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &99870678 stripped
 GameObject:
@@ -8567,6 +8575,10 @@ PrefabInstance:
       propertyPath: playerSpeed
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 3745317101660893261, guid: 1830a1f50f969064688a4cc8120ab670, type: 3}
+      propertyPath: near clip plane
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 6195235833716347159, guid: 1830a1f50f969064688a4cc8120ab670, type: 3}
       propertyPath: m_Color.a
       value: 0.5529412
@@ -8625,7 +8637,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6796674148496820784, guid: 1830a1f50f969064688a4cc8120ab670, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.41
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8681692373614237525, guid: 1830a1f50f969064688a4cc8120ab670, type: 3}
       propertyPath: m_Radius
@@ -10781,6 +10793,11 @@ MonoBehaviour:
   m_AreaLightEmissiveMeshShadowCastingMode: 0
   m_AreaLightEmissiveMeshMotionVectorGenerationMode: 0
   m_AreaLightEmissiveMeshLayer: -1
+--- !u!4 &1571828677 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8996659968439369211, guid: 2c247c8ff2b6d504bbc79cc739fe5028, type: 3}
+  m_PrefabInstance: {fileID: 37706233}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1585505910 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 355765445820699338, guid: 2c247c8ff2b6d504bbc79cc739fe5028, type: 3}
