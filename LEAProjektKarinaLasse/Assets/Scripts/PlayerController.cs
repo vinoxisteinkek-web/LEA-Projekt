@@ -41,4 +41,16 @@ public class PlayerController : MonoBehaviour
             spotlight.enabled = !spotlight.enabled;
         }
     }
+
+    private void onTriggerStay(Collider other)
+    {
+        if (other.tag == "Door")
+        {
+            if(other.GetComponent<DoorController>().Moving == false)
+            {
+                other.GetComponent<DoorController>().Moving = true;
+            }
+        }
+    }
+}
 }
