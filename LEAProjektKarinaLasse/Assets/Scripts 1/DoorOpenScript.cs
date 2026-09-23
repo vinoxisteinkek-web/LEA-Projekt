@@ -4,7 +4,7 @@ using TMPro;
 public class DoorOpenScript : MonoBehaviour
 {
     public Transform door;
-    public TextMeshProUGUI interactText;
+    
 
     public float openAngle = 92f;
     public float openSpeed = 3f;
@@ -27,8 +27,7 @@ public class DoorOpenScript : MonoBehaviour
             0f
         );
 
-        // E am Anfang verstecken
-        interactText.gameObject.SetActive(false);
+        
     }
 
     void Update()
@@ -68,8 +67,7 @@ public class DoorOpenScript : MonoBehaviour
         {
             playerInside = true;
 
-            // E anzeigen
-            interactText.gameObject.SetActive(true);
+           
         }
     }
 
@@ -79,8 +77,7 @@ public class DoorOpenScript : MonoBehaviour
         {
             playerInside = false;
 
-            // E verstecken
-            interactText.gameObject.SetActive(false);
+            
         }
     }
 }
