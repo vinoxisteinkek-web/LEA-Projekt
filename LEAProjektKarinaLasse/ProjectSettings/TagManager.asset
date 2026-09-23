@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Door
   - DoorTrigger
+  - Pickup
   layers:
   - Default
   - TransparentFX
@@ -18,7 +19,24 @@ TagManager:
   - 
   - 
   - 
-  
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
   - 
   - 
   - 

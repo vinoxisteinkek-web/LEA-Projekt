@@ -38,4 +38,13 @@ public class CameraController : MonoBehaviour
         // Hand/Kamera-Objekt ebenfalls ausrichten
         hand.localRotation = Quaternion.Euler(rotation_x_axis, rotation_y_axis, 0f);
     }
+    void OnGUI()
+    {
+        float size = 4f;
+
+        float x = (Screen.width - size) / 2;
+        float y = (Screen.height - size) / 2;
+
+        GUI.Box(new Rect(x, y, size, size), "");
+    }
 }
