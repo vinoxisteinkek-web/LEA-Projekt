@@ -7,6 +7,8 @@ TagManager:
   - Door
   - DoorTrigger
   - Pickup
+  - Dirt
+  - puddle
   layers:
   - Default
   - TransparentFX

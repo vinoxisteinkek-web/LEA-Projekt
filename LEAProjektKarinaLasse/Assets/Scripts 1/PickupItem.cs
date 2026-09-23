@@ -31,6 +31,12 @@ public class PickupItem : MonoBehaviour
                 DropItem();
             }
         }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            SweepDirt();
+            SweepPuddle();
+        }
     }
 
     void TryPickup()
@@ -109,5 +115,77 @@ public class PickupItem : MonoBehaviour
         }
 
         heldItem = null;
+    }
+    void SweepDirt()
+    {
+        if (heldItem == null)
+            return;
+
+        // Broom über den Namen erkennen
+        if (heldItem.name != "brooms")
+            return;
+
+        Ray ray = new Ray(
+            playerCamera.transform.position,
+            playerCamera.transform.forward
+        );
+
+        RaycastHit hit;
+
+        // Normaler Raycast + Trigger-Collider
+        if (Physics.SphereCast(
+            ray,
+            0.25f,
+            out hit,
+            pickupRange,
+            ~0,
+            QueryTriggerInteraction.Collide))
+        {
+            if (hit.collider.CompareTag("Dirt"))
+            {
+                DirtPile dirtPile = hit.collider.GetComponentInParent<DirtPile>();
+
+                if (dirtPile != null)
+                {
+                    dirtPile.Sweep();
+                }
+            }
+        }
+    }
+    void SweepPuddle()
+    {
+        if (heldItem == null)
+            return;
+
+        // Mop über den Namen erkennen
+        if (heldItem.name != "Mop")
+            return;
+
+        Ray ray = new Ray(
+            playerCamera.transform.position,
+            playerCamera.transform.forward
+        );
+
+        RaycastHit hit;
+
+        // Normaler Raycast + Trigger-Collider
+        if (Physics.SphereCast(
+            ray,
+            0.25f,
+            out hit,
+            pickupRange,
+            ~0,
+            QueryTriggerInteraction.Collide))
+        {
+            if (hit.collider.CompareTag("puddle"))
+            {
+                Puddles puddle = hit.collider.GetComponentInParent<Puddles>();
+
+                if (puddle != null)
+                {
+                    puddle.Sweep();
+                }
+            }
+        }
     }
 }
