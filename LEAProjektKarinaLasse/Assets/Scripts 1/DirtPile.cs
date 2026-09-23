@@ -5,6 +5,7 @@ public class DirtPile : MonoBehaviour
     private int sweepCount = 0;
 
     public PlayerController player;
+    public TaskUI taskUI;
 
     private void Start()
     {
@@ -34,6 +35,13 @@ public class DirtPile : MonoBehaviour
             player.dirtCount++;
 
             gameObject.SetActive(false);
+
+            TaskUI taskUI = FindFirstObjectByType<TaskUI>();
+
+            if (taskUI != null)
+            {
+                taskUI.UpdateTasks();
+            }
         }
     }
 }

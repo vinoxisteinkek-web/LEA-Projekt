@@ -5,10 +5,10 @@ public class Puddles : MonoBehaviour
     private int sweepCount = 0;
 
     public PlayerController player;
+    public TaskUI taskUI;
 
     private void Start()
     {
-        // Startposition
         Vector3 pos = transform.position;
         pos.y = 4.3f;
         transform.position = pos;
@@ -35,6 +35,13 @@ public class Puddles : MonoBehaviour
             player.puddleCount++;
 
             gameObject.SetActive(false);
+
+            TaskUI taskUI = FindFirstObjectByType<TaskUI>();
+
+            if (taskUI != null)
+            {
+                taskUI.UpdateTasks();
+            }
         }
     }
 }

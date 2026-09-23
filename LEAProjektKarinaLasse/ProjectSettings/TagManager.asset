@@ -10,6 +10,7 @@ TagManager:
   - Dirt
   - puddle
   - dumpster
+  - LockedDoor
   layers:
   - Default
   - TransparentFX

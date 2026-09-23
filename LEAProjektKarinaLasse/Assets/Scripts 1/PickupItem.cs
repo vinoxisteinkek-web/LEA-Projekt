@@ -10,16 +10,21 @@ public class PickupItem : MonoBehaviour
     [Header("Pickup Settings")]
     [SerializeField] private float pickupRange = 3f;
 
+    [Header("Sweep Settings")]
+    [SerializeField] private float sweepCooldown = 0.5f;
+
     private GameObject heldItem;
+
+    private float nextSweepTime = 0f;
 
     void Update()
     {
-        // E = Aufheben / Müll wegwerfen
         if (Input.GetKeyDown(KeyCode.E))
         {
             if (heldItem == null)
             {
                 TryPickup();
+                InteractWithLockedDoor();
             }
             else
             {
@@ -35,12 +40,30 @@ public class PickupItem : MonoBehaviour
                 DropItem();
             }
         }
-
-        // Linksklick = Wischen
+        //Wischen
         if (Input.GetMouseButtonDown(0))
         {
-            SweepDirt();
-            SweepPuddle();
+            if (Time.time < nextSweepTime)
+                return;
+
+            bool swept = false;
+
+            if (heldItem != null)
+            {
+                if (heldItem.name == "brooms")
+                {
+                    swept = SweepDirt();
+                }
+                else if (heldItem.name == "Mop")
+                {
+                    swept = SweepPuddle();
+                }
+            }
+
+            if (swept)
+            {
+                nextSweepTime = Time.time + sweepCooldown;
+            }
         }
     }
 
@@ -153,23 +176,35 @@ public class PickupItem : MonoBehaviour
         {
             if (hit.collider.CompareTag("dumpster"))
             {
-                // Müllbeutel deaktivieren
                 heldItem.SetActive(false);
 
-                // Hand wieder frei
+                PlayerController player = GetComponent<PlayerController>();
+
+                if (player != null)
+                {
+                    player.trashCount++;
+                }
+
+                // Task UI finden und aktualisieren
+                TaskUI taskUI = FindFirstObjectByType<TaskUI>();
+
+                if (taskUI != null)
+                {
+                    taskUI.UpdateTasks();
+                }
+
                 heldItem = null;
             }
         }
     }
 
-    void SweepDirt()
+    bool SweepDirt()
     {
         if (heldItem == null)
-            return;
+            return false;
 
-        // Nur Besen
         if (heldItem.name != "brooms")
-            return;
+            return false;
 
         Ray ray = new Ray(
             playerCamera.transform.position,
@@ -194,19 +229,20 @@ public class PickupItem : MonoBehaviour
                 if (dirtPile != null)
                 {
                     dirtPile.Sweep();
+                    return true;
                 }
             }
         }
-    }
 
-    void SweepPuddle()
+        return false;
+    }
+    bool SweepPuddle()
     {
         if (heldItem == null)
-            return;
+            return false;
 
-        // Nur Mop
         if (heldItem.name != "Mop")
-            return;
+            return false;
 
         Ray ray = new Ray(
             playerCamera.transform.position,
@@ -231,6 +267,39 @@ public class PickupItem : MonoBehaviour
                 if (puddle != null)
                 {
                     puddle.Sweep();
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    void InteractWithLockedDoor()
+    {
+        Ray ray = new Ray(
+            playerCamera.transform.position,
+            playerCamera.transform.forward
+        );
+
+        RaycastHit hit;
+
+        if (Physics.SphereCast(
+            ray,
+            0.25f,
+            out hit,
+            pickupRange,
+            ~0,
+            QueryTriggerInteraction.Collide))
+        {
+            if (hit.collider.CompareTag("LockedDoor"))
+            {
+                LockedDoor door =
+                    hit.collider.GetComponentInParent<LockedDoor>();
+
+                if (door != null)
+                {
+                    door.Interact();
                 }
             }
         }

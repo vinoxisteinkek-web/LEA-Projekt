@@ -6,11 +6,11 @@ public class PlayerController : MonoBehaviour
     public Transform head;
     public float playerSpeed = 5f;
     public Light spotlight;
-    public TextMeshProUGUI dirtCountText;
-    public TextMeshProUGUI puddleCountText;
+    
 
     public int dirtCount = 0;
     public int puddleCount = 0;
+    public int trashCount = 0;
 
     private Rigidbody rb;
 
@@ -18,20 +18,12 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
 
-        dirtCountText.text = dirtCount.ToString();
-        puddleCountText.text = puddleCount.ToString();
+        
     }
 
     void Update()
     {
-        if (dirtCountText != null)
-        {
-            dirtCountText.text = "DirtCount: " + dirtCount.ToString();
-        }
-        if (puddleCountText != null)
-        {
-            puddleCountText.text = "PuddleCount: " + puddleCount.ToString();
-        }
+       
 
         // Eingabe holen
         float horizontal = Input.GetAxisRaw("Horizontal");
