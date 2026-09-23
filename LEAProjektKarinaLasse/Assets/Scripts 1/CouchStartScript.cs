@@ -12,12 +12,15 @@ public class CouchStartScript : MonoBehaviour
 
     public StoryMessageScript storyMessage;
 
-    // Die beiden Essen
+    // Essen
     public GameObject pizza;
     public GameObject cereal;
 
     private Rigidbody rb;
+
     private bool canStand = true;
+    private bool canEat = false;
+    private bool foodEaten = false;
 
     private void Start()
     {
@@ -85,8 +88,19 @@ public class CouchStartScript : MonoBehaviour
     {
         cereal.SetActive(false);
 
-        storyMessage.ShowMessage("Cereal... yummyS.");
+        storyMessage.ShowMessage("Cereal... yummy.");
 
         // Später können wir hier den nächsten Story-Schritt starten
+    }
+
+    private IEnumerator AfterEating()
+    {
+        yield return new WaitForSeconds(3f);
+
+        storyMessage.ShowMessage(
+            "Okay... jetzt muss ich mich noch schnell umziehen."
+        );
+
+        // Hier machen wir später mit dem Kleiderschrank weiter.
     }
 }
