@@ -9,6 +9,7 @@ TagManager:
   - Pickup
   - Dirt
   - puddle
+  - dumpster
   layers:
   - Default
   - TransparentFX

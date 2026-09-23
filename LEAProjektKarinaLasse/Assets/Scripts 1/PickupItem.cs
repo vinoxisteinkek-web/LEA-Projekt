@@ -14,12 +14,16 @@ public class PickupItem : MonoBehaviour
 
     void Update()
     {
-        // E = Aufheben
+        // E = Aufheben / Müll wegwerfen
         if (Input.GetKeyDown(KeyCode.E))
         {
             if (heldItem == null)
             {
                 TryPickup();
+            }
+            else
+            {
+                ThrowTrashAway();
             }
         }
 
@@ -32,6 +36,7 @@ public class PickupItem : MonoBehaviour
             }
         }
 
+        // Linksklick = Wischen
         if (Input.GetMouseButtonDown(0))
         {
             SweepDirt();
@@ -48,7 +53,14 @@ public class PickupItem : MonoBehaviour
 
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, pickupRange))
+        // SphereCast statt normalem Raycast
+        if (Physics.SphereCast(
+            ray,
+            0.25f,
+            out hit,
+            pickupRange,
+            ~0,
+            QueryTriggerInteraction.Collide))
         {
             if (!hit.collider.CompareTag("Pickup"))
             {
@@ -87,16 +99,16 @@ public class PickupItem : MonoBehaviour
         // Gegenstand vom Spieler lösen
         heldItem.transform.SetParent(null);
 
-        // Position vor dem Spieler berechnen
-        Vector3 dropPosition = transform.position + transform.forward * 1.5f;
+        // Position vor dem Spieler
+        Vector3 dropPosition =
+            transform.position + transform.forward * 1.5f;
 
-        // Y-Höhe fest auf 1 setzen
         dropPosition.y = 6;
 
-        // Gegenstand dort ablegen
         heldItem.transform.position = dropPosition;
 
-        heldItem.transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
+        heldItem.transform.rotation =
+            Quaternion.Euler(-90f, 0f, 0f);
 
         // Physik wieder einschalten
         Rigidbody rb = heldItem.GetComponent<Rigidbody>();
@@ -116,12 +128,46 @@ public class PickupItem : MonoBehaviour
 
         heldItem = null;
     }
+
+    void ThrowTrashAway()
+    {
+        // Nur Müllbeutel dürfen in den Dumpster
+        if (heldItem.name != "trash")
+        {
+            return;
+        }
+
+        Ray ray = new Ray(
+            playerCamera.transform.position,
+            playerCamera.transform.forward
+        );
+
+        RaycastHit hit;
+
+        if (Physics.Raycast(
+            ray,
+            out hit,
+            pickupRange,
+            ~0,
+            QueryTriggerInteraction.Collide))
+        {
+            if (hit.collider.CompareTag("dumpster"))
+            {
+                // Müllbeutel deaktivieren
+                heldItem.SetActive(false);
+
+                // Hand wieder frei
+                heldItem = null;
+            }
+        }
+    }
+
     void SweepDirt()
     {
         if (heldItem == null)
             return;
 
-        // Broom über den Namen erkennen
+        // Nur Besen
         if (heldItem.name != "brooms")
             return;
 
@@ -132,7 +178,6 @@ public class PickupItem : MonoBehaviour
 
         RaycastHit hit;
 
-        // Normaler Raycast + Trigger-Collider
         if (Physics.SphereCast(
             ray,
             0.25f,
@@ -143,7 +188,8 @@ public class PickupItem : MonoBehaviour
         {
             if (hit.collider.CompareTag("Dirt"))
             {
-                DirtPile dirtPile = hit.collider.GetComponentInParent<DirtPile>();
+                DirtPile dirtPile =
+                    hit.collider.GetComponentInParent<DirtPile>();
 
                 if (dirtPile != null)
                 {
@@ -152,12 +198,13 @@ public class PickupItem : MonoBehaviour
             }
         }
     }
+
     void SweepPuddle()
     {
         if (heldItem == null)
             return;
 
-        // Mop über den Namen erkennen
+        // Nur Mop
         if (heldItem.name != "Mop")
             return;
 
@@ -168,7 +215,6 @@ public class PickupItem : MonoBehaviour
 
         RaycastHit hit;
 
-        // Normaler Raycast + Trigger-Collider
         if (Physics.SphereCast(
             ray,
             0.25f,
@@ -179,7 +225,8 @@ public class PickupItem : MonoBehaviour
         {
             if (hit.collider.CompareTag("puddle"))
             {
-                Puddles puddle = hit.collider.GetComponentInParent<Puddles>();
+                Puddles puddle =
+                    hit.collider.GetComponentInParent<Puddles>();
 
                 if (puddle != null)
                 {
