@@ -11,6 +11,8 @@ TagManager:
   - puddle
   - dumpster
   - LockedDoor
+  - LightSwitch
+  - TaskList
   layers:
   - Default
   - TransparentFX

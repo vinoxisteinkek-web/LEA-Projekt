@@ -18,18 +18,28 @@ public class Puddles : MonoBehaviour
     {
         sweepCount++;
 
+        // ERSTES WISCHEN
         if (sweepCount == 1)
         {
             Vector3 pos = transform.position;
-            pos.y = 4.23f;
+            pos.y = 4.25f;
             transform.position = pos;
+
+            if (StoryManagerStore.Instance != null)
+            {
+                StoryManagerStore.Instance.FirstPuddleCleaned();
+            }
         }
+
+        // ZWEITES WISCHEN
         else if (sweepCount == 2)
         {
             Vector3 pos = transform.position;
-            pos.y = 4.22f;
+            pos.y = 4.24f;
             transform.position = pos;
         }
+
+        // DRITTES WISCHEN
         else if (sweepCount >= 3)
         {
             player.puddleCount++;

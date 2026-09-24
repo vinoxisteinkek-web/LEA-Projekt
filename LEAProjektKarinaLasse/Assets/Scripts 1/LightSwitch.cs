@@ -2,15 +2,66 @@ using UnityEngine;
 
 public class LightSwitch : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [Header("Lights")]
+    [SerializeField] private GameObject[] lights;
+
+    private bool lightsOn = false;
+
+
+    public void Interact()
     {
-        
+        // ==========================================
+        // LICHT IST AUS → EINSCHALTEN
+        // ==========================================
+
+        if (!lightsOn)
+        {
+            lightsOn = true;
+
+            SetLights(true);
+
+            if (StoryManagerStore.Instance != null)
+            {
+                StoryManagerStore.Instance.LightTurnedOn();
+            }
+
+            return;
+        }
+
+
+        // ==========================================
+        // LICHT IST AN → AUSSCHALTEN
+        // ==========================================
+
+        if (StoryManagerStore.Instance != null)
+        {
+            if (!StoryManagerStore.Instance.CanTurnLightOff())
+            {
+                return;
+            }
+        }
+
+
+        lightsOn = false;
+
+        SetLights(false);
+
+
+        if (StoryManagerStore.Instance != null)
+        {
+            StoryManagerStore.Instance.LightTurnedOff();
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+
+    private void SetLights(bool state)
     {
-        
+        foreach (GameObject lightObject in lights)
+        {
+            if (lightObject != null)
+            {
+                lightObject.SetActive(state);
+            }
+        }
     }
 }

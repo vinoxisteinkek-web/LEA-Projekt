@@ -13,6 +13,9 @@ public class PickupItem : MonoBehaviour
     [Header("Sweep Settings")]
     [SerializeField] private float sweepCooldown = 0.5f;
 
+    [Header("Door Settings")]
+    [SerializeField] private float lockedDoorRange = 1.5f;
+
     private GameObject heldItem;
 
     private float nextSweepTime = 0f;
@@ -25,6 +28,8 @@ public class PickupItem : MonoBehaviour
             {
                 TryPickup();
                 InteractWithLockedDoor();
+                InteractWithLightSwitch();
+                InteractWithTaskList();
             }
             else
             {
@@ -160,6 +165,7 @@ public class PickupItem : MonoBehaviour
             return;
         }
 
+
         Ray ray = new Ray(
             playerCamera.transform.position,
             playerCamera.transform.forward
@@ -183,6 +189,13 @@ public class PickupItem : MonoBehaviour
                 if (player != null)
                 {
                     player.trashCount++;
+                    if (player.trashCount == 2)
+                    {
+                        if (StoryManagerStore.Instance != null)
+                        {
+                            StoryManagerStore.Instance.SecondTrashBagThrownAway();
+                        }
+                    }
                 }
 
                 // Task UI finden und aktualisieren
@@ -191,6 +204,7 @@ public class PickupItem : MonoBehaviour
                 if (taskUI != null)
                 {
                     taskUI.UpdateTasks();
+
                 }
 
                 heldItem = null;
@@ -288,7 +302,7 @@ public class PickupItem : MonoBehaviour
             ray,
             0.25f,
             out hit,
-            pickupRange,
+            lockedDoorRange,
             ~0,
             QueryTriggerInteraction.Collide))
         {
@@ -300,6 +314,64 @@ public class PickupItem : MonoBehaviour
                 if (door != null)
                 {
                     door.Interact();
+                }
+            }
+        }
+    }
+    void InteractWithLightSwitch()
+    {
+        Ray ray = new Ray(
+            playerCamera.transform.position,
+            playerCamera.transform.forward
+        );
+
+        RaycastHit hit;
+
+        if (Physics.SphereCast(
+            ray,
+            0.25f,
+            out hit,
+            pickupRange,
+            ~0,
+            QueryTriggerInteraction.Collide))
+        {
+            if (hit.collider.CompareTag("LightSwitch"))
+            {
+                LightSwitch lightSwitch =
+                    hit.collider.GetComponentInParent<LightSwitch>();
+
+                if (lightSwitch != null)
+                {
+                    lightSwitch.Interact();
+                }
+            }
+        }
+    }
+    void InteractWithTaskList()
+    {
+        Ray ray = new Ray(
+            playerCamera.transform.position,
+            playerCamera.transform.forward
+        );
+
+        RaycastHit hit;
+
+        if (Physics.SphereCast(
+            ray,
+            0.25f,
+            out hit,
+            pickupRange,
+            ~0,
+            QueryTriggerInteraction.Collide))
+        {
+            if (hit.collider.CompareTag("TaskList"))
+            {
+                TaskList taskList =
+                    hit.collider.GetComponentInParent<TaskList>();
+
+                if (taskList != null)
+                {
+                    taskList.Interact();
                 }
             }
         }
