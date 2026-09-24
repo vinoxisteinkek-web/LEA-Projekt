@@ -85,43 +85,47 @@ public class CouchStartScript : MonoBehaviour
 
     private IEnumerator WakeUp()
     {
-        // Langsam von schwarz zu hell
-        float duration = 3f;
+        // Schwarzer Bildschirm einschalten
+        blackScreen.SetActive(true);
+
+        // Komplett schwarz starten
+        blackScreenCanvas.alpha = 1f;
+
+        // Wie lange der Fade dauert
+        float fadeDuration = 3f;
         float time = 0f;
 
-        while (time < duration)
+        // Langsam von schwarz zu sichtbar
+        while (time < fadeDuration)
         {
             time += Time.deltaTime;
 
-            blackScreenCanvas.alpha = Mathf.Lerp(
-                1f,
-                0f,
-                time / duration
-            );
+            float alpha = 1f - (time / fadeDuration);
+
+            blackScreenCanvas.alpha = alpha;
 
             yield return null;
         }
 
+        // Am Ende komplett durchsichtig
         blackScreenCanvas.alpha = 0f;
         blackScreen.SetActive(false);
 
+        // Jetzt kommt der Text
+        storyMessage.ShowMessage(
+            "Oh nein... ich muss doch zur Arbeit!"
+        );
 
-        // Text "Oh nein..." bleibt insgesamt
-        // noch 4 Sekunden stehen
+        // Text 4 Sekunden anzeigen
         yield return new WaitForSeconds(4f);
 
-
-        // Story-Text ausblenden
         storyMessage.HideMessage();
 
-
-        // Jetzt darf der Spieler aufstehen
+        // E zum Aufstehen anzeigen
         canStand = true;
 
-
-        // E-Text anzeigen
         interactTextUI.text = "E - To stand up";
-        interactText.SetActive(true);
+        interactTextUI.gameObject.SetActive(true);
     }
 
 
