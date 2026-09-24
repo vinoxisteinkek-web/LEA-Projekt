@@ -121,7 +121,7 @@ public class CouchStartScript : MonoBehaviour
 
         // Erster Text
         storyMessage.ShowMessage(
-            "Oh nein... ich muss doch zur Arbeit!"
+            "Oh no... i have to go to work!"
         );
 
 
@@ -190,10 +190,10 @@ public class CouchStartScript : MonoBehaviour
         yield return new WaitForSeconds(4f);
 
         storyMessage.ShowMessage(
-            "Aber zuerst muss ich noch schnell etwas essen."
+            "But first i gotta eat something."
         );
 
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(3f);
 
         storyMessage.ShowMessage(
             "Hmmm... Pizza or cereal?"
@@ -250,7 +250,7 @@ public class CouchStartScript : MonoBehaviour
 
 
         storyMessage.ShowMessage(
-            "Pizza... lecker."
+            "Pizza... yummy"
         );
 
 
@@ -305,7 +305,7 @@ public class CouchStartScript : MonoBehaviour
 
 
         storyMessage.ShowMessage(
-            "Cereal... lecker."
+            "Cereal... yummy."
         );
 
 
@@ -323,7 +323,7 @@ public class CouchStartScript : MonoBehaviour
 
 
         storyMessage.ShowMessage(
-            "Okay... jetzt muss ich mich noch schnell umziehen."
+            "Okay... now i have to change into my uniform."
         );
 
 
@@ -357,7 +357,7 @@ public class CouchStartScript : MonoBehaviour
 
 
         storyMessage.ShowMessage(
-            "Oh nein... die Tür klemmt."
+            "Oh no. The door is stuck"
         );
 
 
@@ -371,7 +371,7 @@ public class CouchStartScript : MonoBehaviour
 
 
         storyMessage.ShowMessage(
-            "Ach stimmt... ich habe noch eine Uniform im Trockner."
+            "Fortunatly i got another pair in the dryer Downstairs."
         );
 
 
@@ -432,7 +432,7 @@ public class CouchStartScript : MonoBehaviour
 
 
         storyMessage.ShowMessage(
-            "Okay... jetzt kann ich zur Arbeit."
+            "Okay... now time to go to work."
         );
 
 
