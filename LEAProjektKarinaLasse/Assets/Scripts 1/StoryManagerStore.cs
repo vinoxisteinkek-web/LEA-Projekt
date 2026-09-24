@@ -52,6 +52,8 @@ public class StoryManagerStore : MonoBehaviour
     private bool radioTaskActive = false;
     private bool radioCanBeTurnedOff = false;
 
+    private bool reachedHomeTrigger = false;
+
 
     private void Awake()
     {
@@ -547,6 +549,7 @@ public class StoryManagerStore : MonoBehaviour
         if (homeTrigger != null)
         {
             homeTrigger.SetActive(true);
+            Debug.Log("Home trigger activated. " + reachedHomeTrigger);
         }
     }
 
@@ -567,14 +570,16 @@ public class StoryManagerStore : MonoBehaviour
             taskUI.CompleteGoHomeTask();
         }
 
-        if (returnHomeAudioSource != null)
+        if (reachedHomeTrigger == false)
         {
-            returnHomeAudioSource.Play();
+
+            if (returnHomeAudioSource != null)
+            {
+                returnHomeAudioSource.Play();
+                reachedHomeTrigger = true;
+                Debug.Log("Reached home trigger. " + reachedHomeTrigger);
+            }
         }
 
-        if (homeTrigger != null)
-        {
-            homeTrigger.SetActive(false);
-        }
     }
 }
