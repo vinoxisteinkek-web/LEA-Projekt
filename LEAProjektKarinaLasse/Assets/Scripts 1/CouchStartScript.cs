@@ -1,14 +1,18 @@
 using UnityEngine;
 using System.Collections;
+using TMPro;
 
 public class CouchStartScript : MonoBehaviour
 {
     public PlayerController playerController;
     public CameraController cameraController;
+    public PlayerInteractionScript playerInteraction;
 
     public Transform standingPosition;
 
+    // E-Text zum Aufstehen
     public GameObject interactText;
+    public TextMeshProUGUI interactTextUI;
 
     public StoryMessageScript storyMessage;
 
@@ -16,15 +20,28 @@ public class CouchStartScript : MonoBehaviour
     public GameObject pizza;
     public GameObject cereal;
 
+    // Trigger
+    public GameObject wardrobeTrigger;
+    public GameObject dryerTrigger;
+
+    // Schwarzer Bildschirm
+    public GameObject blackScreen;
+    public CanvasGroup blackScreenCanvas;
+
     private Rigidbody rb;
 
-    private bool canStand = true;
+    private bool canStand = false;
     private bool canEat = false;
     private bool foodEaten = false;
+
 
     private void Start()
     {
         rb = playerController.GetComponent<Rigidbody>();
+
+        // =====================================
+        // SPIELER SITZT AM ANFANG
+        // =====================================
 
         playerController.enabled = false;
         cameraController.enabled = false;
@@ -32,8 +49,85 @@ public class CouchStartScript : MonoBehaviour
         rb.isKinematic = true;
         rb.useGravity = false;
 
+        // E-Text am Anfang verstecken
+        interactText.SetActive(false);
+
+        // Text vorbereiten
+        interactTextUI.text = "E - To stand up";
+
+        // Kleiderschrank und Trockner deaktivieren
+        wardrobeTrigger.SetActive(false);
+        dryerTrigger.SetActive(false);
+
+        // =====================================
+        // SCHWARZER BILDSCHIRM
+        // =====================================
+
+        blackScreen.SetActive(true);
+        blackScreenCanvas.alpha = 1f;
+
+        // =====================================
+        // ERSTER TEXT
+        // =====================================
+
+        storyMessage.ShowMessage(
+            "Oh nein... ich muss doch zur Arbeit!"
+        );
+
+        // Augen öffnen
+        StartCoroutine(WakeUp());
+    }
+
+
+    // =====================================
+    // AUFWACHEN
+    // =====================================
+
+    private IEnumerator WakeUp()
+    {
+        // Langsam von schwarz zu hell
+        float duration = 3f;
+        float time = 0f;
+
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+
+            blackScreenCanvas.alpha = Mathf.Lerp(
+                1f,
+                0f,
+                time / duration
+            );
+
+            yield return null;
+        }
+
+        blackScreenCanvas.alpha = 0f;
+        blackScreen.SetActive(false);
+
+
+        // Text "Oh nein..." bleibt insgesamt
+        // noch 4 Sekunden stehen
+        yield return new WaitForSeconds(4f);
+
+
+        // Story-Text ausblenden
+        storyMessage.HideMessage();
+
+
+        // Jetzt darf der Spieler aufstehen
+        canStand = true;
+
+
+        // E-Text anzeigen
+        interactTextUI.text = "E - To stand up";
         interactText.SetActive(true);
     }
+
+
+    // =====================================
+    // AUFSTEHEN
+    // =====================================
 
     public void StandUp()
     {
@@ -42,65 +136,261 @@ public class CouchStartScript : MonoBehaviour
 
         canStand = false;
 
+        // E-Text ausblenden
+        interactText.SetActive(false);
+
+
+        // Spieler auf stehende Position setzen
         playerController.transform.position = standingPosition.position;
 
+
+        // Nur Y-Rotation übernehmen
         playerController.transform.rotation = Quaternion.Euler(
             0f,
             standingPosition.eulerAngles.y,
             0f
         );
 
+
+        // Physik wieder aktivieren
         rb.isKinematic = false;
         rb.useGravity = true;
 
+
+        // Spielersteuerung aktivieren
         playerController.enabled = true;
         cameraController.enabled = true;
 
-        interactText.SetActive(false);
 
-        // Erster Text
-        storyMessage.ShowMessage("Oh no... i have to be at work soon!");
-
+        // Essen-Text starten
         StartCoroutine(FoodMessage());
     }
 
+
+    // =====================================
+    // ESSEN
+    // =====================================
+
     private IEnumerator FoodMessage()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(4f);
 
-        storyMessage.ShowMessage("But first i gotta eat something.");
+        storyMessage.ShowMessage(
+            "Aber zuerst muss ich noch schnell etwas essen."
+        );
 
         yield return new WaitForSeconds(4f);
 
-        storyMessage.ShowMessage("Hmmm... Pizza or cereal?");
+        storyMessage.ShowMessage(
+            "Hmmm... Pizza or cereal?"
+        );
+
+        canEat = true;
     }
+
+
+    // =====================================
+    // PIZZA ESSEN
+    // =====================================
 
     public void EatPizza()
     {
+        if (!canEat || foodEaten)
+            return;
+
+        foodEaten = true;
+        canEat = false;
+
+
+        // E-Text entfernen
+        playerInteraction.ClearInteraction();
+
+
+        // Pizza verschwinden lassen
         pizza.SetActive(false);
 
-        storyMessage.ShowMessage("Pizza... yummy.");
 
-        // Später können wir hier den nächsten Story-Schritt starten
+        // Pizza Collider deaktivieren
+        Collider pizzaCollider = pizza.GetComponent<Collider>();
+
+        if (pizzaCollider != null)
+        {
+            pizzaCollider.enabled = false;
+        }
+
+
+        // Cereal ebenfalls deaktivieren
+        Collider cerealCollider = cereal.GetComponent<Collider>();
+
+        if (cerealCollider != null)
+        {
+            cerealCollider.enabled = false;
+        }
+
+
+        storyMessage.ShowMessage(
+            "Pizza... lecker."
+        );
+
+
+        StartCoroutine(AfterEating());
     }
+
+
+    // =====================================
+    // CEREAL ESSEN
+    // =====================================
 
     public void EatCereal()
     {
+        if (!canEat || foodEaten)
+            return;
+
+        foodEaten = true;
+        canEat = false;
+
+
+        // E-Text entfernen
+        playerInteraction.ClearInteraction();
+
+
+        // Cereal verschwinden lassen
         cereal.SetActive(false);
 
-        storyMessage.ShowMessage("Cereal... yummy.");
 
-        // Später können wir hier den nächsten Story-Schritt starten
+        // Cereal Collider deaktivieren
+        Collider cerealCollider = cereal.GetComponent<Collider>();
+
+        if (cerealCollider != null)
+        {
+            cerealCollider.enabled = false;
+        }
+
+
+        // Pizza ebenfalls deaktivieren
+        Collider pizzaCollider = pizza.GetComponent<Collider>();
+
+        if (pizzaCollider != null)
+        {
+            pizzaCollider.enabled = false;
+        }
+
+
+        storyMessage.ShowMessage(
+            "Cereal... lecker."
+        );
+
+
+        StartCoroutine(AfterEating());
     }
+
+
+    // =====================================
+    // NACH DEM ESSEN
+    // =====================================
 
     private IEnumerator AfterEating()
     {
         yield return new WaitForSeconds(3f);
 
+
         storyMessage.ShowMessage(
             "Okay... jetzt muss ich mich noch schnell umziehen."
         );
 
-        // Hier machen wir später mit dem Kleiderschrank weiter.
+
+        // Kleiderschrank aktivieren
+        wardrobeTrigger.SetActive(true);
+    }
+
+
+    // =====================================
+    // KLEIDERSCHRANK
+    // =====================================
+
+    public void OpenWardrobe()
+    {
+        // E-Text entfernen
+        playerInteraction.ClearInteraction();
+
+
+        // Kleiderschrank deaktivieren
+        wardrobeTrigger.SetActive(false);
+
+
+        storyMessage.ShowMessage(
+            "Oh nein... die Tür klemmt."
+        );
+
+
+        StartCoroutine(WardrobeMessage());
+    }
+
+
+    private IEnumerator WardrobeMessage()
+    {
+        yield return new WaitForSeconds(3f);
+
+
+        storyMessage.ShowMessage(
+            "Ach stimmt... ich habe noch eine Uniform im Trockner."
+        );
+
+
+        yield return new WaitForSeconds(2f);
+
+
+        // Trockner aktivieren
+        dryerTrigger.SetActive(true);
+    }
+
+
+    // =====================================
+    // TROCKNER
+    // =====================================
+
+    public void UseDryer()
+    {
+        // E-Text entfernen
+        playerInteraction.ClearInteraction();
+
+
+        // Trockner deaktivieren
+        dryerTrigger.SetActive(false);
+
+
+        StartCoroutine(ChangeClothes());
+    }
+
+
+    // =====================================
+    // UMZIEHEN
+    // =====================================
+
+    private IEnumerator ChangeClothes()
+    {
+        // Bildschirm schwarz
+        blackScreen.SetActive(true);
+        blackScreenCanvas.alpha = 1f;
+
+
+        // 2 Sekunden schwarz
+        yield return new WaitForSeconds(2f);
+
+
+        // Bildschirm wieder sichtbar
+        blackScreenCanvas.alpha = 0f;
+        blackScreen.SetActive(false);
+
+
+        storyMessage.ShowMessage(
+            "Okay... jetzt kann ich zur Arbeit."
+        );
+
+
+        yield return new WaitForSeconds(5f);
+
+        // Text wieder verschwinden lassen
+        storyMessage.HideMessage();
     }
 }
