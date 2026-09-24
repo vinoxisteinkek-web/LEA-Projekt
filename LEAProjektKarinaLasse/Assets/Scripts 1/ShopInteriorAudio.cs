@@ -3,24 +3,21 @@ using UnityEngine;
 public class ShopInteriorAudio : MonoBehaviour
 {
     [SerializeField] private StoryManagerStore storyManager;
+    [SerializeField] private bool enterShop = true;
 
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player"))
             return;
 
-        if (storyManager != null)
+        if (storyManager == null)
+            return;
+
+        if (enterShop)
         {
             storyManager.EnterShop();
         }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (!other.CompareTag("Player"))
-            return;
-
-        if (storyManager != null)
+        else
         {
             storyManager.ExitShop();
         }

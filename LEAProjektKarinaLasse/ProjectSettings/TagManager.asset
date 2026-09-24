@@ -13,6 +13,9 @@ TagManager:
   - LockedDoor
   - LightSwitch
   - TaskList
+  - Enter
+  - Exit
+  - Radio
   layers:
   - Default
   - TransparentFX

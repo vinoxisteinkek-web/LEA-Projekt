@@ -21,8 +21,8 @@ public class StoryManagerStore : MonoBehaviour
     [SerializeField] private AudioSource ambientHumAudioSource;
     [SerializeField] private AudioSource cicadaAudioSource;
 
-    [SerializeField] private float outsideAmbientVolume = 0.10f;
-    [SerializeField] private float shopAmbientVolume = 0.05f;
+    [SerializeField] private float outsideAmbientVolume = 0.05f;
+    [SerializeField] private float shopAmbientVolume = 0.025f;
 
     [Header("Forest Event")]
     [SerializeField] private AudioSource forestEventAudioSource;
@@ -49,6 +49,9 @@ public class StoryManagerStore : MonoBehaviour
 
     private bool goHomeTaskActive = false;
 
+    private bool radioTaskActive = false;
+    private bool radioCanBeTurnedOff = false;
+
 
     private void Awake()
     {
@@ -57,6 +60,21 @@ public class StoryManagerStore : MonoBehaviour
         if (homeTrigger != null)
         {
             homeTrigger.SetActive(false);
+        }
+
+        if (returnHomeAudioSource != null)
+        {
+            returnHomeAudioSource.Stop();
+        }
+
+        if (forestEventAudioSource != null)
+        {
+            forestEventAudioSource.Stop();
+        }
+
+        if (radioAudioSource != null)
+        {
+            radioAudioSource.Stop();
         }
     }
 
@@ -133,13 +151,26 @@ public class StoryManagerStore : MonoBehaviour
         if (taskUI == null)
             return false;
 
-        return taskUI.AreAllTasksComplete();
+        // Hauptaufgaben müssen fertig sein
+        if (!taskUI.AreAllTasksComplete())
+            return false;
+
+        // Radio muss ausgeschaltet sein
+        if (radioTurnedOn)
+            return false;
+
+        return true;
     }
 
 
     public void LightTurnedOff()
     {
         lightTurnedOn = false;
+
+        if (taskUI != null)
+        {
+            taskUI.CompleteLightOffTask();
+        }
 
         CheckIfGoHome();
     }
@@ -165,36 +196,25 @@ public class StoryManagerStore : MonoBehaviour
 
     private IEnumerator TaskListSequence()
     {
-        // Task abhaken
         if (taskUI != null)
         {
             taskUI.CompleteTaskListTask();
         }
 
-
-        // Boss-Notiz
         yield return StartCoroutine(
             PlayerSay(
                 "Hi Cass, Sorry i cant be here today. I've got some task for you. Clean the Floor, Remove the Dust and Take out the Trash. I almost forgot the storage lights are broken"
             )
         );
 
-
-        // Kleine Pause
         yield return new WaitForSeconds(0.5f);
 
+        // Noch NICHT die Hauptaufgaben anzeigen!
+        // Zuerst muss der Spieler das Radio einschalten.
 
-        // Jetzt erst Radio
-        TurnOnRadio();
-
-
-        yield return new WaitForSeconds(0.5f);
-
-
-        // Hauptaufgaben anzeigen
         if (taskUI != null)
         {
-            taskUI.ShowMainTasks();
+            taskUI.ShowRadioOnTask();
         }
     }
 
@@ -210,14 +230,26 @@ public class StoryManagerStore : MonoBehaviour
 
         radioTurnedOn = true;
 
+        // Ambient ausschalten
         SetAmbientVolume(0f);
 
+        // Radio-Musik starten
         if (radioAudioSource != null)
         {
             radioAudioSource.loop = true;
             radioAudioSource.Play();
         }
+
+        // Radio-On-Aufgabe abschließen
+        if (taskUI != null)
+        {
+            taskUI.CompleteRadioOnTask();
+
+            // Jetzt erst die Hauptaufgaben anzeigen
+            taskUI.ShowMainTasks();
+        }
     }
+
 
 
     // ==================================================
@@ -229,8 +261,43 @@ public class StoryManagerStore : MonoBehaviour
         if (radioAudioSource != null)
         {
             radioAudioSource.Stop();
-            radioTurnedOn = false;
         }
+
+        radioTurnedOn = false;
+
+        // Ambient wieder einschalten
+        if (playerInsideShop)
+        {
+            SetAmbientVolume(shopAmbientVolume);
+        }
+        else
+        {
+            SetAmbientVolume(outsideAmbientVolume);
+        }
+
+        // Radio-Off-Aufgabe abschließen
+        if (taskUI != null)
+        {
+            if(taskUI.AreAllTasksComplete())
+            {
+                taskUI.CompleteRadioOffTask();
+            }
+        }
+    }
+    public bool RadioIsOn()
+    {
+        return radioTurnedOn;
+    }
+
+    public bool CanTurnRadioOff()
+    {
+        if (taskUI == null)
+            return false;
+
+        if (!taskUI.AreAllTasksComplete())
+            return false;
+
+        return true;
     }
 
 
@@ -261,7 +328,7 @@ public class StoryManagerStore : MonoBehaviour
 
         yield return StartCoroutine(
             RadioSay(
-                "We are interrupting the music real quick, for some very important information. There is a killer roaming around the area Emschurches."
+                "<color=white>We are interrupting the music real quick, for some very important information. There is a killer roaming around the area Emschurches.</color>"
             )
         );
 
@@ -281,7 +348,7 @@ public class StoryManagerStore : MonoBehaviour
 
         yield return StartCoroutine(
             RadioSay(
-                "Please stay home and lock all doors and windows. If you notice any strange activities report them to the Police."
+                "<color=white>Please stay home and lock all doors and windows. If you notice any strange activities report them to the Police.</color>"
             )
         );
 
@@ -289,7 +356,7 @@ public class StoryManagerStore : MonoBehaviour
 
         yield return StartCoroutine(
             RadioSay(
-                "We will now continue with the music. Stay safe and have a nice day."
+                "<color=white>We will now continue with the music. Stay safe and have a nice day.</color>"
             )
         ); 
         

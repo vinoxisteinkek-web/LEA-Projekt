@@ -30,6 +30,7 @@ public class PickupItem : MonoBehaviour
                 InteractWithLockedDoor();
                 InteractWithLightSwitch();
                 InteractWithTaskList();
+                InteractWithRadio();
             }
             else
             {
@@ -160,11 +161,10 @@ public class PickupItem : MonoBehaviour
     void ThrowTrashAway()
     {
         // Nur Müllbeutel dürfen in den Dumpster
-        if (heldItem.name != "trash")
+        if (heldItem == null || heldItem.name != "trash")
         {
             return;
         }
-
 
         Ray ray = new Ray(
             playerCamera.transform.position,
@@ -182,13 +182,21 @@ public class PickupItem : MonoBehaviour
         {
             if (hit.collider.CompareTag("dumpster"))
             {
+                // Müll verschwinden lassen
                 heldItem.SetActive(false);
 
-                PlayerController player = GetComponent<PlayerController>();
+                // PlayerController suchen
+                PlayerController player =
+                    GetComponentInParent<PlayerController>();
 
                 if (player != null)
                 {
+                    // Müll zählen
                     player.trashCount++;
+
+                    Debug.Log("Müll entsorgt! Count: " + player.trashCount);
+
+                    // Beim zweiten Müllsack Story-Event starten
                     if (player.trashCount == 2)
                     {
                         if (StoryManagerStore.Instance != null)
@@ -197,16 +205,23 @@ public class PickupItem : MonoBehaviour
                         }
                     }
                 }
+                else
+                {
+                    Debug.LogError(
+                        "PickupItem: PlayerController konnte nicht gefunden werden!"
+                    );
+                }
 
-                // Task UI finden und aktualisieren
-                TaskUI taskUI = FindFirstObjectByType<TaskUI>();
+                // Task UI aktualisieren
+                TaskUI taskUI =
+                    FindFirstObjectByType<TaskUI>();
 
                 if (taskUI != null)
                 {
                     taskUI.UpdateTasks();
-
                 }
 
+                // Kein Gegenstand mehr in der Hand
                 heldItem = null;
             }
         }
@@ -372,6 +387,33 @@ public class PickupItem : MonoBehaviour
                 if (taskList != null)
                 {
                     taskList.Interact();
+                }
+            }
+        }
+    }
+
+    void InteractWithRadio()
+    {
+        Ray ray = new Ray(
+            playerCamera.transform.position,
+            playerCamera.transform.forward
+        );
+        RaycastHit hit;
+        if (Physics.SphereCast(
+            ray,
+            0.25f,
+            out hit,
+            pickupRange,
+            ~0,
+            QueryTriggerInteraction.Collide))
+        {
+            if (hit.collider.CompareTag("Radio"))
+            {
+                Radio radio =
+                    hit.collider.GetComponentInParent<Radio>();
+                if (radio != null)
+                {
+                    radio.Interact();
                 }
             }
         }

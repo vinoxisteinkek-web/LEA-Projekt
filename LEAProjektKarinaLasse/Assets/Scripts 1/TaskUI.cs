@@ -10,30 +10,50 @@ public class TaskUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI lightTaskText;
     [SerializeField] private TextMeshProUGUI taskListText;
 
+    [SerializeField] private TextMeshProUGUI radioOnTaskText;
+
     [SerializeField] private TextMeshProUGUI dirtTaskText;
     [SerializeField] private TextMeshProUGUI puddleTaskText;
     [SerializeField] private TextMeshProUGUI trashTaskText;
 
+    [SerializeField] private TextMeshProUGUI radioOffTaskText;
+    [SerializeField] private TextMeshProUGUI lightOffTaskText;
+
     [SerializeField] private TextMeshProUGUI goHomeTaskText;
+
 
     [Header("Task Amounts")]
     [SerializeField] private int maxDirt = 3;
     [SerializeField] private int maxPuddles = 3;
     [SerializeField] private int maxTrash = 3;
 
+
     private bool lightTaskActive = true;
     private bool taskListActive = false;
+
+    private bool radioOnTaskActive = false;
     private bool mainTasksActive = false;
+
+    private bool radioOffTaskActive = false;
+    private bool lightOffTaskActive = false;
+
     private bool goHomeTaskActive = false;
 
 
     private void Start()
     {
-        // Am Anfang nur Licht-Aufgabe anzeigen
-        ShowLightTask();
+        // ---------------------------------
+        // ALLES ZUERST AUSBLENDEN
+        // ---------------------------------
+
+        if (lightTaskText != null)
+            lightTaskText.gameObject.SetActive(false);
 
         if (taskListText != null)
             taskListText.gameObject.SetActive(false);
+
+        if (radioOnTaskText != null)
+            radioOnTaskText.gameObject.SetActive(false);
 
         if (dirtTaskText != null)
             dirtTaskText.gameObject.SetActive(false);
@@ -44,14 +64,27 @@ public class TaskUI : MonoBehaviour
         if (trashTaskText != null)
             trashTaskText.gameObject.SetActive(false);
 
+        if (radioOffTaskText != null)
+            radioOffTaskText.gameObject.SetActive(false);
+
+        if (lightOffTaskText != null)
+            lightOffTaskText.gameObject.SetActive(false);
+
         if (goHomeTaskText != null)
             goHomeTaskText.gameObject.SetActive(false);
+
+
+        // ---------------------------------
+        // ERSTE AUFGABE
+        // ---------------------------------
+
+        ShowLightTask();
     }
 
 
-    // ==================================================
-    // LICHT-AUFGABE
-    // ==================================================
+    // =====================================
+    // LICHT AN
+    // =====================================
 
     public void ShowLightTask()
     {
@@ -60,7 +93,7 @@ public class TaskUI : MonoBehaviour
         if (lightTaskText != null)
         {
             lightTaskText.gameObject.SetActive(true);
-            lightTaskText.text = "☐ Mache das Licht an";
+            lightTaskText.text = "Mache das Licht an";
         }
     }
 
@@ -71,16 +104,17 @@ public class TaskUI : MonoBehaviour
 
         if (lightTaskText != null)
         {
-            lightTaskText.text = "✓ Mache das Licht an";
+            lightTaskText.text = "Mache das Licht an";
+            lightTaskText.gameObject.SetActive(false);
         }
 
         ShowTaskListTask();
     }
 
 
-    // ==================================================
-    // NOTIZ-AUFGABE
-    // ==================================================
+    // =====================================
+    // BOSS-NOTIZ
+    // =====================================
 
     private void ShowTaskListTask()
     {
@@ -89,7 +123,7 @@ public class TaskUI : MonoBehaviour
         if (taskListText != null)
         {
             taskListText.gameObject.SetActive(true);
-            taskListText.text = "☐ Lies die Notiz vom Boss";
+            taskListText.text = "Lies die Notiz vom Boss";
         }
     }
 
@@ -100,14 +134,43 @@ public class TaskUI : MonoBehaviour
 
         if (taskListText != null)
         {
-            taskListText.text = "✓ Lies die Notiz vom Boss";
+            taskListText.text = "Lies die Notiz vom Boss";
+            taskListText.gameObject.SetActive(false);
         }
     }
 
 
-    // ==================================================
+    // =====================================
+    // RADIO AN
+    // =====================================
+
+    public void ShowRadioOnTask()
+    {
+        radioOnTaskActive = true;
+
+        if (radioOnTaskText != null)
+        {
+            radioOnTaskText.gameObject.SetActive(true);
+            radioOnTaskText.text = "Turn on the Radio";
+        }
+    }
+
+
+    public void CompleteRadioOnTask()
+    {
+        radioOnTaskActive = false;
+
+        if (radioOnTaskText != null)
+        {
+            radioOnTaskText.text = "Turn on the Radio";
+            radioOnTaskText.gameObject.SetActive(false);
+        }
+    }
+
+
+    // =====================================
     // HAUPTAUFGABEN
-    // ==================================================
+    // =====================================
 
     public void ShowMainTasks()
     {
@@ -137,81 +200,59 @@ public class TaskUI : MonoBehaviour
         UpdateDirtTask();
         UpdatePuddleTask();
         UpdateTrashTask();
+
+        if (AreAllTasksComplete())
+        {
+            dirtTaskText.gameObject.SetActive(false);
+            puddleTaskText.gameObject.SetActive(false);
+            trashTaskText.gameObject.SetActive(false);
+            ShowRadioOffTask();
+        }
     }
 
-
-    // ==================================================
-    // DIRT
-    // ==================================================
 
     private void UpdateDirtTask()
     {
         int current = player.dirtCount;
 
-        if (current >= maxDirt)
-        {
-            dirtTaskText.text =
-                "✓ Remove the Dust       " +
-                maxDirt + "/" + maxDirt;
-        }
-        else
-        {
-            dirtTaskText.text =
-                "☐ Remove the Dust       " +
-                current + "/" + maxDirt;
-        }
+        if (dirtTaskText == null)
+            return;
+
+        dirtTaskText.text =
+            "Remove the Dust       " +
+            Mathf.Min(current, maxDirt) + "/" + maxDirt;
     }
 
-
-    // ==================================================
-    // PUDDLE
-    // ==================================================
 
     private void UpdatePuddleTask()
     {
         int current = player.puddleCount;
 
-        if (current >= maxPuddles)
-        {
-            puddleTaskText.text =
-                "✓ Clean the Floor       " +
-                maxPuddles + "/" + maxPuddles;
-        }
-        else
-        {
-            puddleTaskText.text =
-                "☐ Clean the Floor       " +
-                current + "/" + maxPuddles;
-        }
+        if (puddleTaskText == null)
+            return;
+
+        puddleTaskText.text =
+            "Clean the Floor       " +
+            Mathf.Min(current, maxPuddles) + "/" + maxPuddles;
     }
 
-
-    // ==================================================
-    // TRASH
-    // ==================================================
 
     private void UpdateTrashTask()
     {
         int current = player.trashCount;
 
-        if (current >= maxTrash)
-        {
-            trashTaskText.text =
-                "✓ Take out the Trash    " +
-                maxTrash + "/" + maxTrash;
-        }
-        else
-        {
-            trashTaskText.text =
-                "☐ Take out the Trash    " +
-                current + "/" + maxTrash;
-        }
+        if (trashTaskText == null)
+            return;
+
+        trashTaskText.text =
+            "Take out the Trash    " +
+            Mathf.Min(current, maxTrash) + "/" + maxTrash;
     }
 
 
-    // ==================================================
-    // ALLE 3 HAUPTTASKS FERTIG?
-    // ==================================================
+    // =====================================
+    // SIND HAUPTAUFGABEN FERTIG?
+    // =====================================
 
     public bool AreAllTasksComplete()
     {
@@ -224,9 +265,78 @@ public class TaskUI : MonoBehaviour
     }
 
 
-    // ==================================================
-    // GO HOME
-    // ==================================================
+    // =====================================
+    // RADIO AUS
+    // =====================================
+
+    public void ShowRadioOffTask()
+    {
+        if (!AreAllTasksComplete())
+            return;
+
+        if (radioOffTaskActive)
+            return;
+
+        radioOffTaskActive = true;
+
+        if (radioOffTaskText != null)
+        {
+            radioOffTaskText.gameObject.SetActive(true);
+            radioOffTaskText.text = "Turn off the Radio";
+        }
+    }
+
+
+    public void CompleteRadioOffTask()
+    {
+        radioOffTaskActive = false;
+
+        if (radioOffTaskText != null)
+        {
+            radioOffTaskText.text = "Turn off the Radio";
+            radioOffTaskText.gameObject.SetActive(false);
+        }
+
+        ShowLightOffTask();
+    }
+
+
+    // =====================================
+    // LICHT AUS
+    // =====================================
+
+    public void ShowLightOffTask()
+    {
+        if (lightOffTaskActive)
+            return;
+
+        lightOffTaskActive = true;
+
+        if (lightOffTaskText != null)
+        {
+            lightOffTaskText.gameObject.SetActive(true);
+            lightOffTaskText.text = "Turn off the Light";
+        }
+    }
+
+
+    public void CompleteLightOffTask()
+    {
+        lightOffTaskActive = false;
+
+        if (lightOffTaskText != null)
+        {
+            lightOffTaskText.text = "Turn off the Light";
+            lightOffTaskText.gameObject.SetActive(false);
+        }
+
+        ShowGoHomeTask();
+    }
+
+
+    // =====================================
+    // NACH HAUSE
+    // =====================================
 
     public void ShowGoHomeTask()
     {
@@ -235,7 +345,7 @@ public class TaskUI : MonoBehaviour
         if (goHomeTaskText != null)
         {
             goHomeTaskText.gameObject.SetActive(true);
-            goHomeTaskText.text = "☐ Go back home";
+            goHomeTaskText.text = "Go back home";
         }
     }
 
@@ -249,7 +359,7 @@ public class TaskUI : MonoBehaviour
 
         if (goHomeTaskText != null)
         {
-            goHomeTaskText.text = "✓ Go back home";
+            goHomeTaskText.text = "Go back home";
         }
     }
 }
