@@ -5,8 +5,25 @@ public class PlayerController : MonoBehaviour
 {
     public Transform head;
     public float playerSpeed = 5f;
+
+    // =========================
+    // TASCHENLAMPE
+    // =========================
+
     public Light spotlight;
-    
+
+    // Sound für Taschenlampe
+    public AudioSource flashlightSound;
+
+    // Hinweis "F - Taschenlampe"
+    public GameObject flashlightHint;
+
+    public float flashlightHintDuration = 5f;
+
+
+    // =========================
+    // ANDERE WERTE
+    // =========================
 
     public int dirtCount = 0;
     public int puddleCount = 0;
@@ -14,28 +31,43 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody rb;
 
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
 
-        
+        // =================================
+        // TASCHENLAMPE AM ANFANG AUS
+        // =================================
+
+        if (spotlight != null)
+        {
+            spotlight.enabled = false;
+        }
+
+        // Hinweis am Anfang verstecken
+        if (flashlightHint != null)
+        {
+            flashlightHint.SetActive(false);
+        }
     }
+
 
     void Update()
     {
-       
+        // =================================
+        // BEWEGUNG
+        // =================================
 
-        // Eingabe holen
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
 
-        // Richtung anhand der Kamera
         Vector3 direction = head.right * horizontal + head.forward * vertical;
 
         // Y-Richtung entfernen
         direction.y = 0f;
 
-        // Diagonale Bewegung nicht schneller machen
+        // Diagonale Bewegung nicht schneller
         direction = direction.normalized;
 
         // Bewegung setzen
@@ -45,10 +77,57 @@ public class PlayerController : MonoBehaviour
             direction.z * playerSpeed
         );
 
-        // Taschenlampe mit F
+
+        // =================================
+        // TASCHENLAMPE
+        // =================================
+
         if (Input.GetKeyDown(KeyCode.F))
         {
-            spotlight.enabled = !spotlight.enabled;
+            ToggleFlashlight();
         }
+    }
+
+
+    // =================================
+    // TASCHENLAMPE AN/AUS
+    // =================================
+
+    private void ToggleFlashlight()
+    {
+        if (spotlight == null)
+            return;
+
+        // Taschenlampe umschalten
+        spotlight.enabled = !spotlight.enabled;
+
+        // Sound abspielen
+        if (flashlightSound != null)
+        {
+            flashlightSound.Play();
+        }
+    }
+
+
+    // =================================
+    // HINWEIS NACH DEM HAUS
+    // =================================
+
+    public void ShowFlashlightHint()
+    {
+        if (flashlightHint == null)
+            return;
+
+        StartCoroutine(FlashlightHintCoroutine());
+    }
+
+
+    private System.Collections.IEnumerator FlashlightHintCoroutine()
+    {
+        flashlightHint.SetActive(true);
+
+        yield return new WaitForSeconds(flashlightHintDuration);
+
+        flashlightHint.SetActive(false);
     }
 }

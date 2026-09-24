@@ -35,6 +35,20 @@ public class CouchStartScript : MonoBehaviour
     private bool foodEaten = false;
 
 
+    // =====================================
+    // SOUNDS
+    // =====================================
+
+    // Sound beim Essen
+    public AudioSource eatSound;
+
+    // Sound für klemmende Tür
+    public AudioSource doorJammedSound;
+
+    // Sound beim Umziehen
+    public AudioSource changeClothesSound;
+
+
     private void Start()
     {
         rb = playerController.GetComponent<Rigidbody>();
@@ -67,14 +81,9 @@ public class CouchStartScript : MonoBehaviour
         blackScreenCanvas.alpha = 1f;
 
         // =====================================
-        // ERSTER TEXT
+        // AUFWACHEN
         // =====================================
 
-        storyMessage.ShowMessage(
-            "Oh nein... ich muss doch zur Arbeit!"
-        );
-
-        // Augen öffnen
         StartCoroutine(WakeUp());
     }
 
@@ -85,13 +94,11 @@ public class CouchStartScript : MonoBehaviour
 
     private IEnumerator WakeUp()
     {
-        // Schwarzer Bildschirm einschalten
         blackScreen.SetActive(true);
 
         // Komplett schwarz starten
         blackScreenCanvas.alpha = 1f;
 
-        // Wie lange der Fade dauert
         float fadeDuration = 3f;
         float time = 0f;
 
@@ -111,15 +118,18 @@ public class CouchStartScript : MonoBehaviour
         blackScreenCanvas.alpha = 0f;
         blackScreen.SetActive(false);
 
-        // Jetzt kommt der Text
+
+        // Erster Text
         storyMessage.ShowMessage(
             "Oh nein... ich muss doch zur Arbeit!"
         );
+
 
         // Text 4 Sekunden anzeigen
         yield return new WaitForSeconds(4f);
 
         storyMessage.HideMessage();
+
 
         // E zum Aufstehen anzeigen
         canStand = true;
@@ -214,6 +224,13 @@ public class CouchStartScript : MonoBehaviour
         pizza.SetActive(false);
 
 
+        // Essen Sound
+        if (eatSound != null)
+        {
+            eatSound.Play();
+        }
+
+
         // Pizza Collider deaktivieren
         Collider pizzaCollider = pizza.GetComponent<Collider>();
 
@@ -260,6 +277,13 @@ public class CouchStartScript : MonoBehaviour
 
         // Cereal verschwinden lassen
         cereal.SetActive(false);
+
+
+        // Essen Sound
+        if (eatSound != null)
+        {
+            eatSound.Play();
+        }
 
 
         // Cereal Collider deaktivieren
@@ -322,6 +346,16 @@ public class CouchStartScript : MonoBehaviour
         wardrobeTrigger.SetActive(false);
 
 
+        // =====================================
+        // SOUND: TÜR KLEMMT
+        // =====================================
+
+        if (doorJammedSound != null)
+        {
+            doorJammedSound.Play();
+        }
+
+
         storyMessage.ShowMessage(
             "Oh nein... die Tür klemmt."
         );
@@ -363,6 +397,16 @@ public class CouchStartScript : MonoBehaviour
         dryerTrigger.SetActive(false);
 
 
+        // =====================================
+        // SOUND: UMZIEHEN
+        // =====================================
+
+        if (changeClothesSound != null)
+        {
+            changeClothesSound.Play();
+        }
+
+
         StartCoroutine(ChangeClothes());
     }
 
@@ -394,7 +438,8 @@ public class CouchStartScript : MonoBehaviour
 
         yield return new WaitForSeconds(5f);
 
-        // Text wieder verschwinden lassen
+
+        // Text verschwinden lassen
         storyMessage.HideMessage();
     }
 }
