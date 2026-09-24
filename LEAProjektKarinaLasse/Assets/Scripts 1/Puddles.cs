@@ -21,13 +21,13 @@ public class Puddles : MonoBehaviour
         if (sweepCount == 1)
         {
             Vector3 pos = transform.position;
-            pos.y = -0.06f;
+            pos.y = 4.23f;
             transform.position = pos;
         }
         else if (sweepCount == 2)
         {
             Vector3 pos = transform.position;
-            pos.y = -0.07f;
+            pos.y = 4.22f;
             transform.position = pos;
         }
         else if (sweepCount >= 3)
