@@ -33,8 +33,8 @@ public class StoryManagerStore : MonoBehaviour
 
     [Header("Dialogue")]
     [SerializeField] private TextMeshProUGUI dialogueText;
-    [SerializeField] private float textSpeed = 0.035f;
-    [SerializeField] private float dialogueEndDelay = 1f;
+    [SerializeField] private float textSpeed = 0.05f;
+    [SerializeField] private float dialogueEndDelay = 1.5f;
 
     [Header("Tasks")]
     [SerializeField] private TaskUI taskUI;
@@ -229,6 +229,7 @@ public class StoryManagerStore : MonoBehaviour
         if (radioAudioSource != null)
         {
             radioAudioSource.Stop();
+            radioTurnedOn = false;
         }
     }
 
@@ -265,7 +266,7 @@ public class StoryManagerStore : MonoBehaviour
         );
 
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
 
 
         yield return StartCoroutine(
@@ -275,7 +276,7 @@ public class StoryManagerStore : MonoBehaviour
         );
 
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
 
 
         yield return StartCoroutine(
@@ -283,6 +284,26 @@ public class StoryManagerStore : MonoBehaviour
                 "Please stay home and lock all doors and windows. If you notice any strange activities report them to the Police."
             )
         );
+
+        yield return new WaitForSeconds(1f);
+
+        yield return StartCoroutine(
+            RadioSay(
+                "We will now continue with the music. Stay safe and have a nice day."
+            )
+        ); 
+        
+        yield return new WaitForSeconds(1f);
+        
+        yield return StartCoroutine(
+            PlayerSay(
+                "Dang, that was scary. I better finish my tasks and go home."
+            )
+        );
+
+        yield return new WaitForSeconds(1f);
+      
+        TurnOnRadio();
     }
 
 
