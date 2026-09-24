@@ -4,10 +4,12 @@ using TMPro;
 public class DoorOpenScript : MonoBehaviour
 {
     public Transform door;
-    
 
     public float openAngle = 92f;
     public float openSpeed = 3f;
+
+    // Türsound
+    public AudioSource doorSound;
 
     private bool playerInside = false;
     private bool doorOpen = false;
@@ -26,8 +28,6 @@ public class DoorOpenScript : MonoBehaviour
             openAngle,
             0f
         );
-
-        
     }
 
     void Update()
@@ -39,6 +39,12 @@ public class DoorOpenScript : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.E))
             {
                 doorOpen = !doorOpen;
+
+                // Türsound abspielen
+                if (doorSound != null)
+                {
+                    doorSound.Play();
+                }
             }
         }
 
@@ -66,8 +72,6 @@ public class DoorOpenScript : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerInside = true;
-
-           
         }
     }
 
@@ -76,8 +80,6 @@ public class DoorOpenScript : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerInside = false;
-
-            
         }
     }
 }

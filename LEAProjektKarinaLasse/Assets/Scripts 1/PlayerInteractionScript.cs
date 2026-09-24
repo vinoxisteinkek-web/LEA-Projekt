@@ -45,8 +45,14 @@ public class PlayerInteractionScript : MonoBehaviour
 
         if (interactable != null && currentInteractable == interactable)
         {
-            currentInteractable = null;
-            interactText.gameObject.SetActive(false);
+            ClearInteraction();
         }
+    }
+
+    // Interaktion manuell beenden
+    public void ClearInteraction()
+    {
+        currentInteractable = null;
+        interactText.gameObject.SetActive(false);
     }
 }
