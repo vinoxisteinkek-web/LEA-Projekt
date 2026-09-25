@@ -93,7 +93,7 @@ public class TaskUI : MonoBehaviour
         if (lightTaskText != null)
         {
             lightTaskText.gameObject.SetActive(true);
-            lightTaskText.text = "Mache das Licht an";
+            lightTaskText.text = "Turn on the Lights";
         }
     }
 
@@ -104,7 +104,7 @@ public class TaskUI : MonoBehaviour
 
         if (lightTaskText != null)
         {
-            lightTaskText.text = "Mache das Licht an";
+            lightTaskText.text = "Turn on the Lights";
             lightTaskText.gameObject.SetActive(false);
         }
 
@@ -123,7 +123,7 @@ public class TaskUI : MonoBehaviour
         if (taskListText != null)
         {
             taskListText.gameObject.SetActive(true);
-            taskListText.text = "Lies die Notiz vom Boss";
+            taskListText.text = "Read the note from your boss";
         }
     }
 
@@ -134,7 +134,7 @@ public class TaskUI : MonoBehaviour
 
         if (taskListText != null)
         {
-            taskListText.text = "Lies die Notiz vom Boss";
+            taskListText.text = "Read the note from your boss";
             taskListText.gameObject.SetActive(false);
         }
     }

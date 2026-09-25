@@ -1,6 +1,7 @@
-using UnityEngine;
-using TMPro;
 using System.Collections;
+using TMPro;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class StoryManagerStore : MonoBehaviour
 {
@@ -8,16 +9,18 @@ public class StoryManagerStore : MonoBehaviour
 
     [Header("Radio Music")]
     [SerializeField] private AudioSource radioAudioSource;
-
     [SerializeField] private float radioVolume = 1f;
+
 
     [Header("Player Voice")]
     [SerializeField] private AudioSource playerVoiceAudioSource;
     [SerializeField] private AudioClip playerTalking;
 
+
     [Header("Radio Voice")]
     [SerializeField] private AudioSource radioVoiceAudioSource;
     [SerializeField] private AudioClip radioManTalking;
+
 
     [Header("Ambient")]
     [SerializeField] private AudioSource ambientHumAudioSource;
@@ -26,20 +29,29 @@ public class StoryManagerStore : MonoBehaviour
     [SerializeField] private float outsideAmbientVolume = 0.03f;
     [SerializeField] private float shopAmbientVolume = 0.01f;
 
+
     [Header("Forest Event")]
     [SerializeField] private AudioSource forestEventAudioSource;
+
 
     [Header("Return Home")]
     [SerializeField] private AudioSource returnHomeAudioSource;
     [SerializeField] private GameObject homeTrigger;
+
+    // Schwarzer Bildschirm für Szenenwechsel
+    [SerializeField] private CanvasGroup blackScreenCanvas;
+    [SerializeField] private float fadeDuration = 2f;
+
 
     [Header("Dialogue")]
     [SerializeField] private TextMeshProUGUI dialogueText;
     [SerializeField] private float textSpeed = 0.05f;
     [SerializeField] private float dialogueEndDelay = 1.5f;
 
+
     [Header("Tasks")]
     [SerializeField] private TaskUI taskUI;
+
 
     private bool lightTurnedOn = false;
     private bool radioTurnedOn = false;
@@ -62,21 +74,26 @@ public class StoryManagerStore : MonoBehaviour
     {
         Instance = this;
 
+
         if (homeTrigger != null)
         {
             homeTrigger.SetActive(false);
         }
 
+
         // Audio sicherheitshalber beim Start stoppen
+
         if (returnHomeAudioSource != null)
         {
             returnHomeAudioSource.Stop();
         }
 
+
         if (forestEventAudioSource != null)
         {
             forestEventAudioSource.Stop();
         }
+
 
         if (radioAudioSource != null)
         {
@@ -84,10 +101,12 @@ public class StoryManagerStore : MonoBehaviour
             radioAudioSource.volume = 0f;
         }
 
+
         if (playerVoiceAudioSource != null)
         {
             playerVoiceAudioSource.Stop();
         }
+
 
         if (radioVoiceAudioSource != null)
         {
@@ -384,6 +403,7 @@ public class StoryManagerStore : MonoBehaviour
 
         // Radio gilt danach als ausgeschaltet,
         // aber die Radio-Off-Aufgabe wird NICHT automatisch abgeschlossen.
+
         radioTurnedOn = false;
 
         UpdateAudioEnvironment();
@@ -413,14 +433,16 @@ public class StoryManagerStore : MonoBehaviour
         // Radio-Musik stoppen
         // NICHT StopRadio(), da sonst die Radio-Off-Aufgabe
         // automatisch erledigt werden würde.
+
         StopRadioForNews();
 
         yield return new WaitForSeconds(0.5f);
 
 
+        // RADIO - WEISS
         yield return StartCoroutine(
             RadioSay(
-                "<color=white>We are interrupting the music real quick, for some very important information. There is a killer roaming around the area Emschurches.</color>"
+                "We are interrupting the music real quick, for some very important information. There is a killer roaming around the area Emschurches."
             )
         );
 
@@ -428,6 +450,7 @@ public class StoryManagerStore : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
 
+        // SPIELER - ORANGE
         yield return StartCoroutine(
             PlayerSay(
                 "Dang, my area? No way, who is it? I hope his name isnt Michael!"
@@ -438,9 +461,10 @@ public class StoryManagerStore : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
 
+        // RADIO - WEISS
         yield return StartCoroutine(
             RadioSay(
-                "<color=white>Please stay home and lock all doors and windows. If you notice any strange activities report them to the Police.</color>"
+                "Please stay home and lock all doors and windows. If you notice any strange activities report them to the Police."
             )
         );
 
@@ -448,9 +472,10 @@ public class StoryManagerStore : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
 
+        // RADIO - WEISS
         yield return StartCoroutine(
             RadioSay(
-                "<color=white>We will now continue with the music. Stay safe and have a nice day.</color>"
+                "We will now continue with the music. Stay safe and have a nice day."
             )
         );
 
@@ -458,6 +483,7 @@ public class StoryManagerStore : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
 
+        // SPIELER - ORANGE
         yield return StartCoroutine(
             PlayerSay(
                 "Dang, that was scary. I better finish my tasks and go home."
@@ -467,6 +493,7 @@ public class StoryManagerStore : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
+        // Radio wieder einschalten
         TurnOnRadio();
     }
 
@@ -479,7 +506,9 @@ public class StoryManagerStore : MonoBehaviour
     {
         if (dialogueText != null)
         {
-            dialogueText.text = "";
+            // Orange direkt setzen
+            // Der Color-Tag wird NICHT Zeichen für Zeichen geschrieben.
+            dialogueText.text = "<color=orange>";
             dialogueText.gameObject.SetActive(true);
         }
 
@@ -493,6 +522,12 @@ public class StoryManagerStore : MonoBehaviour
             }
 
             yield return new WaitForSeconds(textSpeed);
+        }
+
+        // Color-Tag erst am Ende schließen
+        if (dialogueText != null)
+        {
+            dialogueText.text += "</color>";
         }
 
         StopPlayerVoice();
@@ -514,7 +549,9 @@ public class StoryManagerStore : MonoBehaviour
     {
         if (dialogueText != null)
         {
-            dialogueText.text = "";
+            // Weiß direkt setzen
+            // Der Color-Tag wird NICHT Zeichen für Zeichen geschrieben.
+            dialogueText.text = "<color=white>";
             dialogueText.gameObject.SetActive(true);
         }
 
@@ -528,6 +565,12 @@ public class StoryManagerStore : MonoBehaviour
             }
 
             yield return new WaitForSeconds(textSpeed);
+        }
+
+        // Color-Tag erst am Ende schließen
+        if (dialogueText != null)
+        {
+            dialogueText.text += "</color>";
         }
 
         StopRadioVoice();
@@ -671,17 +714,69 @@ public class StoryManagerStore : MonoBehaviour
 
         if (!reachedHomeTrigger)
         {
+            reachedHomeTrigger = true;
+
+            // Sound beim Nach-Hause-Gehen
             if (returnHomeAudioSource != null)
             {
                 returnHomeAudioSource.Play();
-
-                reachedHomeTrigger = true;
-
-                Debug.Log(
-                    "Reached home trigger. " +
-                    reachedHomeTrigger
-                );
             }
+
+            Debug.Log("Spieler geht nach Hause.");
+
+            StartCoroutine(ReturnHome());
         }
+    }
+
+
+    // ==================================================
+    // SCHWARZ FADEN UND NACH HAUSE
+    // ==================================================
+
+    private IEnumerator ReturnHome()
+    {
+        // Falls noch ein Player-Sprechsound läuft:
+        StopPlayerVoice();
+
+        // Falls noch eine Radio-Stimme läuft:
+        StopRadioVoice();
+
+        // Dialog ausblenden
+        if (dialogueText != null)
+        {
+            dialogueText.gameObject.SetActive(false);
+        }
+
+
+        // Bildschirm langsam schwarz machen
+        if (blackScreenCanvas != null)
+        {
+            blackScreenCanvas.gameObject.SetActive(true);
+
+            blackScreenCanvas.alpha = 0f;
+
+            float time = 0f;
+
+            while (time < fadeDuration)
+            {
+                time += Time.deltaTime;
+
+                blackScreenCanvas.alpha =
+                    Mathf.Clamp01(time / fadeDuration);
+
+                yield return null;
+            }
+
+            // Komplett schwarz
+            blackScreenCanvas.alpha = 1f;
+        }
+
+
+        // Kurz warten, während der Bildschirm schwarz ist
+        yield return new WaitForSeconds(0.5f);
+
+
+        // Zurück zum Haus
+        SceneManager.LoadScene("HouseSceneAfterMarket");
     }
 }
