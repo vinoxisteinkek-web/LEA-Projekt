@@ -37,6 +37,8 @@ public class PickupItem : MonoBehaviour
                 InteractWithLightSwitch();
                 InteractWithTaskList();
                 InteractWithRadio();
+                InteractWithAfterMarketEnding();
+                InteractWithDoor();
             }
             else
             {
@@ -484,6 +486,65 @@ public class PickupItem : MonoBehaviour
                     radio.Interact();
                 }
             }
+        }
+    }
+    void InteractWithAfterMarketEnding()
+    {
+        Ray ray = new Ray(
+            playerCamera.transform.position,
+            playerCamera.transform.forward
+        );
+
+        RaycastHit hit;
+
+        if (Physics.SphereCast(
+            ray,
+            0.25f,
+            out hit,
+            pickupRange,
+            ~0,
+            QueryTriggerInteraction.Collide))
+        {
+            AfterMarketEndingInteraction ending =
+                hit.collider.GetComponentInParent<AfterMarketEndingInteraction>();
+
+            if (ending != null)
+            {
+                ending.Interact();
+            }
+        }
+    }
+
+    void InteractWithDoor()
+    {
+        Ray ray = new Ray(
+            playerCamera.transform.position,
+            playerCamera.transform.forward
+        );
+
+        RaycastHit hit;
+
+        if (Physics.SphereCast(
+            ray,
+            0.25f,
+            out hit,
+            pickupRange,
+            ~0,
+            QueryTriggerInteraction.Collide))
+        {
+            DoorInteraction door =
+                hit.collider.GetComponentInParent<DoorInteraction>();
+
+            if (door == null)
+                return;
+
+            if (!hit.collider.CompareTag("DoorTrigger") &&
+                !hit.collider.transform.root.CompareTag("DoorTrigger"))
+            {
+                return;
+            }
+
+            door.Interact();
         }
     }
 }

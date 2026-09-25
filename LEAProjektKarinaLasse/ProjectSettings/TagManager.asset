@@ -16,6 +16,9 @@ TagManager:
   - Enter
   - Exit
   - Radio
+  - Phone
+  - KIllerDoor
+  - Bed
   layers:
   - Default
   - TransparentFX

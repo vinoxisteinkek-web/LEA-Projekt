@@ -11,6 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SupermarketScene.unity
     guid: c4777a0a224a37c41b26c8b59401fd5f
+  - enabled: 1
+    path: Assets/Scenes/HouseSceneAfterMarket.unity
+    guid: 63d76e4e114c23148a396d0d7911666e
   m_configObjects:
     com.unity.dt.app-ui: {fileID: 11400000, guid: 1b1c20d82303e4b5781c3ef50ac1449f, type: 2}
   m_UseUCBPForAssetBundles: 0

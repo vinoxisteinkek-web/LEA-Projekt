@@ -51,7 +51,8 @@ public class CouchStartScript : MonoBehaviour
 
     private void Start()
     {
-        rb = playerController.GetComponent<Rigidbody>();
+        if(rb == null)
+            rb = playerController.GetComponent<Rigidbody>();
 
         // =====================================
         // SPIELER SITZT AM ANFANG
