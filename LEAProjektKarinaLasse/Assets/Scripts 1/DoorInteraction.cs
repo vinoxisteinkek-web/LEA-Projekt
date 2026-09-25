@@ -39,18 +39,29 @@ public class DoorInteraction : MonoBehaviour
         isOpen = true;
         isMoving = true;
 
-        // Normaler Door-Sound
+        Debug.Log("Tür wurde geöffnet.");
+
+        // Normaler Tür-Sound
         if (audioSource != null && doorSound != null)
         {
             audioSource.PlayOneShot(doorSound);
         }
 
-        // Zusätzlicher Sound nur bei der Haustür
+        // Zusätzlicher Sound bei der Haustür
         if (isHouseDoor &&
             audioSource != null &&
             houseDoorSound != null)
         {
             audioSource.PlayOneShot(houseDoorSound);
+        }
+
+        // Story starten
+        if (isHouseDoor &&
+            StoryManagerAfterMarket.Instance != null)
+        {
+            Debug.Log("AfterMarket Story: EnterHouse() wird aufgerufen.");
+
+            StoryManagerAfterMarket.Instance.EnterHouse();
         }
     }
 
