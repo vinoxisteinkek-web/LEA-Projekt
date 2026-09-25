@@ -4,65 +4,60 @@ using System.Collections;
 
 public class StoryMessageScript : MonoBehaviour
 {
+    [Header("Normaler Dialog")]
     public TextMeshProUGUI dialogueText;
 
-    // =========================
-    // TEXT
-    // =========================
+    [Header("Intro Dialog")]
+    public TextMeshProUGUI introText;
 
+    [Header("Text Einstellungen")]
     public float textSpeed = 0.035f;
 
-
-    // =========================
-    // PLAYER VOICE
-    // =========================
-
+    [Header("Player Voice")]
     public AudioSource playerVoiceAudioSource;
     public AudioClip playerTalking;
 
-
     private Coroutine typingCoroutine;
-
 
     private void Start()
     {
-        dialogueText.gameObject.SetActive(false);
+        if (dialogueText != null)
+        {
+            dialogueText.gameObject.SetActive(false);
+        }
+
+        if (introText != null)
+        {
+            introText.gameObject.SetActive(false);
+        }
     }
 
-
-    // =========================================
-    // NACHRICHTE ANZEIGEN
-    // =========================================
+    // =========================
+    // NORMALE DIALOGE
+    // =========================
 
     public void ShowMessage(string message)
     {
-        // Falls gerade noch ein anderer Text geschrieben wird
         if (typingCoroutine != null)
         {
             StopCoroutine(typingCoroutine);
         }
 
-        // Alten Sprechsound stoppen
         StopPlayerVoice();
 
-        // Neue Nachricht starten
-        typingCoroutine = StartCoroutine(TypeMessage(message));
+        typingCoroutine = StartCoroutine(TypeNormalMessage(message));
     }
 
-
-    // =========================================
-    // TEXT BUCHSTABE FÜR BUCHSTABE
-    // =========================================
-
-    private IEnumerator TypeMessage(string message)
+    private IEnumerator TypeNormalMessage(string message)
     {
+        if (dialogueText == null)
+            yield break;
+
         dialogueText.text = "";
         dialogueText.gameObject.SetActive(true);
 
-        // Spieler fängt an zu sprechen
         StartPlayerVoice();
 
-        // Text langsam schreiben
         for (int i = 0; i < message.Length; i++)
         {
             dialogueText.text += message[i];
@@ -70,37 +65,77 @@ public class StoryMessageScript : MonoBehaviour
             yield return new WaitForSeconds(textSpeed);
         }
 
-        // Text ist fertig geschrieben
         StopPlayerVoice();
 
         typingCoroutine = null;
     }
 
+    // =========================
+    // INTRO
+    // =========================
 
-    // =========================================
+    public void ShowIntroMessage(string message)
+    {
+        if (typingCoroutine != null)
+        {
+            StopCoroutine(typingCoroutine);
+        }
+
+        StopPlayerVoice();
+
+        typingCoroutine = StartCoroutine(TypeIntroMessage(message));
+    }
+
+    private IEnumerator TypeIntroMessage(string message)
+    {
+        if (introText == null)
+            yield break;
+
+        introText.text = "";
+        introText.gameObject.SetActive(true);
+
+        StartPlayerVoice();
+
+        for (int i = 0; i < message.Length; i++)
+        {
+            introText.text += message[i];
+
+            yield return new WaitForSeconds(textSpeed);
+        }
+
+        StopPlayerVoice();
+
+        typingCoroutine = null;
+    }
+
+    // =========================
     // TEXT AUSBLENDEN
-    // =========================================
+    // =========================
 
     public void HideMessage()
     {
-        // Laufenden Text stoppen
         if (typingCoroutine != null)
         {
             StopCoroutine(typingCoroutine);
             typingCoroutine = null;
         }
 
-        // Stimme stoppen
         StopPlayerVoice();
 
-        // Text verstecken
-        dialogueText.gameObject.SetActive(false);
+        if (dialogueText != null)
+        {
+            dialogueText.gameObject.SetActive(false);
+        }
+
+        if (introText != null)
+        {
+            introText.gameObject.SetActive(false);
+        }
     }
 
-
-    // =========================================
-    // PLAYER VOICE START
-    // =========================================
+    // =========================
+    // PLAYER VOICE
+    // =========================
 
     private void StartPlayerVoice()
     {
@@ -114,11 +149,6 @@ public class StoryMessageScript : MonoBehaviour
         playerVoiceAudioSource.loop = true;
         playerVoiceAudioSource.Play();
     }
-
-
-    // =========================================
-    // PLAYER VOICE STOP
-    // =========================================
 
     private void StopPlayerVoice()
     {

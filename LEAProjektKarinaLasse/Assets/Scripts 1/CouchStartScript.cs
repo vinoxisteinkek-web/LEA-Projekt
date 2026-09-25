@@ -49,10 +49,15 @@ public class CouchStartScript : MonoBehaviour
     public AudioSource changeClothesSound;
 
 
+    // =====================================
+    // START
+    // =====================================
+
     private void Start()
     {
-        if(rb == null)
+        if (rb == null)
             rb = playerController.GetComponent<Rigidbody>();
+
 
         // =====================================
         // SPIELER SITZT AM ANFANG
@@ -64,15 +69,23 @@ public class CouchStartScript : MonoBehaviour
         rb.isKinematic = true;
         rb.useGravity = false;
 
-        // E-Text am Anfang verstecken
+
+        // =====================================
+        // E-TEXT VERSTECKEN
+        // =====================================
+
         interactText.SetActive(false);
 
-        // Text vorbereiten
         interactTextUI.text = "E - To stand up";
 
-        // Kleiderschrank und Trockner deaktivieren
+
+        // =====================================
+        // TRIGGER DEAKTIVIEREN
+        // =====================================
+
         wardrobeTrigger.SetActive(false);
         dryerTrigger.SetActive(false);
+
 
         // =====================================
         // SCHWARZER BILDSCHIRM
@@ -81,8 +94,9 @@ public class CouchStartScript : MonoBehaviour
         blackScreen.SetActive(true);
         blackScreenCanvas.alpha = 1f;
 
+
         // =====================================
-        // AUFWACHEN
+        // VORGESCHICHTE STARTEN
         // =====================================
 
         StartCoroutine(WakeUp());
@@ -90,20 +104,54 @@ public class CouchStartScript : MonoBehaviour
 
 
     // =====================================
-    // AUFWACHEN
+    // AUFWACHEN / VORGESCHICHTE
     // =====================================
 
     private IEnumerator WakeUp()
     {
+        // Bildschirm komplett schwarz
         blackScreen.SetActive(true);
-
-        // Komplett schwarz starten
         blackScreenCanvas.alpha = 1f;
+
+
+        // =====================================
+        // VORGESCHICHTE
+        // =====================================
+
+        string introText =
+     "My name is Cassy. This story happened to me five years ago. " +
+     "I had just turned eighteen and was working at a supermarket at the time. " +
+     "But one evening, something happened that still haunts me to this day.";
+
+        storyMessage.ShowIntroMessage(introText);
+
+
+        // =====================================
+        // WARTEN, BIS DIE VORGESCHICHTE FERTIG IST
+        // =====================================
+
+        // Zeit für das Tippen + kurze Pause danach
+        yield return new WaitForSeconds(15f);
+
+
+        // =====================================
+        // TEXT AUSBLENDEN
+        // =====================================
+
+        storyMessage.HideMessage();
+
+
+        // Kleine Pause
+        yield return new WaitForSeconds(0.5f);
+
+
+        // =====================================
+        // SCHWARZ AUSFADEN
+        // =====================================
 
         float fadeDuration = 3f;
         float time = 0f;
 
-        // Langsam von schwarz zu sichtbar
         while (time < fadeDuration)
         {
             time += Time.deltaTime;
@@ -115,12 +163,19 @@ public class CouchStartScript : MonoBehaviour
             yield return null;
         }
 
-        // Am Ende komplett durchsichtig
+
+        // =====================================
+        // BILDSCHIRM KOMPLETT SICHTBAR
+        // =====================================
+
         blackScreenCanvas.alpha = 0f;
         blackScreen.SetActive(false);
 
 
-        // Erster Text
+        // =====================================
+        // ERSTER SATZ NACH DEM AUFWACHEN
+        // =====================================
+
         storyMessage.ShowMessage(
             "Oh no... i have to go to work!"
         );
@@ -129,10 +184,14 @@ public class CouchStartScript : MonoBehaviour
         // Text 4 Sekunden anzeigen
         yield return new WaitForSeconds(4f);
 
+
         storyMessage.HideMessage();
 
 
-        // E zum Aufstehen anzeigen
+        // =====================================
+        // E ZUM AUFSTEHEN
+        // =====================================
+
         canStand = true;
 
         interactTextUI.text = "E - To stand up";
@@ -150,6 +209,7 @@ public class CouchStartScript : MonoBehaviour
             return;
 
         canStand = false;
+
 
         // E-Text ausblenden
         interactText.SetActive(false);
@@ -372,7 +432,7 @@ public class CouchStartScript : MonoBehaviour
 
 
         storyMessage.ShowMessage(
-            "Fortunatly i got another pair in the dryer Downstairs."
+            "Fortunately i got another pair in the dryer downstairs."
         );
 
 
