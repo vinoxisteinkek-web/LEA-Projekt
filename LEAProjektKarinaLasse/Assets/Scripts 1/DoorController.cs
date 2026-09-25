@@ -4,9 +4,15 @@ public class DoorController : MonoBehaviour
 {
     [SerializeField] private Transform doorLeft;
     [SerializeField] private Transform doorRight;
+
     [SerializeField] private float openDistance = 1.5f;
     [SerializeField] private float doorSpeed = 2f;
     [SerializeField] private float sensorCloseDelay = 2f;
+
+    [Header("Door Sound")]
+    [SerializeField] private AudioSource doorAudioSource;
+    [SerializeField] private AudioClip motionSensorSound;
+
 
     private bool isOpen = false;
     private float closeTimer = 0f;
@@ -14,26 +20,35 @@ public class DoorController : MonoBehaviour
     private Vector3 doorLeftClosedPos;
     private Vector3 doorRightClosedPos;
 
+
     void Start()
     {
         doorLeftClosedPos = doorLeft.localPosition;
         doorRightClosedPos = doorRight.localPosition;
     }
 
+
     void Update()
     {
         Vector3 leftTarget;
         Vector3 rightTarget;
 
+
         if (isOpen)
         {
             // Linke Tür nach links
-            leftTarget = doorLeftClosedPos + Vector3.left * openDistance;
+            leftTarget =
+                doorLeftClosedPos +
+                Vector3.left * openDistance;
 
             // Rechte Tür nach rechts
-            rightTarget = doorRightClosedPos + Vector3.right * openDistance;
+            rightTarget =
+                doorRightClosedPos +
+                Vector3.right * openDistance;
+
 
             closeTimer -= Time.deltaTime;
+
 
             if (closeTimer <= 0f)
             {
@@ -46,11 +61,13 @@ public class DoorController : MonoBehaviour
             rightTarget = doorRightClosedPos;
         }
 
+
         doorLeft.localPosition = Vector3.MoveTowards(
             doorLeft.localPosition,
             leftTarget,
             doorSpeed * Time.deltaTime
         );
+
 
         doorRight.localPosition = Vector3.MoveTowards(
             doorRight.localPosition,
@@ -59,8 +76,23 @@ public class DoorController : MonoBehaviour
         );
     }
 
+
     public void OnMotionDetected()
     {
+        // Nur Sound abspielen,
+        // wenn die Tür vorher geschlossen war.
+        if (!isOpen)
+        {
+            if (doorAudioSource != null &&
+                motionSensorSound != null)
+            {
+                doorAudioSource.PlayOneShot(
+                    motionSensorSound
+                );
+            }
+        }
+
+
         isOpen = true;
         closeTimer = sensorCloseDelay;
     }

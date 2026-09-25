@@ -9,6 +9,8 @@ public class StoryManagerStore : MonoBehaviour
     [Header("Radio Music")]
     [SerializeField] private AudioSource radioAudioSource;
 
+    [SerializeField] private float radioVolume = 1f;
+
     [Header("Player Voice")]
     [SerializeField] private AudioSource playerVoiceAudioSource;
     [SerializeField] private AudioClip playerTalking;
@@ -21,8 +23,8 @@ public class StoryManagerStore : MonoBehaviour
     [SerializeField] private AudioSource ambientHumAudioSource;
     [SerializeField] private AudioSource cicadaAudioSource;
 
-    [SerializeField] private float outsideAmbientVolume = 0.05f;
-    [SerializeField] private float shopAmbientVolume = 0.025f;
+    [SerializeField] private float outsideAmbientVolume = 0.03f;
+    [SerializeField] private float shopAmbientVolume = 0.01f;
 
     [Header("Forest Event")]
     [SerializeField] private AudioSource forestEventAudioSource;
@@ -49,11 +51,12 @@ public class StoryManagerStore : MonoBehaviour
 
     private bool goHomeTaskActive = false;
 
-    private bool radioTaskActive = false;
-    private bool radioCanBeTurnedOff = false;
-
     private bool reachedHomeTrigger = false;
 
+
+    // ==================================================
+    // START
+    // ==================================================
 
     private void Awake()
     {
@@ -64,6 +67,7 @@ public class StoryManagerStore : MonoBehaviour
             homeTrigger.SetActive(false);
         }
 
+        // Audio sicherheitshalber beim Start stoppen
         if (returnHomeAudioSource != null)
         {
             returnHomeAudioSource.Stop();
@@ -77,28 +81,38 @@ public class StoryManagerStore : MonoBehaviour
         if (radioAudioSource != null)
         {
             radioAudioSource.Stop();
+            radioAudioSource.volume = 0f;
+        }
+
+        if (playerVoiceAudioSource != null)
+        {
+            playerVoiceAudioSource.Stop();
+        }
+
+        if (radioVoiceAudioSource != null)
+        {
+            radioVoiceAudioSource.Stop();
         }
     }
 
 
     private void Start()
     {
-        SetAmbientVolume(outsideAmbientVolume);
+        UpdateAudioEnvironment();
     }
 
 
     // ==================================================
-    // SHOP
+    // SHOP / GEBÄUDE
     // ==================================================
 
     public void EnterShop()
     {
         playerInsideShop = true;
 
-        if (!radioTurnedOn)
-        {
-            SetAmbientVolume(shopAmbientVolume);
-        }
+        UpdateAudioEnvironment();
+
+        Debug.Log("Spieler ist im Gebäude.");
     }
 
 
@@ -106,7 +120,72 @@ public class StoryManagerStore : MonoBehaviour
     {
         playerInsideShop = false;
 
-        if (!radioTurnedOn)
+        UpdateAudioEnvironment();
+
+        Debug.Log("Spieler ist außerhalb des Gebäudes.");
+    }
+
+
+    // ==================================================
+    // AUDIO UMGEBUNG
+    // ==================================================
+
+    private void UpdateAudioEnvironment()
+    {
+        // ==========================================
+        // RADIO IST AN
+        // ==========================================
+
+        if (radioTurnedOn)
+        {
+            if (playerInsideShop)
+            {
+                // Im Gebäude:
+                // Radio hörbar
+                // Ambient aus
+
+                if (radioAudioSource != null)
+                {
+                    radioAudioSource.volume = radioVolume;
+                }
+
+                SetAmbientVolume(0f);
+            }
+            else
+            {
+                // Außerhalb:
+                // Radio nicht hörbar
+                // Ambient wieder an
+
+                if (radioAudioSource != null)
+                {
+                    radioAudioSource.volume = 0f;
+                }
+
+                SetAmbientVolume(outsideAmbientVolume);
+            }
+
+            return;
+        }
+
+
+        // ==========================================
+        // RADIO IST AUS
+        // ==========================================
+
+        if (radioAudioSource != null)
+        {
+            radioAudioSource.volume = 0f;
+        }
+
+
+        // Im Gebäude
+        if (playerInsideShop)
+        {
+            SetAmbientVolume(shopAmbientVolume);
+        }
+        // Außerhalb
+        else
         {
             SetAmbientVolume(outsideAmbientVolume);
         }
@@ -116,10 +195,14 @@ public class StoryManagerStore : MonoBehaviour
     private void SetAmbientVolume(float volume)
     {
         if (ambientHumAudioSource != null)
+        {
             ambientHumAudioSource.volume = volume;
+        }
 
         if (cicadaAudioSource != null)
+        {
             cicadaAudioSource.volume = volume;
+        }
     }
 
 
@@ -153,11 +236,9 @@ public class StoryManagerStore : MonoBehaviour
         if (taskUI == null)
             return false;
 
-        // Hauptaufgaben müssen fertig sein
         if (!taskUI.AreAllTasksComplete())
             return false;
 
-        // Radio muss ausgeschaltet sein
         if (radioTurnedOn)
             return false;
 
@@ -211,9 +292,6 @@ public class StoryManagerStore : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
 
-        // Noch NICHT die Hauptaufgaben anzeigen!
-        // Zuerst muss der Spieler das Radio einschalten.
-
         if (taskUI != null)
         {
             taskUI.ShowRadioOnTask();
@@ -232,30 +310,25 @@ public class StoryManagerStore : MonoBehaviour
 
         radioTurnedOn = true;
 
-        // Ambient ausschalten
-        SetAmbientVolume(0f);
-
-        // Radio-Musik starten
         if (radioAudioSource != null)
         {
             radioAudioSource.loop = true;
             radioAudioSource.Play();
         }
 
-        // Radio-On-Aufgabe abschließen
+        UpdateAudioEnvironment();
+
+
         if (taskUI != null)
         {
             taskUI.CompleteRadioOnTask();
-
-            // Jetzt erst die Hauptaufgaben anzeigen
             taskUI.ShowMainTasks();
         }
     }
 
 
-
     // ==================================================
-    // RADIO AUS
+    // RADIO AUS - MANUELL
     // ==================================================
 
     public void StopRadio()
@@ -267,29 +340,24 @@ public class StoryManagerStore : MonoBehaviour
 
         radioTurnedOn = false;
 
-        // Ambient wieder einschalten
-        if (playerInsideShop)
-        {
-            SetAmbientVolume(shopAmbientVolume);
-        }
-        else
-        {
-            SetAmbientVolume(outsideAmbientVolume);
-        }
+        UpdateAudioEnvironment();
 
-        // Radio-Off-Aufgabe abschließen
+
         if (taskUI != null)
         {
-            if(taskUI.AreAllTasksComplete())
+            if (taskUI.AreAllTasksComplete())
             {
                 taskUI.CompleteRadioOffTask();
             }
         }
     }
+
+
     public bool RadioIsOn()
     {
         return radioTurnedOn;
     }
+
 
     public bool CanTurnRadioOff()
     {
@@ -300,6 +368,25 @@ public class StoryManagerStore : MonoBehaviour
             return false;
 
         return true;
+    }
+
+
+    // ==================================================
+    // RADIO FÜR NEWS STOPPEN
+    // ==================================================
+
+    private void StopRadioForNews()
+    {
+        if (radioAudioSource != null)
+        {
+            radioAudioSource.Stop();
+        }
+
+        // Radio gilt danach als ausgeschaltet,
+        // aber die Radio-Off-Aufgabe wird NICHT automatisch abgeschlossen.
+        radioTurnedOn = false;
+
+        UpdateAudioEnvironment();
     }
 
 
@@ -323,7 +410,10 @@ public class StoryManagerStore : MonoBehaviour
 
     private IEnumerator NewsSequence()
     {
-        StopRadio();
+        // Radio-Musik stoppen
+        // NICHT StopRadio(), da sonst die Radio-Off-Aufgabe
+        // automatisch erledigt werden würde.
+        StopRadioForNews();
 
         yield return new WaitForSeconds(0.5f);
 
@@ -340,7 +430,7 @@ public class StoryManagerStore : MonoBehaviour
 
         yield return StartCoroutine(
             PlayerSay(
-                "Dang, my area? No way, who is it? I hope it's not Michael!"
+                "Dang, my area? No way, who is it? I hope his name isnt Michael!"
             )
         );
 
@@ -354,24 +444,29 @@ public class StoryManagerStore : MonoBehaviour
             )
         );
 
+
         yield return new WaitForSeconds(1f);
+
 
         yield return StartCoroutine(
             RadioSay(
                 "<color=white>We will now continue with the music. Stay safe and have a nice day.</color>"
             )
-        ); 
-        
+        );
+
+
         yield return new WaitForSeconds(1f);
-        
+
+
         yield return StartCoroutine(
             PlayerSay(
                 "Dang, that was scary. I better finish my tasks and go home."
             )
         );
 
+
         yield return new WaitForSeconds(1f);
-      
+
         TurnOnRadio();
     }
 
@@ -549,7 +644,11 @@ public class StoryManagerStore : MonoBehaviour
         if (homeTrigger != null)
         {
             homeTrigger.SetActive(true);
-            Debug.Log("Home trigger activated. " + reachedHomeTrigger);
+
+            Debug.Log(
+                "Home trigger activated. " +
+                reachedHomeTrigger
+            );
         }
     }
 
@@ -570,16 +669,19 @@ public class StoryManagerStore : MonoBehaviour
             taskUI.CompleteGoHomeTask();
         }
 
-        if (reachedHomeTrigger == false)
+        if (!reachedHomeTrigger)
         {
-
             if (returnHomeAudioSource != null)
             {
                 returnHomeAudioSource.Play();
+
                 reachedHomeTrigger = true;
-                Debug.Log("Reached home trigger. " + reachedHomeTrigger);
+
+                Debug.Log(
+                    "Reached home trigger. " +
+                    reachedHomeTrigger
+                );
             }
         }
-
     }
 }

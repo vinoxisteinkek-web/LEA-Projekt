@@ -13,12 +13,18 @@ public class PickupItem : MonoBehaviour
     [Header("Sweep Settings")]
     [SerializeField] private float sweepCooldown = 0.5f;
 
+    [Header("Sweep Sounds")]
+    [SerializeField] private AudioSource sweepAudioSource;
+    [SerializeField] private AudioClip broomSweepSound;
+    [SerializeField] private AudioClip mopSweepSound;
+
     [Header("Door Settings")]
     [SerializeField] private float lockedDoorRange = 1.5f;
 
     private GameObject heldItem;
 
     private float nextSweepTime = 0f;
+
 
     void Update()
     {
@@ -38,6 +44,7 @@ public class PickupItem : MonoBehaviour
             }
         }
 
+
         // Q = Ablegen
         if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -46,7 +53,9 @@ public class PickupItem : MonoBehaviour
                 DropItem();
             }
         }
-        //Wischen
+
+
+        // Wischen
         if (Input.GetMouseButtonDown(0))
         {
             if (Time.time < nextSweepTime)
@@ -73,6 +82,11 @@ public class PickupItem : MonoBehaviour
         }
     }
 
+
+    // ==================================================
+    // PICKUP
+    // ==================================================
+
     void TryPickup()
     {
         Ray ray = new Ray(
@@ -82,7 +96,6 @@ public class PickupItem : MonoBehaviour
 
         RaycastHit hit;
 
-        // SphereCast statt normalem Raycast
         if (Physics.SphereCast(
             ray,
             0.25f,
@@ -98,14 +111,11 @@ public class PickupItem : MonoBehaviour
 
             heldItem = hit.collider.gameObject;
 
-            // Gegenstand an die Hand hängen
             heldItem.transform.SetParent(holdPoint);
 
-            // Position an HoldPoint setzen
             heldItem.transform.localPosition = Vector3.zero;
             heldItem.transform.localRotation = Quaternion.identity;
 
-            // Physik ausschalten
             Rigidbody rb = heldItem.GetComponent<Rigidbody>();
 
             if (rb != null)
@@ -113,7 +123,6 @@ public class PickupItem : MonoBehaviour
                 rb.isKinematic = true;
             }
 
-            // Collider ausschalten
             Collider col = heldItem.GetComponent<Collider>();
 
             if (col != null)
@@ -123,12 +132,15 @@ public class PickupItem : MonoBehaviour
         }
     }
 
+
+    // ==================================================
+    // DROP
+    // ==================================================
+
     void DropItem()
     {
-        // Gegenstand vom Spieler lösen
         heldItem.transform.SetParent(null);
 
-        // Position vor dem Spieler
         Vector3 dropPosition =
             transform.position + transform.forward * 1.5f;
 
@@ -139,7 +151,6 @@ public class PickupItem : MonoBehaviour
         heldItem.transform.rotation =
             Quaternion.Euler(-90f, 0f, 0f);
 
-        // Physik wieder einschalten
         Rigidbody rb = heldItem.GetComponent<Rigidbody>();
 
         if (rb != null)
@@ -147,7 +158,6 @@ public class PickupItem : MonoBehaviour
             rb.isKinematic = false;
         }
 
-        // Collider wieder einschalten
         Collider col = heldItem.GetComponent<Collider>();
 
         if (col != null)
@@ -158,9 +168,13 @@ public class PickupItem : MonoBehaviour
         heldItem = null;
     }
 
+
+    // ==================================================
+    // MÜLL
+    // ==================================================
+
     void ThrowTrashAway()
     {
-        // Nur Müllbeutel dürfen in den Dumpster
         if (heldItem == null || heldItem.name != "trash")
         {
             return;
@@ -182,26 +196,26 @@ public class PickupItem : MonoBehaviour
         {
             if (hit.collider.CompareTag("dumpster"))
             {
-                // Müll verschwinden lassen
                 heldItem.SetActive(false);
 
-                // PlayerController suchen
                 PlayerController player =
                     GetComponentInParent<PlayerController>();
 
                 if (player != null)
                 {
-                    // Müll zählen
                     player.trashCount++;
 
-                    Debug.Log("Müll entsorgt! Count: " + player.trashCount);
+                    Debug.Log(
+                        "Müll entsorgt! Count: " +
+                        player.trashCount
+                    );
 
-                    // Beim zweiten Müllsack Story-Event starten
                     if (player.trashCount == 2)
                     {
                         if (StoryManagerStore.Instance != null)
                         {
-                            StoryManagerStore.Instance.SecondTrashBagThrownAway();
+                            StoryManagerStore.Instance
+                                .SecondTrashBagThrownAway();
                         }
                     }
                 }
@@ -212,7 +226,6 @@ public class PickupItem : MonoBehaviour
                     );
                 }
 
-                // Task UI aktualisieren
                 TaskUI taskUI =
                     FindFirstObjectByType<TaskUI>();
 
@@ -221,11 +234,15 @@ public class PickupItem : MonoBehaviour
                     taskUI.UpdateTasks();
                 }
 
-                // Kein Gegenstand mehr in der Hand
                 heldItem = null;
             }
         }
     }
+
+
+    // ==================================================
+    // BESEN
+    // ==================================================
 
     bool SweepDirt()
     {
@@ -258,6 +275,16 @@ public class PickupItem : MonoBehaviour
                 if (dirtPile != null)
                 {
                     dirtPile.Sweep();
+
+                    // Besen-Sound
+                    if (sweepAudioSource != null &&
+                        broomSweepSound != null)
+                    {
+                        sweepAudioSource.PlayOneShot(
+                            broomSweepSound
+                        );
+                    }
+
                     return true;
                 }
             }
@@ -265,6 +292,12 @@ public class PickupItem : MonoBehaviour
 
         return false;
     }
+
+
+    // ==================================================
+    // MOP
+    // ==================================================
+
     bool SweepPuddle()
     {
         if (heldItem == null)
@@ -296,6 +329,16 @@ public class PickupItem : MonoBehaviour
                 if (puddle != null)
                 {
                     puddle.Sweep();
+
+                    // Mop-Sound
+                    if (sweepAudioSource != null &&
+                        mopSweepSound != null)
+                    {
+                        sweepAudioSource.PlayOneShot(
+                            mopSweepSound
+                        );
+                    }
+
                     return true;
                 }
             }
@@ -303,6 +346,11 @@ public class PickupItem : MonoBehaviour
 
         return false;
     }
+
+
+    // ==================================================
+    // LOCKED DOOR
+    // ==================================================
 
     void InteractWithLockedDoor()
     {
@@ -333,6 +381,12 @@ public class PickupItem : MonoBehaviour
             }
         }
     }
+
+
+    // ==================================================
+    // LICHTSCHALTER
+    // ==================================================
+
     void InteractWithLightSwitch()
     {
         Ray ray = new Ray(
@@ -362,6 +416,12 @@ public class PickupItem : MonoBehaviour
             }
         }
     }
+
+
+    // ==================================================
+    // TASKLISTE
+    // ==================================================
+
     void InteractWithTaskList()
     {
         Ray ray = new Ray(
@@ -392,13 +452,20 @@ public class PickupItem : MonoBehaviour
         }
     }
 
+
+    // ==================================================
+    // RADIO
+    // ==================================================
+
     void InteractWithRadio()
     {
         Ray ray = new Ray(
             playerCamera.transform.position,
             playerCamera.transform.forward
         );
+
         RaycastHit hit;
+
         if (Physics.SphereCast(
             ray,
             0.25f,
@@ -411,6 +478,7 @@ public class PickupItem : MonoBehaviour
             {
                 Radio radio =
                     hit.collider.GetComponentInParent<Radio>();
+
                 if (radio != null)
                 {
                     radio.Interact();

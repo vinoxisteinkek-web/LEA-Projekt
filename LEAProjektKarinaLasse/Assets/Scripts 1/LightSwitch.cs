@@ -5,6 +5,10 @@ public class LightSwitch : MonoBehaviour
     [Header("Lights")]
     [SerializeField] private GameObject[] lights;
 
+    [Header("Sound")]
+    [SerializeField] private AudioSource lightSwitchAudioSource;
+    [SerializeField] private AudioClip lightOnSound;
+
     private bool lightsOn = false;
 
 
@@ -19,6 +23,17 @@ public class LightSwitch : MonoBehaviour
             lightsOn = true;
 
             SetLights(true);
+
+
+            // Lichtschalter-Sound
+            if (lightSwitchAudioSource != null &&
+                lightOnSound != null)
+            {
+                lightSwitchAudioSource.PlayOneShot(
+                    lightOnSound
+                );
+            }
+
 
             if (StoryManagerStore.Instance != null)
             {
