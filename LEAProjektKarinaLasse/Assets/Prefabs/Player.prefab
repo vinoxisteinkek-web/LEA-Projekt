@@ -1019,7 +1019,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CameraController
   _camera: {fileID: 9203376507964098550}
   hand: {fileID: 1653299209913287319}
-  cameraSensitivity: 200
+  cameraSensitivity: 50
 --- !u!65 &6374876606066693540
 BoxCollider:
   m_ObjectHideFlags: 0

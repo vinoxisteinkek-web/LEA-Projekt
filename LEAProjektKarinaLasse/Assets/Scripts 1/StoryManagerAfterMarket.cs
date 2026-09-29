@@ -365,7 +365,7 @@ public class StoryManagerAfterMarket : MonoBehaviour
         yield return new WaitForSeconds(2f);
 
 
-        SceneManager.LoadScene("MenueScene");
+        restartGame();
     }
 
 
@@ -443,7 +443,7 @@ public class StoryManagerAfterMarket : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
 
-        SceneManager.LoadScene("MenueScene");
+        restartGame();
 
     }
     // ==================================================
@@ -534,7 +534,7 @@ public class StoryManagerAfterMarket : MonoBehaviour
         yield return new WaitForSeconds(2f);
 
 
-        SceneManager.LoadScene("MenueScene");
+        restartGame();
     }
 
 
@@ -755,6 +755,14 @@ public class StoryManagerAfterMarket : MonoBehaviour
     public bool HasEndingTriggered()
     {
         return endingTriggered;
+    }
+
+    public void restartGame()
+
+    {
+        Cursor.lockState = CursorLockMode.None;
+        SceneManager.LoadScene("MenueScene");
+
     }
 }
 
