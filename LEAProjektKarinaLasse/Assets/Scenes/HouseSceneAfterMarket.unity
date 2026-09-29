@@ -821,6 +821,110 @@ MonoBehaviour:
   doorSound: {fileID: 8300000, guid: 07ed00bf43896874bbc8a51fb7ae07d8, type: 3}
   isHouseDoor: 1
   houseDoorSound: {fileID: 8300000, guid: 3b642e55e552a484ba48d472fbcb481a, type: 3}
+--- !u!1001 &338410649
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1070929697392381293, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -5.27423
+      objectReference: {fileID: 0}
+    - target: {fileID: 1070929697392381293, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 4.59381
+      objectReference: {fileID: 0}
+    - target: {fileID: 1070929697392381293, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -19.27827
+      objectReference: {fileID: 0}
+    - target: {fileID: 1070929697392381293, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1070929697392381293, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1070929697392381293, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1070929697392381293, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1070929697392381293, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1070929697392381293, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1070929697392381293, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2753893885191518244, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3192327206189272829, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4703148204235163035, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5444249321878634490, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
+      propertyPath: m_Name
+      value: PauseMenue
+      objectReference: {fileID: 0}
+    - target: {fileID: 5444249321878634490, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7639925377793366328, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
+--- !u!1 &338410650 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5444249321878634490, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
+  m_PrefabInstance: {fileID: 338410649}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &338410651 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7265605470251288989, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
+  m_PrefabInstance: {fileID: 338410649}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Slider
+--- !u!114 &338410652 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1668762367845094605, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
+  m_PrefabInstance: {fileID: 338410649}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Slider
 --- !u!1 &430373745 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1160106857250959407, guid: d6a0d044148e47d43b93e761ac695355, type: 3}
@@ -1547,6 +1651,7 @@ GameObject:
   m_Component:
   - component: {fileID: 810754707}
   - component: {fileID: 810754708}
+  - component: {fileID: 810754709}
   m_Layer: 0
   m_Name: StoryManagerAfterMarket
   m_TagString: Untagged
@@ -1605,6 +1710,22 @@ MonoBehaviour:
   cicadaAudioSource: {fileID: 1795241028}
   ambientVolume: 0.03
   endingScreen: {fileID: 1172901420}
+--- !u!114 &810754709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 810754706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f8aa078101b33d488e86eb2c9f2b840, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PauseMenuScript
+  pauseMenu: {fileID: 338410650}
+  sensitivitySlider: {fileID: 338410652}
+  volumeSlider: {fileID: 338410651}
+  cameraController: {fileID: 1302081670}
 --- !u!1 &858414210 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2734553006231628629, guid: d6a0d044148e47d43b93e761ac695355, type: 3}
@@ -2244,6 +2365,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1830a1f50f969064688a4cc8120ab670, type: 3}
+--- !u!114 &1302081670 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5515755839254876871, guid: 1830a1f50f969064688a4cc8120ab670, type: 3}
+  m_PrefabInstance: {fileID: 1302081669}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9125ccebe20e41245aadf68d5ce95866, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraController
 --- !u!1 &1510970811 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 552242004836692758, guid: d6a0d044148e47d43b93e761ac695355, type: 3}
@@ -3046,3 +3178,4 @@ SceneRoots:
   - {fileID: 696532235}
   - {fileID: 1003999342}
   - {fileID: 1615464299}
+  - {fileID: 338410649}
