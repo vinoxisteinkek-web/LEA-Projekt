@@ -11,6 +11,8 @@ public class StoryManagerStore : MonoBehaviour
     [SerializeField] private AudioSource radioAudioSource;
     [SerializeField] private float radioVolume = 1f;
 
+    private bool radioTurnedOff = false;
+
 
     [Header("Player Voice")]
     [SerializeField] private AudioSource playerVoiceAudioSource;
@@ -268,6 +270,7 @@ public class StoryManagerStore : MonoBehaviour
     public void LightTurnedOff()
     {
         lightTurnedOn = false;
+        LightSwitch.lightsTurnedOff = true;
 
         if (taskUI != null)
         {
@@ -386,7 +389,13 @@ public class StoryManagerStore : MonoBehaviour
         if (!taskUI.AreAllTasksComplete())
             return false;
 
+        if(taskUI.AreAllTasksComplete())
+        {
+            radioTurnedOff = true;
+            return true;
+        }
         return true;
+
     }
 
 

@@ -22,7 +22,7 @@ public class Puddles : MonoBehaviour
         if (sweepCount == 1)
         {
             Vector3 pos = transform.position;
-            pos.y = 4.25f;
+            pos.y = 4.20f;
             transform.position = pos;
 
             if (StoryManagerStore.Instance != null)
@@ -35,7 +35,7 @@ public class Puddles : MonoBehaviour
         else if (sweepCount == 2)
         {
             Vector3 pos = transform.position;
-            pos.y = 4.24f;
+            pos.y = 4.18f;
             transform.position = pos;
         }
 

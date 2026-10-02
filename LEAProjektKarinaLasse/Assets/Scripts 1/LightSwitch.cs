@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class LightSwitch : MonoBehaviour
@@ -8,6 +9,8 @@ public class LightSwitch : MonoBehaviour
     [Header("Sound")]
     [SerializeField] private AudioSource lightSwitchAudioSource;
     [SerializeField] private AudioClip lightOnSound;
+
+    public static bool lightsTurnedOff = false;
 
     private bool lightsOn = false;
 
@@ -20,9 +23,13 @@ public class LightSwitch : MonoBehaviour
 
         if (!lightsOn)
         {
-            lightsOn = true;
 
-            SetLights(true);
+            
+            if(lightsTurnedOff == false)
+            {
+                lightsOn = true;
+                SetLights(true);
+            }
 
 
             // Lichtschalter-Sound
