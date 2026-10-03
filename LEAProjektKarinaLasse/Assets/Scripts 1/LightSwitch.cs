@@ -23,28 +23,25 @@ public class LightSwitch : MonoBehaviour
 
         if (!lightsOn)
         {
-
-            
-            if(lightsTurnedOff == false)
+            if (!lightsTurnedOff)
             {
+
                 lightsOn = true;
                 SetLights(true);
-            }
 
+                // Lichtschalter-Sound
+                if (lightSwitchAudioSource != null &&
+                    lightOnSound != null)
+                {
+                    lightSwitchAudioSource.PlayOneShot(
+                        lightOnSound
+                    );
+                }
 
-            // Lichtschalter-Sound
-            if (lightSwitchAudioSource != null &&
-                lightOnSound != null)
-            {
-                lightSwitchAudioSource.PlayOneShot(
-                    lightOnSound
-                );
-            }
-
-
-            if (StoryManagerStore.Instance != null)
-            {
-                StoryManagerStore.Instance.LightTurnedOn();
+                if (StoryManagerStore.Instance != null)
+                {
+                    StoryManagerStore.Instance.LightTurnedOn();
+                }
             }
 
             return;

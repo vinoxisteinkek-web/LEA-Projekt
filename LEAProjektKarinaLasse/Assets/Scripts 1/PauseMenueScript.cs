@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -37,6 +38,7 @@ public class PauseMenuScript : MonoBehaviour
             if (isPaused)
             {
                 ResumeGame();
+                StartCoroutine(CusorLocked());
             }
             else
             {
@@ -77,5 +79,12 @@ public class PauseMenuScript : MonoBehaviour
     private void ChangeVolume(float value)
     {
         AudioListener.volume = value;
+    }
+
+    private IEnumerator CusorLocked()
+    {
+        yield return null;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 }

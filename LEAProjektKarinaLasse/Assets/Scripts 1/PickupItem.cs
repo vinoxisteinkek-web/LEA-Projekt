@@ -205,6 +205,11 @@ public class PickupItem : MonoBehaviour
 
                 if (player != null)
                 {
+                    if(StoryManagerStore.Instance != null)
+                    {
+                        StoryManagerStore.Instance
+                            .ThrowAwayTrash();
+                    }
                     player.trashCount++;
 
                     Debug.Log(
@@ -216,8 +221,11 @@ public class PickupItem : MonoBehaviour
                     {
                         if (StoryManagerStore.Instance != null)
                         {
-                            StoryManagerStore.Instance
-                                .SecondTrashBagThrownAway();
+                            if(StoryManagerStore.Instance.forestEventPlayed == false)
+                            {
+                                StoryManagerStore.Instance
+                                    .SecondTrashBagThrownAway();
+                            }
                         }
                     }
                 }

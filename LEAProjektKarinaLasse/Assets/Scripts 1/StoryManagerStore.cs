@@ -34,6 +34,11 @@ public class StoryManagerStore : MonoBehaviour
 
     [Header("Forest Event")]
     [SerializeField] private AudioSource forestEventAudioSource;
+    public bool forestEventPlayed = false;
+
+    [Header("Dumpster")]
+    [SerializeField] private AudioSource dumpsterAudioSource;
+
 
 
     [Header("Return Home")]
@@ -61,8 +66,7 @@ public class StoryManagerStore : MonoBehaviour
     private bool newsPlayed = false;
 
     private bool playerInsideShop = false;
-    private bool forestEventPlayed = false;
-
+    
     private bool goHomeTaskActive = false;
 
     private bool reachedHomeTrigger = false;
@@ -113,6 +117,10 @@ public class StoryManagerStore : MonoBehaviour
         if (radioVoiceAudioSource != null)
         {
             radioVoiceAudioSource.Stop();
+        }
+        if(dumpsterAudioSource != null)
+        {
+            dumpsterAudioSource.Stop();
         }
     }
 
@@ -456,7 +464,7 @@ public class StoryManagerStore : MonoBehaviour
         );
 
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
 
 
         // SPIELER - ORANGE
@@ -467,7 +475,7 @@ public class StoryManagerStore : MonoBehaviour
         );
 
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
 
 
         // RADIO - WEISS
@@ -478,7 +486,7 @@ public class StoryManagerStore : MonoBehaviour
         );
 
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
 
 
         // RADIO - WEISS
@@ -489,7 +497,7 @@ public class StoryManagerStore : MonoBehaviour
         );
 
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
 
 
         // SPIELER - ORANGE
@@ -500,7 +508,7 @@ public class StoryManagerStore : MonoBehaviour
         );
 
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
 
         // Radio wieder einschalten
         TurnOnRadio();
@@ -541,7 +549,7 @@ public class StoryManagerStore : MonoBehaviour
 
         StopPlayerVoice();
 
-        yield return new WaitForSeconds(dialogueEndDelay);
+        yield return new WaitForSeconds(dialogueEndDelay + (message.Length * 0.025f));
 
         if (dialogueText != null)
         {
@@ -584,7 +592,7 @@ public class StoryManagerStore : MonoBehaviour
 
         StopRadioVoice();
 
-        yield return new WaitForSeconds(dialogueEndDelay);
+        yield return new WaitForSeconds(dialogueEndDelay + (message.Length * 0.025f));
 
         if (dialogueText != null)
         {
@@ -650,18 +658,41 @@ public class StoryManagerStore : MonoBehaviour
     // ==================================================
     // 2. MÜLLBEUTEL
     // ==================================================
+    public void ThrowAwayTrash()
+    {
+        if(dumpsterAudioSource != null)
+        { 
+            dumpsterAudioSource.Play();
+        }
+    }
+
 
     public void SecondTrashBagThrownAway()
-    {
-        if (forestEventPlayed)
-            return;
-
+    { 
         forestEventPlayed = true;
 
         if (forestEventAudioSource != null)
         {
             forestEventAudioSource.Play();
         }
+
+        StartCoroutine(ForestEvent());
+    }
+
+    public IEnumerator ForestEvent()
+    {
+        yield return new WaitForSeconds(4f);
+        yield return StartCoroutine(
+            PlayerSay(
+                "what was that ?!"
+            )
+        );
+        yield return new WaitForSeconds(2f);
+        yield return StartCoroutine(
+            PlayerSay(
+                "I'm probably just imagining things."
+            )
+        );
     }
 
 
