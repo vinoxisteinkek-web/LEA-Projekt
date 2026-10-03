@@ -877,6 +877,34 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3950565937023030115, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3950565937023030115, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3950565937023030115, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 810754709}
+    - target: {fileID: 3950565937023030115, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3950565937023030115, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ResumeGame
+      objectReference: {fileID: 0}
+    - target: {fileID: 3950565937023030115, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: PauseMenuScript, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3950565937023030115, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 4703148204235163035, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -925,6 +953,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Slider
+--- !u!114 &338410653 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8918537249072599745, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
+  m_PrefabInstance: {fileID: 338410649}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &430373745 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1160106857250959407, guid: d6a0d044148e47d43b93e761ac695355, type: 3}
@@ -1726,6 +1765,7 @@ MonoBehaviour:
   sensitivitySlider: {fileID: 338410652}
   volumeSlider: {fileID: 338410651}
   cameraController: {fileID: 1302081670}
+  closeText: {fileID: 338410653}
 --- !u!1 &858414210 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2734553006231628629, guid: d6a0d044148e47d43b93e761ac695355, type: 3}

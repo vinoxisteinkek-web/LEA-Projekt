@@ -1,6 +1,8 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PauseMenuScript : MonoBehaviour
 {
@@ -13,8 +15,12 @@ public class PauseMenuScript : MonoBehaviour
 
     private bool isPaused = false;
 
+    [SerializeField]
+    private TextMeshProUGUI closeText;
+
     private void Start()
     {
+        closeText.text = "Close";
         pauseMenu.SetActive(false);
 
         // Maus-Sensitivität
@@ -35,19 +41,12 @@ public class PauseMenuScript : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (isPaused)
-            {
-                ResumeGame();
-                StartCoroutine(CusorLocked());
-            }
-            else
-            {
+            if(!isPaused)
                 PauseGame();
-            }
         }
     }
 
-    private void PauseGame()
+    public void PauseGame()
     {
         isPaused = true;
 
@@ -67,8 +66,11 @@ public class PauseMenuScript : MonoBehaviour
 
         Time.timeScale = 1f;
 
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        if(SceneManager.GetActiveScene().name != "MenueScene")
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
     }
 
     private void ChangeSensitivity(float value)
@@ -81,10 +83,7 @@ public class PauseMenuScript : MonoBehaviour
         AudioListener.volume = value;
     }
 
-    private IEnumerator CusorLocked()
-    {
-        yield return null;
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-    }
+
+    
+
 }

@@ -922,6 +922,7 @@ MonoBehaviour:
   sensitivitySlider: {fileID: 38590137}
   volumeSlider: {fileID: 762880248}
   cameraController: {fileID: 1799254328}
+  closeText: {fileID: 0}
 --- !u!1 &128547768
 GameObject:
   m_ObjectHideFlags: 0
@@ -2179,6 +2180,7 @@ MonoBehaviour:
   sensitivitySlider: {fileID: 1468493412}
   volumeSlider: {fileID: 1795682171}
   cameraController: {fileID: 1799254328}
+  closeText: {fileID: 295888285158711124}
 --- !u!1 &1194618528
 GameObject:
   m_ObjectHideFlags: 0
@@ -4210,6 +4212,34 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3950565937023030115, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3950565937023030115, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3950565937023030115, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1147523331}
+    - target: {fileID: 3950565937023030115, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3950565937023030115, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ResumeGame
+      objectReference: {fileID: 0}
+    - target: {fileID: 3950565937023030115, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: PauseMenuScript, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3950565937023030115, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 4703148204235163035, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -4231,6 +4261,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
+--- !u!114 &295888285158711124 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8918537249072599745, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
+  m_PrefabInstance: {fileID: 295888285158711123}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1001 &6854641304630407106
 PrefabInstance:
   m_ObjectHideFlags: 0
