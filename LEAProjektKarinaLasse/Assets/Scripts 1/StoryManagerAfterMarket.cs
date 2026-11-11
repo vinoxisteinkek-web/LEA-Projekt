@@ -216,7 +216,7 @@ public class StoryManagerAfterMarket : MonoBehaviour
 
 
     // ==================================================
-    // EINGANGSTÜR
+    // EINGANGSTï¿½R
     // ==================================================
 
     public void EnterHouse()
@@ -699,11 +699,37 @@ public class StoryManagerAfterMarket : MonoBehaviour
     // ENDING SCREEN
     // ==================================================
 
-    private void ShowEndingScreen()
+private void ShowEndingScreen()
     {
-        if (endingScreen != null)
+        if (endingScreen == null)
         {
-            endingScreen.SetActive(true);
+            Debug.LogWarning("StoryManagerAfterMarket: Kein Ending Screen zugewiesen!");
+            return;
+        }
+
+        endingScreen.SetActive(true);
+
+        // Sicherstellen, dass der schwarze Screen IMMER den ganzen Bildschirm abdeckt
+        // (unabhaengig von Aufloesung / Fenstergroesse)
+        foreach (RectTransform rt in endingScreen.GetComponentsInChildren<RectTransform>(true))
+        {
+            if (rt.GetComponent<UnityEngine.UI.Image>() == null)
+                continue;
+
+            rt.gameObject.SetActive(true);
+            rt.anchorMin = Vector2.zero;
+            rt.anchorMax = Vector2.one;
+            rt.offsetMin = Vector2.zero;
+            rt.offsetMax = Vector2.zero;
+            rt.localScale = Vector3.one;
+        }
+
+        // Ueber dem restlichen UI anzeigen, aber unter dem Dialogtext
+        Canvas endCanvas = endingScreen.GetComponent<Canvas>();
+        if (endCanvas != null)
+        {
+            endCanvas.overrideSorting = true;
+            endCanvas.sortingOrder = 9;
         }
     }
 

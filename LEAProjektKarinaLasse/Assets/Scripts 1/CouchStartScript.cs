@@ -16,6 +16,16 @@ public class CouchStartScript : MonoBehaviour
 
     public StoryMessageScript storyMessage;
 
+    // Aufgabenfenster oben links
+    public HouseTaskUI taskUI;
+
+    private void SetTask(string task)
+    {
+        if (taskUI != null)
+            taskUI.ShowTask(task);
+    }
+
+
     // Essen
     public GameObject pizza;
     public GameObject cereal;
@@ -42,7 +52,7 @@ public class CouchStartScript : MonoBehaviour
     // Sound beim Essen
     public AudioSource eatSound;
 
-    // Sound für klemmende Tür
+    // Sound fï¿½r klemmende Tï¿½r
     public AudioSource doorJammedSound;
 
     // Sound beim Umziehen
@@ -130,7 +140,7 @@ public class CouchStartScript : MonoBehaviour
         // WARTEN, BIS DIE VORGESCHICHTE FERTIG IST
         // =====================================
 
-        // Zeit für das Tippen + kurze Pause danach
+        // Zeit fï¿½r das Tippen + kurze Pause danach
         yield return new WaitForSeconds(15f);
 
 
@@ -194,6 +204,9 @@ public class CouchStartScript : MonoBehaviour
 
         canStand = true;
 
+        SetTask("Stand up from the couch");
+
+
         interactTextUI.text = "E - To stand up";
         interactTextUI.gameObject.SetActive(true);
     }
@@ -210,6 +223,11 @@ public class CouchStartScript : MonoBehaviour
 
         canStand = false;
 
+        // Aufgabe erledigt -> Fenster kurz ausblenden bis zur naechsten
+        if (taskUI != null)
+            taskUI.HideTask();
+
+
 
         // E-Text ausblenden
         interactText.SetActive(false);
@@ -219,7 +237,7 @@ public class CouchStartScript : MonoBehaviour
         playerController.transform.position = standingPosition.position;
 
 
-        // Nur Y-Rotation übernehmen
+        // Nur Y-Rotation ï¿½bernehmen
         playerController.transform.rotation = Quaternion.Euler(
             0f,
             standingPosition.eulerAngles.y,
@@ -261,6 +279,9 @@ public class CouchStartScript : MonoBehaviour
         );
 
         canEat = true;
+
+        SetTask("Eat something (Pizza or Cereal)");
+
     }
 
 
@@ -390,6 +411,9 @@ public class CouchStartScript : MonoBehaviour
 
         // Kleiderschrank aktivieren
         wardrobeTrigger.SetActive(true);
+
+        SetTask("Get your uniform from the wardrobe");
+
     }
 
 
@@ -408,7 +432,7 @@ public class CouchStartScript : MonoBehaviour
 
 
         // =====================================
-        // SOUND: TÜR KLEMMT
+        // SOUND: Tï¿½R KLEMMT
         // =====================================
 
         if (doorJammedSound != null)
@@ -441,6 +465,9 @@ public class CouchStartScript : MonoBehaviour
 
         // Trockner aktivieren
         dryerTrigger.SetActive(true);
+
+        SetTask("Get the uniform from the dryer downstairs");
+
     }
 
 
@@ -495,6 +522,9 @@ public class CouchStartScript : MonoBehaviour
         storyMessage.ShowMessage(
             "Okay... now time to go to work."
         );
+
+        SetTask("Go to work");
+
 
 
         yield return new WaitForSeconds(5f);

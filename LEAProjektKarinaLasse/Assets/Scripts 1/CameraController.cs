@@ -6,10 +6,31 @@ public class CameraController : MonoBehaviour
     public Transform _camera;
     public Transform hand;
 
-    public float cameraSensitivity = 200f;
+    // Wird jetzt aus GameSettings geladen (szenenübergreifend)
+    public float cameraSensitivity = GameSettings.DefaultSensitivity;
 
     private float rotation_x_axis;
     private float rotation_y_axis;
+
+    void Awake()
+    {
+        cameraSensitivity = GameSettings.Sensitivity;
+    }
+
+    void OnEnable()
+    {
+        GameSettings.OnSettingsChanged += ApplySettings;
+    }
+
+    void OnDisable()
+    {
+        GameSettings.OnSettingsChanged -= ApplySettings;
+    }
+
+    private void ApplySettings()
+    {
+        cameraSensitivity = GameSettings.Sensitivity;
+    }
 
     void Start()
     {

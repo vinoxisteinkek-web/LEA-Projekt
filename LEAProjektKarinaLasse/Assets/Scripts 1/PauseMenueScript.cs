@@ -11,6 +11,8 @@ public class PauseMenuScript : MonoBehaviour
     public Slider sensitivitySlider;
     public Slider volumeSlider;
 
+    // Optional – Sensitivität läuft jetzt über GameSettings,
+    // die Referenz wird nicht mehr zwingend gebraucht (z.B. im Hauptmenü).
     public CameraController cameraController;
 
     private bool isPaused = false;
@@ -20,18 +22,18 @@ public class PauseMenuScript : MonoBehaviour
 
     private void Start()
     {
-        closeText.text = "Close";
+        if (closeText != null) closeText.text = "Close";
         pauseMenu.SetActive(false);
 
-        // Maus-Sensitivit�t
+        // Maus-Sensitivität
         sensitivitySlider.minValue = 50f;
         sensitivitySlider.maxValue = 400f;
-        sensitivitySlider.value = cameraController.cameraSensitivity;
+        sensitivitySlider.SetValueWithoutNotify(GameSettings.Sensitivity);
 
-        // Lautst�rke
+        // Lautstärke
         volumeSlider.minValue = 0f;
         volumeSlider.maxValue = 1f;
-        volumeSlider.value = AudioListener.volume;
+        volumeSlider.SetValueWithoutNotify(GameSettings.Volume);
 
         sensitivitySlider.onValueChanged.AddListener(ChangeSensitivity);
         volumeSlider.onValueChanged.AddListener(ChangeVolume);
@@ -49,6 +51,10 @@ public class PauseMenuScript : MonoBehaviour
     public void PauseGame()
     {
         isPaused = true;
+
+        // Slider immer mit den aktuellen globalen Werten synchronisieren
+        sensitivitySlider.SetValueWithoutNotify(GameSettings.Sensitivity);
+        volumeSlider.SetValueWithoutNotify(GameSettings.Volume);
 
         pauseMenu.SetActive(true);
 
@@ -75,15 +81,11 @@ public class PauseMenuScript : MonoBehaviour
 
     private void ChangeSensitivity(float value)
     {
-        cameraController.cameraSensitivity = value;
+        GameSettings.Sensitivity = value; // speichert + informiert alle CameraController
     }
 
     private void ChangeVolume(float value)
     {
-        AudioListener.volume = value;
+        GameSettings.Volume = value; // speichert + setzt AudioListener.volume
     }
-
-
-    
-
 }
