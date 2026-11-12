@@ -42,6 +42,9 @@ public class StoryManagerAfterMarket : MonoBehaviour
     [SerializeField] private AudioSource killerDoorEndingAudioSource;
     [SerializeField] private AudioClip killerDoorEndingSound;
 
+    // Tür geht auf + Stalker greift nach dem Spieler (optional)
+    [SerializeField] private KillerDoorStalkerSequence killerDoorSequence;
+
 
     // ==================================================
     // DIALOGUE
@@ -461,7 +464,20 @@ public class StoryManagerAfterMarket : MonoBehaviour
 
         Debug.Log("ENDING 3 - KILLER DOOR");
 
-        StartCoroutine(KillerDoorEnding());
+        StartCoroutine(KillerDoorEndingWithStalker());
+    }
+
+
+    private IEnumerator KillerDoorEndingWithStalker()
+    {
+        // Erst: Schranktür geht auf und der Stalker greift nach dem Spieler
+        if (killerDoorSequence != null)
+        {
+            yield return StartCoroutine(killerDoorSequence.Play());
+        }
+
+        // Danach: normales Ending (schwarzer Bildschirm, Schrei, Texte)
+        yield return StartCoroutine(KillerDoorEnding());
     }
 
 

@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
 
     public Light spotlight;
 
-    // Sound f�r Taschenlampe
+    // Sound für Taschenlampe
     public AudioSource flashlightSound;
 
     // Hinweis "F - Taschenlampe"
@@ -53,10 +53,13 @@ public class PlayerController : MonoBehaviour
     }
 
 
+    // Eingabe wird in Update gelesen, die Physik in FixedUpdate gesetzt
+    private Vector3 moveDirection;
+
     void Update()
     {
         // =================================
-        // BEWEGUNG
+        // BEWEGUNG (Eingabe lesen)
         // =================================
 
         float horizontal = Input.GetAxisRaw("Horizontal");
@@ -68,14 +71,7 @@ public class PlayerController : MonoBehaviour
         direction.y = 0f;
 
         // Diagonale Bewegung nicht schneller
-        direction = direction.normalized;
-
-        // Bewegung setzen
-        rb.linearVelocity = new Vector3(
-            direction.x * playerSpeed,
-            rb.linearVelocity.y,
-            direction.z * playerSpeed
-        );
+        moveDirection = direction.normalized;
 
 
         // =================================
@@ -86,6 +82,22 @@ public class PlayerController : MonoBehaviour
         {
             ToggleFlashlight();
         }
+    }
+
+
+    void FixedUpdate()
+    {
+        // =================================
+        // BEWEGUNG (Physik)
+        // Rigidbody-Werte nur im Physik-Takt setzen.
+        // Zusammen mit Interpolation am Rigidbody = flüssige Kamera.
+        // =================================
+
+        rb.linearVelocity = new Vector3(
+            moveDirection.x * playerSpeed,
+            rb.linearVelocity.y,
+            moveDirection.z * playerSpeed
+        );
     }
 
 
