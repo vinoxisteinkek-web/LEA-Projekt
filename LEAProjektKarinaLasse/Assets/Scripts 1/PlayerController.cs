@@ -185,12 +185,29 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private CapsuleCollider groundCheckCapsule;
+
     private bool IsGrounded()
     {
-        return Physics.Raycast(
-            transform.position + Vector3.up * 0.2f,
+        // Prüft direkt unter der Kapsel (nicht unter dem Pivot),
+        // denn die Kapsel beginnt erst ein Stück über dem Pivot.
+        if (groundCheckCapsule == null)
+            groundCheckCapsule = GetComponent<CapsuleCollider>();
+
+        if (groundCheckCapsule == null)
+            return false;
+
+        Bounds b = groundCheckCapsule.bounds;
+        float radius = b.extents.x * 0.9f;
+        Vector3 origin = new Vector3(b.center.x, b.min.y + radius + 0.05f, b.center.z);
+
+        // SphereCast statt Raycast: findet den Boden auch an Kanten (Bordstein, Stufen)
+        return Physics.SphereCast(
+            origin,
+            radius,
             Vector3.down,
-            0.4f,
+            out _,
+            0.2f,
             ~0,
             QueryTriggerInteraction.Ignore
         );
