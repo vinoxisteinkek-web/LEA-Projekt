@@ -803,7 +803,7 @@ private void ShowEndingScreen()
 
     {
         Cursor.lockState = CursorLockMode.None;
-        SceneManager.LoadScene("MenueScene");
+        SceneLoader.Load("MenueScene");
 
     }
 }

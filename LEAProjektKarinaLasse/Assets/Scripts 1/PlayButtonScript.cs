@@ -5,6 +5,6 @@ public class PlayButtonScript : MonoBehaviour
 {
     public void PlayGame()
     {
-        SceneManager.LoadScene("HouseScene");
+        SceneLoader.Load("HouseScene");
     }
 }

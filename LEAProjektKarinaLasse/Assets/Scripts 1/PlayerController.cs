@@ -22,6 +22,23 @@ public class PlayerController : MonoBehaviour
 
 
     // =========================
+    // SCHRITTE
+    // =========================
+
+    [Header("Schritte")]
+    // Lauf-Sound (wird in einer Schleife abgespielt, solange der Spieler läuft)
+    public AudioClip walkingClip;
+
+    [Range(0f, 1f)]
+    public float walkingVolume = 0.6f;
+
+    // Wie schnell der Sound ein-/ausgeblendet wird (verhindert Knacken)
+    public float footstepFadeSpeed = 8f;
+
+    private AudioSource footstepSource;
+
+
+    // =========================
     // ANDERE WERTE
     // =========================
 
@@ -50,6 +67,8 @@ public class PlayerController : MonoBehaviour
         {
             flashlightHint.SetActive(false);
         }
+
+        SetupFootsteps();
     }
 
 
@@ -72,6 +91,13 @@ public class PlayerController : MonoBehaviour
 
         // Diagonale Bewegung nicht schneller
         moveDirection = direction.normalized;
+
+
+        // =================================
+        // SCHRITTE
+        // =================================
+
+        UpdateFootsteps();
 
 
         // =================================
@@ -98,6 +124,86 @@ public class PlayerController : MonoBehaviour
             rb.linearVelocity.y,
             moveDirection.z * playerSpeed
         );
+    }
+
+
+    // =================================
+    // SCHRITTE
+    // =================================
+
+    private void SetupFootsteps()
+    {
+        if (walkingClip == null)
+            return;
+
+        // Eigene AudioSource nur für die Schritte,
+        // damit sich nichts mit anderen Sounds (z. B. Stimme) überschneidet
+        footstepSource = gameObject.AddComponent<AudioSource>();
+        footstepSource.clip = walkingClip;
+        footstepSource.loop = true;
+        footstepSource.playOnAwake = false;
+        footstepSource.spatialBlend = 0f; // 2D – kommt vom Spieler selbst
+        footstepSource.volume = 0f;
+    }
+
+    private void UpdateFootsteps()
+    {
+        if (footstepSource == null || rb == null)
+            return;
+
+        // Nur wenn der Spieler laufen will, sich wirklich bewegt
+        // (nicht gegen eine Wand drückt) und auf dem Boden steht
+        Vector3 velocity = rb.linearVelocity;
+        velocity.y = 0f;
+
+        bool isWalking =
+            Time.timeScale > 0f &&
+            moveDirection.sqrMagnitude > 0.01f &&
+            velocity.sqrMagnitude > 0.25f &&
+            IsGrounded();
+
+        float targetVolume = isWalking ? walkingVolume : 0f;
+
+        footstepSource.volume = Mathf.MoveTowards(
+            footstepSource.volume,
+            targetVolume,
+            footstepFadeSpeed * walkingVolume * Time.unscaledDeltaTime
+        );
+
+        if (isWalking && !footstepSource.isPlaying)
+        {
+            // UnPause setzt an der gleichen Stelle fort,
+            // Play startet beim allerersten Mal von vorne
+            if (footstepSource.time > 0f)
+                footstepSource.UnPause();
+            else
+                footstepSource.Play();
+        }
+        else if (!isWalking && footstepSource.isPlaying && footstepSource.volume <= 0.001f)
+        {
+            footstepSource.Pause();
+        }
+    }
+
+    private bool IsGrounded()
+    {
+        return Physics.Raycast(
+            transform.position + Vector3.up * 0.2f,
+            Vector3.down,
+            0.4f,
+            ~0,
+            QueryTriggerInteraction.Ignore
+        );
+    }
+
+    private void OnDisable()
+    {
+        // Steuerung aus (z. B. Sitzen, Zwischensequenz) -> Schritte sofort stumm
+        if (footstepSource != null)
+        {
+            footstepSource.volume = 0f;
+            footstepSource.Pause();
+        }
     }
 
 

@@ -233,21 +233,25 @@ public class CouchStartScript : MonoBehaviour
         interactText.SetActive(false);
 
 
-        // Spieler auf stehende Position setzen
-        playerController.transform.position = standingPosition.position;
+        // Spieler auf stehende Position setzen (nur Y-Rotation uebernehmen)
+        Vector3 standPos = standingPosition.position;
+        Quaternion standRot = Quaternion.Euler(0f, standingPosition.eulerAngles.y, 0f);
 
+        playerController.transform.SetPositionAndRotation(standPos, standRot);
 
-        // Nur Y-Rotation �bernehmen
-        playerController.transform.rotation = Quaternion.Euler(
-            0f,
-            standingPosition.eulerAngles.y,
-            0f
-        );
+        // WICHTIG: Auch den Rigidbody direkt versetzen!
+        // Sonst steckt der Physik-Koerper noch an der Sitzposition (im Boden)
+        // und wird beim Aktivieren der Physik nach oben durch die Decke geschleudert.
+        rb.position = standPos;
+        rb.rotation = standRot;
+        Physics.SyncTransforms();
 
 
         // Physik wieder aktivieren
         rb.isKinematic = false;
         rb.useGravity = true;
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
 
 
         // Spielersteuerung aktivieren

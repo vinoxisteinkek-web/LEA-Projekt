@@ -286,6 +286,9 @@ MonoBehaviour:
   flashlightSound: {fileID: 8755989487467116373}
   flashlightHint: {fileID: 0}
   flashlightHintDuration: 5
+  walkingClip: {fileID: 8300000, guid: 23e6f65afaa07514aa885802d6402f8e, type: 3}
+  walkingVolume: 0.6
+  footstepFadeSpeed: 8
   dirtCount: 0
   puddleCount: 0
   trashCount: 0

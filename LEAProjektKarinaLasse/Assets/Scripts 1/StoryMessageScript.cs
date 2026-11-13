@@ -45,29 +45,7 @@ public class StoryMessageScript : MonoBehaviour
 
         StopPlayerVoice();
 
-        typingCoroutine = StartCoroutine(TypeNormalMessage(message));
-    }
-
-    private IEnumerator TypeNormalMessage(string message)
-    {
-        if (dialogueText == null)
-            yield break;
-
-        dialogueText.text = "";
-        dialogueText.gameObject.SetActive(true);
-
-        StartPlayerVoice();
-
-        for (int i = 0; i < message.Length; i++)
-        {
-            dialogueText.text += message[i];
-
-            yield return new WaitForSeconds(textSpeed);
-        }
-
-        StopPlayerVoice();
-
-        typingCoroutine = null;
+        typingCoroutine = StartCoroutine(TypeMessage(dialogueText, message));
     }
 
     // =========================
@@ -83,25 +61,38 @@ public class StoryMessageScript : MonoBehaviour
 
         StopPlayerVoice();
 
-        typingCoroutine = StartCoroutine(TypeIntroMessage(message));
+        typingCoroutine = StartCoroutine(TypeMessage(introText, message));
     }
 
-    private IEnumerator TypeIntroMessage(string message)
+    // =========================
+    // SCHREIBMASCHINEN-EFFEKT
+    // Der Text wird EINMAL komplett gesetzt, danach werden nur die
+    // sichtbaren Zeichen hochgezaehlt (maxVisibleCharacters).
+    // Vorher wurde pro Buchstabe ein neuer String erzeugt und der
+    // komplette Text neu aufgebaut -> unnoetiger Muell fuer den GC.
+    // =========================
+
+    private IEnumerator TypeMessage(TextMeshProUGUI target, string message)
     {
-        if (introText == null)
+        if (target == null)
             yield break;
 
-        introText.text = "";
-        introText.gameObject.SetActive(true);
+        target.text = message;
+        target.maxVisibleCharacters = 0;
+        target.gameObject.SetActive(true);
 
         StartPlayerVoice();
 
-        for (int i = 0; i < message.Length; i++)
-        {
-            introText.text += message[i];
+        WaitForSeconds wait = new WaitForSeconds(textSpeed);
 
-            yield return new WaitForSeconds(textSpeed);
+        for (int i = 1; i <= message.Length; i++)
+        {
+            target.maxVisibleCharacters = i;
+
+            yield return wait;
         }
+
+        target.maxVisibleCharacters = int.MaxValue;
 
         StopPlayerVoice();
 
@@ -124,11 +115,13 @@ public class StoryMessageScript : MonoBehaviour
 
         if (dialogueText != null)
         {
+            dialogueText.maxVisibleCharacters = int.MaxValue;
             dialogueText.gameObject.SetActive(false);
         }
 
         if (introText != null)
         {
+            introText.maxVisibleCharacters = int.MaxValue;
             introText.gameObject.SetActive(false);
         }
     }

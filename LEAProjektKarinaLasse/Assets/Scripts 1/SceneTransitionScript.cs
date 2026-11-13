@@ -16,7 +16,7 @@ public class SceneTransitionScript : MonoBehaviour
         blackScreen.alpha = 0f;
         blackScreen.gameObject.SetActive(true);
 
-        // Warten, bis die nächste Szene geladen wurde
+        // Warten, bis die nï¿½chste Szene geladen wurde
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
@@ -39,7 +39,7 @@ public class SceneTransitionScript : MonoBehaviour
         yield return StartCoroutine(FadeToBlack());
 
         // Supermarkt-Szene laden
-        SceneManager.LoadScene("SupermarketScene");
+        SceneLoader.Load("SupermarketScene");
     }
 
     private IEnumerator FadeToBlack()

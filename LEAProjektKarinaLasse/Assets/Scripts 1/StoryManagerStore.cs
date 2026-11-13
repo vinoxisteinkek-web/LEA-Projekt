@@ -817,6 +817,6 @@ public class StoryManagerStore : MonoBehaviour
 
 
         // Zurück zum Haus
-        SceneManager.LoadScene("HouseSceneAfterMarket");
+        SceneLoader.Load("HouseSceneAfterMarket");
     }
 }
