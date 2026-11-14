@@ -119,9 +119,26 @@ public class PlayerController : MonoBehaviour
         // Zusammen mit Interpolation am Rigidbody = flüssige Kamera.
         // =================================
 
+        float verticalVelocity = rb.linearVelocity.y;
+
+        // Der Spieler springt nie. Schwung nach oben entsteht nur, wenn die Kapsel
+        // über eine Kante (Bordstein, Stufe) rutscht -> abschneiden, sonst hüpft er.
+        if (verticalVelocity > 0f)
+            verticalVelocity = 0f;
+
+        // Beim Herunterlaufen von einer Kante am Boden bleiben, statt kurz zu schweben.
+        bool grounded = IsGrounded();
+        bool snapped = false;
+        if (!grounded && wasGroundedLastStep && GroundCheck(groundSnapDistance))
+        {
+            verticalVelocity = Mathf.Min(verticalVelocity, -groundSnapSpeed);
+            snapped = true;
+        }
+        wasGroundedLastStep = grounded || snapped;
+
         rb.linearVelocity = new Vector3(
             moveDirection.x * playerSpeed,
-            rb.linearVelocity.y,
+            verticalVelocity,
             moveDirection.z * playerSpeed
         );
     }
@@ -185,9 +202,22 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    [Header("Kanten")]
+    // Wie weit unter der Kapsel noch Boden gesucht wird, wenn man eine Kante runterläuft
+    public float groundSnapDistance = 0.35f;
+    // Wie schnell der Spieler dann nach unten an den Boden gezogen wird
+    public float groundSnapSpeed = 4f;
+
+    private bool wasGroundedLastStep;
+
     private CapsuleCollider groundCheckCapsule;
 
     private bool IsGrounded()
+    {
+        return GroundCheck(0.2f);
+    }
+
+    private bool GroundCheck(float distance)
     {
         // Prüft direkt unter der Kapsel (nicht unter dem Pivot),
         // denn die Kapsel beginnt erst ein Stück über dem Pivot.
@@ -207,7 +237,7 @@ public class PlayerController : MonoBehaviour
             radius,
             Vector3.down,
             out _,
-            0.2f,
+            distance,
             ~0,
             QueryTriggerInteraction.Ignore
         );
