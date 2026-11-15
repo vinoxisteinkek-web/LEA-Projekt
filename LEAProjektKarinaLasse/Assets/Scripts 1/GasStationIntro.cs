@@ -216,7 +216,12 @@ public class GasStationIntro : MonoBehaviour
         hintText.gameObject.SetActive(false);
     }
 
-    private void ShowTask(string text)
+    public void HideTask()
+    {
+        HideText(taskText);
+    }
+
+    public void ShowTask(string text)
     {
         if (taskText == null) return;
         taskText.text = "Aufgabe:\n<size=80%>" + text + "</size>";
@@ -259,7 +264,7 @@ public class GasStationIntro : MonoBehaviour
     }
 
     // Gleiche Darstellung wie im Supermarkt: orange, Buchstabe für Buchstabe
-    private IEnumerator PlayerSay(string message)
+    public IEnumerator PlayerSay(string message)
     {
         if (dialogueText == null) yield break;
 

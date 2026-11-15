@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ab5fc171c72c04eaead40250420766, type: 3}
+  m_Name: Cashier_Pay
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueData
+  startNodeId: start
+  nodes:
+  - id: start
+    speaker: Cashier
+    text: "[Platzhalter] Begr\xFC\xDFung des Kassierers."
+    nextNodeId: 
+    eventName: 
+    choices:
+    - text: '[Platzhalter] Antwort 1 - direkt bezahlen'
+      nextNodeId: pay
+      eventName: 
+    - text: '[Platzhalter] Antwort 2 - etwas fragen'
+      nextNodeId: question
+      eventName: 
+    - text: '[Platzhalter] Antwort 3 - Smalltalk'
+      nextNodeId: smalltalk
+      eventName: 
+  - id: question
+    speaker: Cashier
+    text: '[Platzhalter] Antwort des Kassierers auf die Frage.'
+    nextNodeId: 
+    eventName: 
+    choices:
+    - text: '[Platzhalter] Nachhaken'
+      nextNodeId: question_2
+      eventName: 
+    - text: "[Platzhalter] Zur\xFCck zum Bezahlen"
+      nextNodeId: pay
+      eventName: 
+  - id: question_2
+    speaker: Cashier
+    text: '[Platzhalter] Weitere Info. (Ohne Antworten -> Klick geht zu ''nextNodeId'')'
+    nextNodeId: pay
+    eventName: 
+    choices: []
+  - id: smalltalk
+    speaker: Cashier
+    text: '[Platzhalter] Smalltalk-Zeile 1.'
+    nextNodeId: smalltalk_2
+    eventName: 
+    choices: []
+  - id: smalltalk_2
+    speaker: Cashier
+    text: '[Platzhalter] Smalltalk-Zeile 2.'
+    nextNodeId: 
+    eventName: 
+    choices:
+    - text: '[Platzhalter] Bezahlen'
+      nextNodeId: pay
+      eventName: 
+  - id: pay
+    speaker: Cashier
+    text: '[Platzhalter] Das macht dann ... Euro.'
+    nextNodeId: 
+    eventName: 
+    choices:
+    - text: '[Platzhalter] Bar bezahlen'
+      nextNodeId: goodbye
+      eventName: paid
+    - text: '[Platzhalter] Mit Karte bezahlen'
+      nextNodeId: goodbye
+      eventName: paid
+  - id: goodbye
+    speaker: Cashier
+    text: '[Platzhalter] Verabschiedung. (Dialog endet, da nextNodeId leer)'
+    nextNodeId: 
+    eventName: 
+    choices: []
