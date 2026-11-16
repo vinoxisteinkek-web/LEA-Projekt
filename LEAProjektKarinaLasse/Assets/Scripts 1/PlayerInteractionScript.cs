@@ -16,7 +16,7 @@ public class PlayerInteractionScript : MonoBehaviour
     {
         if (currentInteractable != null)
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            if (InputBindings.GetDown(GameAction.Interact))
             {
                 currentInteractable.Interact();
             }

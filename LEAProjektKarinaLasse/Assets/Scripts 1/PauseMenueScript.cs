@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,6 +16,10 @@ public class PauseMenuScript : MonoBehaviour
     public CameraController cameraController;
 
     private bool isPaused = false;
+
+    // Cursor-Zustand vor dem Pausieren (z.B. frei waehrend eines Dialogs)
+    private CursorLockMode previousLockState = CursorLockMode.Locked;
+    private bool previousCursorVisible = false;
 
     [SerializeField]
     private TextMeshProUGUI closeText;
@@ -56,6 +60,9 @@ public class PauseMenuScript : MonoBehaviour
         sensitivitySlider.SetValueWithoutNotify(GameSettings.Sensitivity);
         volumeSlider.SetValueWithoutNotify(GameSettings.Volume);
 
+        previousLockState = Cursor.lockState;
+        previousCursorVisible = Cursor.visible;
+
         pauseMenu.SetActive(true);
 
         Time.timeScale = 0f;
@@ -74,8 +81,9 @@ public class PauseMenuScript : MonoBehaviour
 
         if(SceneManager.GetActiveScene().name != "MenueScene")
         {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            // Cursor so wiederherstellen, wie er vor der Pause war
+            Cursor.lockState = previousLockState;
+            Cursor.visible = previousCursorVisible;
         }
     }
 

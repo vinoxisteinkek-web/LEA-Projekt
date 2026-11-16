@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class PickupItem : MonoBehaviour
 {
@@ -28,7 +28,7 @@ public class PickupItem : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (InputBindings.GetDown(GameAction.Interact))
         {
             if (heldItem == null)
             {
@@ -48,7 +48,7 @@ public class PickupItem : MonoBehaviour
 
 
         // Q = Ablegen
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (InputBindings.GetDown(GameAction.Drop))
         {
             if (heldItem != null)
             {
@@ -58,7 +58,7 @@ public class PickupItem : MonoBehaviour
 
 
         // Wischen
-        if (Input.GetMouseButtonDown(0))
+        if (InputBindings.GetDown(GameAction.Use))
         {
             if (Time.time < nextSweepTime)
                 return;
@@ -172,7 +172,7 @@ public class PickupItem : MonoBehaviour
 
 
     // ==================================================
-    // MÜLL
+    // MÃœLL
     // ==================================================
 
     void ThrowTrashAway()
@@ -213,7 +213,7 @@ public class PickupItem : MonoBehaviour
                     player.trashCount++;
 
                     Debug.Log(
-                        "Müll entsorgt! Count: " +
+                        "MÃ¼ll entsorgt! Count: " +
                         player.trashCount
                     );
 

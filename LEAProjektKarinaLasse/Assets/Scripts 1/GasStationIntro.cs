@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -25,6 +25,17 @@ public class GasStationIntro : MonoBehaviour
     public TextMeshProUGUI promptText;
     public TextMeshProUGUI hintText;
     public CanvasGroup blackScreen;
+
+    [Header("Einfuehrung (wie bei Story 1)")]
+    public bool playIntroStory = true;
+    public TextMeshProUGUI introText;                // weisser Text mittig auf Schwarz
+    [TextArea(3, 8)]
+    public string introStory =
+        "Nobody believed me when I told them what happened that night. " +
+        "It was November 1998, just a few weeks after that girl went missing in Emschurches. " +
+        "I was driving home late on the old country road... and I never should have stopped.";
+    public float introTypeSpeed = 0.035f;
+    public float introHoldAfterTyping = 3.5f;
 
     [Header("Stimme")]
     public AudioSource playerVoiceAudioSource;
@@ -60,6 +71,14 @@ public class GasStationIntro : MonoBehaviour
         HideText(promptText);
         HideText(hintText);
         HideText(taskText);
+        HideText(introText);
+
+        // Von Anfang an schwarz, damit man vor der Einfuehrung nichts sieht
+        if (blackScreen != null)
+        {
+            blackScreen.gameObject.SetActive(true);
+            blackScreen.alpha = 1f;
+        }
 
         if (car != null)
         {
@@ -77,12 +96,26 @@ public class GasStationIntro : MonoBehaviour
     // =================================
     private IEnumerator Sequence()
     {
+        // Einfuehrung auf schwarzem Bildschirm (wie bei Story 1)
+        if (playIntroStory && introText != null && !string.IsNullOrEmpty(introStory))
+        {
+            yield return new WaitForSeconds(1f);
+            yield return TypeIntro(introStory);
+            yield return new WaitForSeconds(introHoldAfterTyping);
+            HideText(introText);
+            yield return new WaitForSeconds(0.5f);
+        }
+
         // Aus dem Schwarz einblenden, das Auto rollt schon
         car.SetSpeed(startSpeed);
         yield return Fade(1f, 0f, startFadeDuration);
 
         car.controlsEnabled = true;
-        StartCoroutine(ShowHint("W / S - Gas / Bremse      A / D - Lenken      Maus - Umschauen", controlsHintDuration));
+        StartCoroutine(ShowHint(
+            InputBindings.GetKeyName(GameAction.MoveForward) + " / " + InputBindings.GetKeyName(GameAction.MoveBackward) + " - Gas / Bremse      " +
+            InputBindings.GetKeyName(GameAction.MoveLeft) + " / " + InputBindings.GetKeyName(GameAction.MoveRight) + " - Lenken      " +
+            InputBindings.GetKeyName(GameAction.Handbrake) + " - Handbremse      Maus - Umschauen",
+            controlsHintDuration));
 
         // Eine Weile fahren lassen
         float driven = 0f;
@@ -116,8 +149,8 @@ public class GasStationIntro : MonoBehaviour
 
             if (canExit)
             {
-                ShowPrompt("[E] Aussteigen");
-                if (Input.GetKeyDown(KeyCode.E))
+                ShowPrompt(InputBindings.FormatPrompt("[E] Aussteigen"));
+                if (InputBindings.GetDown(GameAction.Interact))
                 {
                     HideText(promptText);
                     yield return ExitCar();
@@ -261,6 +294,31 @@ public class GasStationIntro : MonoBehaviour
             }
         }
         return found;
+    }
+
+    // Einfuehrungstext: Buchstabe fuer Buchstabe mit Stimme (wie StoryMessageScript in Story 1)
+    private IEnumerator TypeIntro(string message)
+    {
+        introText.text = message;
+        introText.maxVisibleCharacters = 0;
+        introText.gameObject.SetActive(true);
+
+        if (playerVoiceAudioSource != null && playerTalking != null)
+        {
+            playerVoiceAudioSource.clip = playerTalking;
+            playerVoiceAudioSource.loop = true;
+            playerVoiceAudioSource.Play();
+        }
+
+        var wait = new WaitForSeconds(introTypeSpeed);
+        for (int i = 1; i <= message.Length; i++)
+        {
+            introText.maxVisibleCharacters = i;
+            yield return wait;
+        }
+        introText.maxVisibleCharacters = int.MaxValue;
+
+        if (playerVoiceAudioSource != null) playerVoiceAudioSource.Stop();
     }
 
     // Gleiche Darstellung wie im Supermarkt: orange, Buchstabe für Buchstabe

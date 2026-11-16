@@ -140,9 +140,9 @@ public class CarController : MonoBehaviour
     {
         if (controlsEnabled && Time.timeScale > 0f)
         {
-            throttleInput = Input.GetAxisRaw("Vertical");
-            steerInput = Mathf.MoveTowards(steerInput, Input.GetAxisRaw("Horizontal"), steerResponse * Time.deltaTime);
-            handbrake = Input.GetKey(KeyCode.Space);
+            throttleInput = InputBindings.GetVertical();
+            steerInput = Mathf.MoveTowards(steerInput, InputBindings.GetHorizontal(), steerResponse * Time.deltaTime);
+            handbrake = InputBindings.Get(GameAction.Handbrake);
         }
         else
         {

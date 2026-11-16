@@ -81,8 +81,8 @@ public class PlayerController : MonoBehaviour
         // BEWEGUNG (Eingabe lesen)
         // =================================
 
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");
+        float horizontal = InputBindings.GetHorizontal();
+        float vertical = InputBindings.GetVertical();
 
         Vector3 direction = head.right * horizontal + head.forward * vertical;
 
@@ -104,7 +104,7 @@ public class PlayerController : MonoBehaviour
         // TASCHENLAMPE
         // =================================
 
-        if (Input.GetKeyDown(KeyCode.F))
+        if (InputBindings.GetDown(GameAction.Flashlight))
         {
             ToggleFlashlight();
         }

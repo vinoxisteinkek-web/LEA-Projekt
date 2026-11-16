@@ -802,8 +802,12 @@ private void ShowEndingScreen()
     public void restartGame()
 
     {
+        // Story 1 ist durchgespielt -> Story 2 im Hauptmenue freischalten
+        StoryProgress.CompleteStory1();
+
         Cursor.lockState = CursorLockMode.None;
-        SceneLoader.Load("MenueScene");
+        // Weiter mit Story 2 (Tankstelle)
+        SceneLoader.Load("GasStationScene");
 
     }
 }

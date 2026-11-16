@@ -10,7 +10,7 @@ public class PlayerInteractor : MonoBehaviour
 {
     public Camera playerCamera;
     public float reach = 2.8f;
-    public KeyCode key = KeyCode.E;
+    // Taste kommt jetzt aus InputBindings (Settings > Controls)
     public TextMeshProUGUI promptText;
 
     private WorldInteractable current;
@@ -31,12 +31,12 @@ public class PlayerInteractor : MonoBehaviour
         if (current.holdDuration <= 0f)
         {
             ShowPrompt(current.GetPrompt());
-            if (Input.GetKeyDown(key)) current.Interact(gameObject);
+            if (InputBindings.GetDown(GameAction.Interact)) current.Interact(gameObject);
             return;
         }
 
         // E halten
-        if (Input.GetKey(key))
+        if (InputBindings.Get(GameAction.Interact))
         {
             holding = true;
             current.holdProgress = Mathf.Clamp01(current.holdProgress + Time.deltaTime / current.holdDuration);
@@ -91,6 +91,7 @@ public class PlayerInteractor : MonoBehaviour
     private void ShowPrompt(string s)
     {
         if (promptText == null) return;
+        s = InputBindings.FormatPrompt(s);
         if (promptText.text != s) promptText.text = s;
         if (!promptText.gameObject.activeSelf) promptText.gameObject.SetActive(true);
     }

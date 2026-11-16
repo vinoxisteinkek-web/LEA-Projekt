@@ -199,28 +199,7 @@ MonoBehaviour:
       - rid: 860269375869943836
       - rid: 860269375869943837
     m_RuntimeSettings:
-      m_List:
-      - rid: 8556427327610290176
-      - rid: 8556427327610290180
-      - rid: 860269375869943809
-      - rid: 860269375869943811
-      - rid: 860269375869943812
-      - rid: 860269375869943813
-      - rid: 860269375869943814
-      - rid: 860269375869943816
-      - rid: 860269375869943818
-      - rid: 860269375869943819
-      - rid: 860269375869943820
-      - rid: 860269375869943824
-      - rid: 860269375869943825
-      - rid: 860269375869943827
-      - rid: 860269375869943828
-      - rid: 860269375869943829
-      - rid: 860269375869943830
-      - rid: 860269375869943831
-      - rid: 860269375869943833
-      - rid: 860269375869943835
-      - rid: 860269375869943836
+      m_List: []
   renderingLayerNames:
   - Light Layer default
   - Light Layer 1
@@ -324,7 +303,8 @@ MonoBehaviour:
           m_CustomPostProcessTypesAsString: []
         m_AfterPostProcessCustomPostProcesses:
           m_InjectionPoint: 2
-          m_CustomPostProcessTypesAsString: []
+          m_CustomPostProcessTypesAsString:
+          - VHSEffect, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     - rid: 860269375869943814
       type: {class: RenderingPathFrameSettings, ns: UnityEngine.Rendering.HighDefinition, asm: Unity.RenderPipelines.HighDefinition.Runtime}
       data:

@@ -167,6 +167,7 @@ MonoBehaviour:
   openSpeed: 3
   audioSource: {fileID: 2072936970}
   doorSound: {fileID: 8300000, guid: 07ed00bf43896874bbc8a51fb7ae07d8, type: 3}
+  closeSound: {fileID: 0}
   isHouseDoor: 0
   houseDoorSound: {fileID: 0}
 --- !u!1 &47514301
@@ -388,6 +389,7 @@ MonoBehaviour:
   openSpeed: 3
   audioSource: {fileID: 2072936970}
   doorSound: {fileID: 8300000, guid: 07ed00bf43896874bbc8a51fb7ae07d8, type: 3}
+  closeSound: {fileID: 0}
   isHouseDoor: 0
   houseDoorSound: {fileID: 0}
 --- !u!1 &219509680
@@ -3968,8 +3970,58 @@ MonoBehaviour:
   openSpeed: 3
   audioSource: {fileID: 2072936970}
   doorSound: {fileID: 8300000, guid: 07ed00bf43896874bbc8a51fb7ae07d8, type: 3}
+  closeSound: {fileID: 0}
   isHouseDoor: 1
   houseDoorSound: {fileID: 8300000, guid: 3b642e55e552a484ba48d472fbcb481a, type: 3}
+--- !u!1 &300146751
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 300146753}
+  - component: {fileID: 300146752}
+  m_Layer: 0
+  m_Name: Camera Filter (PS2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &300146752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 300146751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.Volume
+  m_IsGlobal: 1
+  priority: 10
+  blendDistance: 0
+  weight: 1
+  sharedProfile: {fileID: 11400000, guid: c58089337ff7b6c49809b0d68b34498d, type: 2}
+--- !u!4 &300146753
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 300146751}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &338410649
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4018,14 +4070,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2753893885191518244, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3192327206189272829, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3950565937023030115, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
@@ -4054,10 +4098,6 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
-    - target: {fileID: 4703148204235163035, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5444249321878634490, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
       propertyPath: m_Name
       value: PauseMenue
@@ -4065,10 +4105,6 @@ PrefabInstance:
     - target: {fileID: 5444249321878634490, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
       propertyPath: m_IsActive
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7639925377793366328, guid: a0b774f14d47f664a80ec701a5a5fe66, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4398,6 +4434,7 @@ MonoBehaviour:
   openSpeed: 3
   audioSource: {fileID: 2072936970}
   doorSound: {fileID: 8300000, guid: 07ed00bf43896874bbc8a51fb7ae07d8, type: 3}
+  closeSound: {fileID: 0}
   isHouseDoor: 0
   houseDoorSound: {fileID: 0}
 --- !u!1 &601366750 stripped
@@ -4421,6 +4458,7 @@ MonoBehaviour:
   openSpeed: 3
   audioSource: {fileID: 2072936970}
   doorSound: {fileID: 8300000, guid: 07ed00bf43896874bbc8a51fb7ae07d8, type: 3}
+  closeSound: {fileID: 0}
   isHouseDoor: 0
   houseDoorSound: {fileID: 0}
 --- !u!1 &655775314
@@ -5426,6 +5464,7 @@ MonoBehaviour:
   openSpeed: 3
   audioSource: {fileID: 2072936970}
   doorSound: {fileID: 8300000, guid: 07ed00bf43896874bbc8a51fb7ae07d8, type: 3}
+  closeSound: {fileID: 0}
   isHouseDoor: 0
   houseDoorSound: {fileID: 0}
 --- !u!64 &1164484364
@@ -5884,6 +5923,7 @@ MonoBehaviour:
   openSpeed: 3
   audioSource: {fileID: 2072936970}
   doorSound: {fileID: 8300000, guid: 07ed00bf43896874bbc8a51fb7ae07d8, type: 3}
+  closeSound: {fileID: 0}
   isHouseDoor: 0
   houseDoorSound: {fileID: 0}
 --- !u!64 &1643174834
@@ -6522,3 +6562,4 @@ SceneRoots:
   - {fileID: 1615464299}
   - {fileID: 338410649}
   - {fileID: 196551892}
+  - {fileID: 300146753}

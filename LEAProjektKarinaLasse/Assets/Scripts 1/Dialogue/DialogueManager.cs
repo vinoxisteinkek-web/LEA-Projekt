@@ -204,7 +204,7 @@ public class DialogueManager : MonoBehaviour
     {
         if (!IsOpen || Time.frameCount == openedFrame || Time.timeScale == 0f) return;
 
-        bool advance = Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Return);
+        bool advance = Input.GetKeyDown(KeyCode.Space) || InputBindings.GetDown(GameAction.Interact) || Input.GetKeyDown(KeyCode.Return);
         bool click = Input.GetMouseButtonDown(0);
 
         if (!lineComplete)

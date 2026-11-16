@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using TMPro;
 
 public class DoorOpenScript : MonoBehaviour
@@ -8,7 +8,7 @@ public class DoorOpenScript : MonoBehaviour
     public float openAngle = 92f;
     public float openSpeed = 3f;
 
-    // Türsound
+    // TÃ¼rsound
     public AudioSource doorSound;
 
     private bool playerInside = false;
@@ -22,7 +22,7 @@ public class DoorOpenScript : MonoBehaviour
         // Geschlossene Rotation speichern
         closedRotation = door.localRotation;
 
-        // Öffnungsrotation
+        // Ã¶ffnungsrotation
         openRotation = Quaternion.Euler(
             -90f,
             openAngle,
@@ -35,12 +35,12 @@ public class DoorOpenScript : MonoBehaviour
         // Spieler ist im Bereich
         if (playerInside)
         {
-            // Tür öffnen/schließen
-            if (Input.GetKeyDown(KeyCode.E))
+            // TÃ¼r Ã¶ffnen/schlieÃŸen
+            if (InputBindings.GetDown(GameAction.Interact))
             {
                 doorOpen = !doorOpen;
 
-                // Türsound abspielen
+                // TÃ¼rsound abspielen
                 if (doorSound != null)
                 {
                     doorSound.Play();
@@ -48,7 +48,7 @@ public class DoorOpenScript : MonoBehaviour
             }
         }
 
-        // Tür bewegen
+        // TÃ¼r bewegen
         if (doorOpen)
         {
             door.localRotation = Quaternion.Slerp(
