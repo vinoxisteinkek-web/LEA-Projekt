@@ -6,15 +6,17 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // =====================================================
-// DIALOG-ANZEIGE
+// DIALOG-ANZEIGE (Untertitel unten in der Mitte)
 // Zeigt ein DialogueData-Asset an. Einmal pro Szene vorhanden.
 // Aufruf von überall:
 //   DialogueManager.Instance.StartDialogue(meinDialog, player, OnEvent, OnEnde);
+// oder einfacher mit der Komponente DialogueTrigger.
 //
 // Steuerung:
-//   Klick / Leertaste / E  = Text sofort ganz zeigen bzw. weiter
-//   Maus oder Tasten 1-9   = Antwort wählen
-// Während des Dialogs kann sich der Spieler nicht bewegen/umschauen.
+//   Interact-Taste (Settings) / Enter = Text sofort ganz zeigen bzw. weiter
+//   zusätzlich Klick / Leertaste, wenn der Spieler gesperrt ist
+//   (beim Autofahren nicht, weil Leertaste = Handbremse)
+//   Tasten 1-9 (oder Maus, wenn gesperrt) = Antwort wählen
 // =====================================================
 public class DialogueManager : MonoBehaviour
 {
@@ -29,32 +31,48 @@ public class DialogueManager : MonoBehaviour
     public GameObject continueHint;
 
     [Header("Darstellung")]
+    [Tooltip("Sekunden pro Buchstabe (0 = sofort ganzer Text)")]
     public float textSpeed = 0.03f;
     public Color playerChoiceColor = new Color(1f, 0.69f, 0f);
 
-    [Header("Stimme (optional)")]
+    [Header("Stimme")]
     public AudioSource voiceSource;
+    [Tooltip("Standard-Murmeln beim Tippen, wenn eine Zeile keine Sprachaufnahme hat")]
     public AudioClip npcTalking;
+
+    [Header("'Nach dem Audio' ohne Audio-Clip")]
+    [Tooltip("Lesezeit pro Buchstabe, falls bei 'Automatisch nach dem Audio' noch kein Clip drin ist")]
+    public float readTimePerChar = 0.05f;
+    public float minReadTime = 1.5f;
 
     public bool IsOpen { get; private set; }
     public int ClosedFrame { get; private set; } = -1;
+
+    // Für DialogueDucking: 1 = normal laut, kleiner = leiser
+    public float DuckTarget => IsOpen && data != null ? data.ambienceVolumeDuringDialogue : 1f;
 
     private DialogueData data;
     private DialogueNode current;
     private Action<string> onEvent;
     private Action onEnd;
     private GameObject player;
+    private bool lockPlayer;
     private readonly List<Behaviour> frozen = new List<Behaviour>();
     private readonly List<Button> spawned = new List<Button>();
-    private Coroutine typing;
+    private Coroutine lineRoutine;
     private bool lineComplete;
+    private bool skipTyping;
     private int openedFrame;
+    private float voiceBaseVolume = 1f;
+    private Color speakerBaseColor = Color.white;
 
     void Awake()
     {
         Instance = this;
         if (panel != null) panel.SetActive(false);
         if (choiceTemplate != null) choiceTemplate.gameObject.SetActive(false);
+        if (voiceSource != null) voiceBaseVolume = voiceSource.volume;
+        if (speakerText != null) speakerBaseColor = speakerText.color;
     }
 
     // =================================
@@ -75,10 +93,11 @@ public class DialogueManager : MonoBehaviour
         onEvent = eventCallback;
         onEnd = endCallback;
         player = playerObject;
+        lockPlayer = dialogue.lockPlayer;
         IsOpen = true;
         openedFrame = Time.frameCount;
 
-        FreezePlayer(true);
+        if (lockPlayer) FreezePlayer(true);
         panel.SetActive(true);
         ShowNode(start);
     }
@@ -88,12 +107,12 @@ public class DialogueManager : MonoBehaviour
         if (!IsOpen) return;
 
         StopVoice();
-        if (typing != null) StopCoroutine(typing);
+        if (lineRoutine != null) { StopCoroutine(lineRoutine); lineRoutine = null; }
         ClearChoices();
         panel.SetActive(false);
         IsOpen = false;
         ClosedFrame = Time.frameCount;
-        FreezePlayer(false);
+        if (lockPlayer) FreezePlayer(false);
 
         var cb = onEnd;
         data = null; current = null; onEvent = null; onEnd = null;
@@ -101,7 +120,7 @@ public class DialogueManager : MonoBehaviour
     }
 
     // =================================
-    // NODES
+    // ZEILEN
     // =================================
     private void ShowNode(DialogueNode node)
     {
@@ -109,53 +128,126 @@ public class DialogueManager : MonoBehaviour
 
         current = node;
         ClearChoices();
+        StopVoice();
         if (continueHint != null) continueHint.SetActive(false);
 
-        speakerText.text = node.speaker;
-        speakerText.gameObject.SetActive(!string.IsNullOrEmpty(node.speaker));
-
-        if (!string.IsNullOrEmpty(node.eventName))
-            onEvent?.Invoke(node.eventName);
-
-        if (typing != null) StopCoroutine(typing);
-        typing = StartCoroutine(TypeLine(node.text));
+        if (lineRoutine != null) StopCoroutine(lineRoutine);
+        lineRoutine = StartCoroutine(PlayNode(node));
     }
 
-    private IEnumerator TypeLine(string text)
+    private IEnumerator PlayNode(DialogueNode node)
     {
         lineComplete = false;
-        lineText.text = text;
+        skipTyping = false;
+
+        // 1) Pause vor der Zeile
+        if (node.delayBefore > 0f)
+        {
+            speakerText.gameObject.SetActive(false);
+            lineText.text = "";
+            yield return new WaitForSeconds(node.delayBefore);
+            skipTyping = false;
+        }
+
+        // 2) Sprecher
+        string speakerName = node.speakerData != null ? node.speakerData.displayName : node.speaker;
+        speakerText.text = speakerName;
+        speakerText.color = node.speakerData != null ? node.speakerData.nameColor : speakerBaseColor;
+        speakerText.gameObject.SetActive(!string.IsNullOrEmpty(speakerName));
+
+        // 3) Event
+        if (!string.IsNullOrEmpty(node.eventName))
+        {
+            onEvent?.Invoke(node.eventName);
+            if (!IsOpen || current != node) yield break; // Event hat den Dialog beendet/umgeleitet
+        }
+
+        // 4) Sound
+        bool hasVoice = node.voiceClip != null;
+        if (hasVoice) PlayVoice(node.voiceClip, node.voiceVolume);
+        else StartTalkingLoop(node.speakerData);
+
+        // 5) Text tippen
+        lineText.text = node.text;
         lineText.maxVisibleCharacters = 0;
         lineText.ForceMeshUpdate();
         int total = lineText.textInfo.characterCount;
 
-        StartVoice();
-        var wait = new WaitForSeconds(textSpeed);
-        for (int i = 1; i <= total; i++)
+        if (textSpeed > 0f)
         {
-            lineText.maxVisibleCharacters = i;
-            yield return wait;
+            float t = 0f;
+            int shown = 0;
+            while (shown < total && !skipTyping)
+            {
+                t += Time.deltaTime;
+                shown = Mathf.Min(total, Mathf.FloorToInt(t / textSpeed));
+                lineText.maxVisibleCharacters = shown;
+                yield return null;
+            }
         }
-        FinishLine();
-    }
-
-    private void FinishLine()
-    {
-        if (typing != null) { StopCoroutine(typing); typing = null; }
-        StopVoice();
         lineText.maxVisibleCharacters = int.MaxValue;
+        if (!hasVoice) StopVoice();   // Sprachaufnahme läuft weiter, Murmeln nicht
         lineComplete = true;
 
-        if (current.choices != null && current.choices.Count > 0)
-            ShowChoices();
-        else if (continueHint != null)
-            continueHint.SetActive(true);
+        // 6) Antworten?
+        if (HasChoices(node)) { ShowChoices(); lineRoutine = null; yield break; }
+
+        // 7) Wie geht's weiter?
+        switch (node.advance)
+        {
+            case DialogueAdvance.Key:
+                if (continueHint != null) continueHint.SetActive(true);
+                lineRoutine = null;
+                yield break;
+
+            case DialogueAdvance.AfterAudio:
+                if (hasVoice)
+                {
+                    while (voiceSource != null && voiceSource.isPlaying) yield return null;
+                    if (node.pauseAfterAudio > 0f) yield return new WaitForSeconds(node.pauseAfterAudio);
+                }
+                else
+                {
+                    yield return new WaitForSeconds(Mathf.Max(minReadTime, total * readTimePerChar));
+                }
+                break;
+
+            case DialogueAdvance.AfterSeconds:
+                yield return new WaitForSeconds(node.seconds);
+                break;
+        }
+
+        lineRoutine = null;
+        Advance();
     }
 
+    // Zur nächsten Zeile (nach Tastendruck oder automatisch)
+    private void Advance()
+    {
+        if (current == null) return;
+        if (lineRoutine != null) { StopCoroutine(lineRoutine); lineRoutine = null; }
+        StopVoice();
+
+        string next = current.nextNodeId;
+        if (IsEnd(next)) { EndDialogue(); return; }
+        if (string.IsNullOrEmpty(next)) { ShowNode(data.GetNext(current)); return; }
+        ShowNode(data.Find(next));
+    }
+
+    private static bool IsEnd(string id) => !string.IsNullOrEmpty(id) && id.Trim().ToUpperInvariant() == "END";
+
+    private static bool HasChoices(DialogueNode n) => n.choices != null && n.choices.Count > 0;
+
+    // =================================
+    // ANTWORTEN
+    // =================================
     private void ShowChoices()
     {
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+        if (lockPlayer)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
 
         for (int i = 0; i < current.choices.Count; i++)
         {
@@ -172,23 +264,23 @@ public class DialogueManager : MonoBehaviour
 
     private void Choose(int index)
     {
-        if (current == null || current.choices == null || index < 0 || index >= current.choices.Count) return;
+        if (current == null || !HasChoices(current) || index < 0 || index >= current.choices.Count) return;
         var choice = current.choices[index];
 
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        if (lockPlayer)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
 
+        StopVoice();
         if (!string.IsNullOrEmpty(choice.eventName))
             onEvent?.Invoke(choice.eventName);
 
         if (!IsOpen) return; // Event hat den Dialog evtl. beendet
-        GoTo(choice.nextNodeId);
-    }
 
-    private void GoTo(string nextId)
-    {
-        if (string.IsNullOrEmpty(nextId) || nextId == "END") { EndDialogue(); return; }
-        ShowNode(data.Find(nextId));
+        if (string.IsNullOrEmpty(choice.nextNodeId) || IsEnd(choice.nextNodeId)) { EndDialogue(); return; }
+        ShowNode(data.Find(choice.nextNodeId));
     }
 
     private void ClearChoices()
@@ -202,28 +294,28 @@ public class DialogueManager : MonoBehaviour
     // =================================
     void Update()
     {
-        if (!IsOpen || Time.frameCount == openedFrame || Time.timeScale == 0f) return;
+        if (!IsOpen || current == null || Time.frameCount == openedFrame || Time.timeScale == 0f) return;
 
-        bool advance = Input.GetKeyDown(KeyCode.Space) || InputBindings.GetDown(GameAction.Interact) || Input.GetKeyDown(KeyCode.Return);
-        bool click = Input.GetMouseButtonDown(0);
+        bool pressed = InputBindings.GetDown(GameAction.Interact) || Input.GetKeyDown(KeyCode.Return);
+        if (lockPlayer)
+            pressed |= Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0);
 
         if (!lineComplete)
         {
-            if (advance || click) FinishLine();
+            if (pressed) skipTyping = true;   // Text sofort ganz zeigen
             return;
         }
 
-        bool hasChoices = current.choices != null && current.choices.Count > 0;
-        if (hasChoices)
+        if (HasChoices(current))
         {
             for (int i = 0; i < current.choices.Count && i < 9; i++)
                 if (Input.GetKeyDown(KeyCode.Alpha1 + i) || Input.GetKeyDown(KeyCode.Keypad1 + i))
                 { Choose(i); return; }
+            return;
         }
-        else if (advance || click)
-        {
-            GoTo(current.nextNodeId);
-        }
+
+        // Auch bei automatischen Zeilen darf man vorspulen
+        if (pressed) Advance();
     }
 
     // =================================
@@ -254,11 +346,31 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    private void StartVoice()
+    // =================================
+    // SOUND
+    // =================================
+    private void PlayVoice(AudioClip clip, float volume)
     {
-        if (voiceSource == null || npcTalking == null) return;
-        voiceSource.clip = npcTalking;
+        if (voiceSource == null) return;
+        voiceSource.loop = false;
+        voiceSource.clip = clip;
+        voiceSource.volume = volume;
+        voiceSource.Play();
+    }
+
+    private void StartTalkingLoop(SpeakerData speaker)
+    {
+        if (voiceSource == null) return;
+        AudioClip clip = npcTalking;
+        if (speaker != null)
+        {
+            if (!speaker.useTalkingSound) return;
+            if (speaker.talkingLoop != null) clip = speaker.talkingLoop;
+        }
+        if (clip == null) return;
+        voiceSource.clip = clip;
         voiceSource.loop = true;
+        voiceSource.volume = voiceBaseVolume;
         voiceSource.Play();
     }
 

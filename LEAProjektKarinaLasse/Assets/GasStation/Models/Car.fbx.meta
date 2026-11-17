@@ -7,6 +7,11 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: Car_Carpet
+    second: {fileID: 2100000, guid: c7c29461202c78a44a348c908b32c5c4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: Car_Chrome
     second: {fileID: 2100000, guid: 1649b5b17093ab64f82b4cf84dd55948, type: 2}
   - first:
@@ -57,6 +62,11 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: Car_Mirror
+    second: {fileID: 2100000, guid: df7727978bd86a14987596625137c663, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: Car_Paint
     second: {fileID: 2100000, guid: 1ddc4e611cf7d6d4cbb0c33abba4b7a1, type: 2}
   - first:
@@ -64,6 +74,11 @@ ModelImporter:
       assembly: UnityEngine.CoreModule
       name: Car_Plate
     second: {fileID: 2100000, guid: 5fbd3584d5aeb0e41a9cf8d6294115d4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Car_Rim
+    second: {fileID: 2100000, guid: b5b5682ff19d9424298d4f5492fdce68, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule

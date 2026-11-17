@@ -12,11 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97ab5fc171c72c04eaead40250420766, type: 3}
   m_Name: Cashier_AfterPaid
   m_EditorClassIdentifier: Assembly-CSharp::DialogueData
+  lockPlayer: 1
+  ambienceVolumeDuringDialogue: 0.35
   startNodeId: start
   nodes:
   - id: start
+    speakerData: {fileID: 0}
     speaker: Cashier
     text: '[Platzhalter] Kassierer, nachdem bezahlt wurde.'
+    voiceClip: {fileID: 0}
+    voiceVolume: 1
+    delayBefore: 0
+    advance: 0
+    seconds: 3
+    pauseAfterAudio: 0.4
     nextNodeId: 
     eventName: 
     choices: []

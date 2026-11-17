@@ -24,6 +24,12 @@ public class PauseMenuScript : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI closeText;
 
+    // Button "Main Menu" im Pause-Menue-Prefab. Wird per Name gesucht,
+    // damit er in jeder Szene ohne Zuweisung funktioniert.
+    private const string MainMenuSceneName = "MenueScene";
+    private const string MainMenuButtonName = "MainMenuButton";
+    private Button mainMenuButton;
+
     private void Start()
     {
         if (closeText != null) closeText.text = "Close";
@@ -41,6 +47,44 @@ public class PauseMenuScript : MonoBehaviour
 
         sensitivitySlider.onValueChanged.AddListener(ChangeSensitivity);
         volumeSlider.onValueChanged.AddListener(ChangeVolume);
+
+        SetupMainMenuButton();
+    }
+
+    private void SetupMainMenuButton()
+    {
+        foreach (Button b in pauseMenu.GetComponentsInChildren<Button>(true))
+        {
+            if (b.name == MainMenuButtonName)
+            {
+                mainMenuButton = b;
+                break;
+            }
+        }
+
+        if (mainMenuButton == null)
+            return;
+
+        // Im Hauptmenue selbst ergibt der Button keinen Sinn
+        bool inMainMenu = SceneManager.GetActiveScene().name == MainMenuSceneName;
+        mainMenuButton.gameObject.SetActive(!inMainMenu);
+
+        mainMenuButton.onClick.RemoveListener(ReturnToMainMenu);
+        mainMenuButton.onClick.AddListener(ReturnToMainMenu);
+    }
+
+    public void ReturnToMainMenu()
+    {
+        isPaused = false;
+        pauseMenu.SetActive(false);
+
+        // Zeit wieder normal laufen lassen, sonst bleibt das Hauptmenue eingefroren
+        Time.timeScale = 1f;
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+        SceneLoader.Load(MainMenuSceneName);
     }
 
     private void Update()

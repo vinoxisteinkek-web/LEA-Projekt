@@ -12,11 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97ab5fc171c72c04eaead40250420766, type: 3}
   m_Name: Cashier_Pay
   m_EditorClassIdentifier: Assembly-CSharp::DialogueData
+  lockPlayer: 1
+  ambienceVolumeDuringDialogue: 0.35
   startNodeId: start
   nodes:
   - id: start
+    speakerData: {fileID: 0}
     speaker: Cashier
     text: "[Platzhalter] Begr\xFC\xDFung des Kassierers."
+    voiceClip: {fileID: 0}
+    voiceVolume: 1
+    delayBefore: 0
+    advance: 0
+    seconds: 3
+    pauseAfterAudio: 0.4
     nextNodeId: 
     eventName: 
     choices:
@@ -30,8 +39,15 @@ MonoBehaviour:
       nextNodeId: smalltalk
       eventName: 
   - id: question
+    speakerData: {fileID: 0}
     speaker: Cashier
     text: '[Platzhalter] Antwort des Kassierers auf die Frage.'
+    voiceClip: {fileID: 0}
+    voiceVolume: 1
+    delayBefore: 0
+    advance: 0
+    seconds: 3
+    pauseAfterAudio: 0.4
     nextNodeId: 
     eventName: 
     choices:
@@ -42,20 +58,41 @@ MonoBehaviour:
       nextNodeId: pay
       eventName: 
   - id: question_2
+    speakerData: {fileID: 0}
     speaker: Cashier
     text: '[Platzhalter] Weitere Info. (Ohne Antworten -> Klick geht zu ''nextNodeId'')'
+    voiceClip: {fileID: 0}
+    voiceVolume: 1
+    delayBefore: 0
+    advance: 0
+    seconds: 3
+    pauseAfterAudio: 0.4
     nextNodeId: pay
     eventName: 
     choices: []
   - id: smalltalk
+    speakerData: {fileID: 0}
     speaker: Cashier
     text: '[Platzhalter] Smalltalk-Zeile 1.'
+    voiceClip: {fileID: 0}
+    voiceVolume: 1
+    delayBefore: 0
+    advance: 0
+    seconds: 3
+    pauseAfterAudio: 0.4
     nextNodeId: smalltalk_2
     eventName: 
     choices: []
   - id: smalltalk_2
+    speakerData: {fileID: 0}
     speaker: Cashier
     text: '[Platzhalter] Smalltalk-Zeile 2.'
+    voiceClip: {fileID: 0}
+    voiceVolume: 1
+    delayBefore: 0
+    advance: 0
+    seconds: 3
+    pauseAfterAudio: 0.4
     nextNodeId: 
     eventName: 
     choices:
@@ -63,8 +100,15 @@ MonoBehaviour:
       nextNodeId: pay
       eventName: 
   - id: pay
+    speakerData: {fileID: 0}
     speaker: Cashier
     text: '[Platzhalter] Das macht dann ... Euro.'
+    voiceClip: {fileID: 0}
+    voiceVolume: 1
+    delayBefore: 0
+    advance: 0
+    seconds: 3
+    pauseAfterAudio: 0.4
     nextNodeId: 
     eventName: 
     choices:
@@ -75,8 +119,15 @@ MonoBehaviour:
       nextNodeId: goodbye
       eventName: paid
   - id: goodbye
+    speakerData: {fileID: 0}
     speaker: Cashier
     text: '[Platzhalter] Verabschiedung. (Dialog endet, da nextNodeId leer)'
+    voiceClip: {fileID: 0}
+    voiceVolume: 1
+    delayBefore: 0
+    advance: 0
+    seconds: 3
+    pauseAfterAudio: 0.4
     nextNodeId: 
     eventName: 
     choices: []

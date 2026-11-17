@@ -143,11 +143,21 @@ public class GasStationIntro : MonoBehaviour
         // An der Zapfsäule anhalten und aussteigen
         while (!playerOutOfCar)
         {
-            bool canExit = stopZone != null
-                && stopZone.bounds.Contains(car.transform.position)
-                && Mathf.Abs(car.CurrentSpeed) < 0.5f;
+            // Aussteigen geht, sobald das Auto steht und eine Zapfsaeule
+            // in Schlauch-Reichweite ist. Die Zone dient nur noch dazu,
+            // einen Hinweis zu zeigen, wenn man an der Tankstelle zu weit weg haelt.
+            bool stopped = Mathf.Abs(car.CurrentSpeed) < 0.5f;
+            float pumpDist = NearestPumpDistance(out float pumpReach);
+            bool nearPump = pumpDist <= pumpReach;
+            bool atStation = (stopZone != null && stopZone.bounds.Contains(car.transform.position))
+                             || pumpDist <= pumpReach + 10f;
+            bool canExit = stopped && nearPump;
 
-            if (canExit)
+            if (stopped && atStation && !nearPump)
+            {
+                ShowPrompt("Näher an die Zapfsäule fahren");
+            }
+            else if (canExit)
             {
                 ShowPrompt(InputBindings.FormatPrompt("[E] Aussteigen"));
                 if (InputBindings.GetDown(GameAction.Interact))
@@ -171,6 +181,45 @@ public class GasStationIntro : MonoBehaviour
     }
 
     // =================================
+    // ZAPFSAEULEN-NAEHE
+    // =================================
+    private FuelPumpInteractable[] pumps;
+
+    // Abstand zur naechsten Zapfsaeule und deren Schlauch-Reichweite
+    private float NearestPumpDistance(out float reach)
+    {
+        if (pumps == null || pumps.Length == 0)
+            pumps = FindObjectsByType<FuelPumpInteractable>(FindObjectsSortMode.None);
+        reach = 5f;
+        if (pumps.Length == 0) return 0f; // keine Saeulen gefunden -> nicht blockieren
+        float best = float.MaxValue;
+        foreach (var p in pumps)
+        {
+            if (p == null) continue;
+            float d = p.CarDistance(car);
+            if (d < best) { best = d; reach = p.maxCarDistance; }
+        }
+        return best;
+    }
+
+    // Mittelpunkt und halbe Breite/Laenge des Autos (Welt-Meter) aus dem groessten BoxCollider
+    private void GetCarFootprint(out Vector3 center, out float halfWidth, out float halfLength)
+    {
+        center = car.transform.position;
+        halfWidth = 1.0f;
+        halfLength = 2.6f;
+        BoxCollider best = null;
+        foreach (var b in car.GetComponents<BoxCollider>())
+            if (!b.isTrigger && (best == null || b.size.x * b.size.z > best.size.x * best.size.z)) best = b;
+        if (best == null) return;
+        Vector3 s = car.transform.lossyScale;
+        Vector3 wc = car.transform.TransformPoint(best.center);
+        center = new Vector3(wc.x, car.transform.position.y, wc.z);
+        halfWidth = best.size.x * s.x * 0.5f;
+        halfLength = best.size.z * s.z * 0.5f;
+    }
+
+    // =================================
     // AUSSTEIGEN
     // =================================
     private IEnumerator ExitCar()
@@ -183,14 +232,17 @@ public class GasStationIntro : MonoBehaviour
         car.engineRunning = false;
         car.LowFuelWarning = false;
 
-        // Freien Platz neben dem Auto suchen (Fahrerseite zuerst)
-        Vector3 c = car.transform.position;
+        // Freien Platz neben dem Auto suchen (Fahrerseite zuerst).
+        // Abstaende kommen aus dem Auto-Collider, damit sie auch bei
+        // skaliertem Auto stimmen.
+        GetCarFootprint(out Vector3 c, out float halfWidth, out float halfLength);
+        const float margin = 0.6f; // Spieler-Radius + etwas Luft
         Vector3[] candidates =
         {
-            c - car.transform.right * 1.6f,
-            c + car.transform.right * 1.6f,
-            c - car.transform.forward * 3.2f,
-            c + car.transform.forward * 3.2f
+            c - car.transform.right * (halfWidth + margin),
+            c + car.transform.right * (halfWidth + margin),
+            c - car.transform.forward * (halfLength + margin),
+            c + car.transform.forward * (halfLength + margin)
         };
 
         Vector3 exitPos = candidates[0];

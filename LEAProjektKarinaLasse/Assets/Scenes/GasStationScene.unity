@@ -4874,7 +4874,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 45, y: -40}
+  m_AnchoredPosition: {x: 70, y: -125}
   m_SizeDelta: {x: 520, y: 90}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &191313033
@@ -8167,6 +8167,7 @@ MonoBehaviour:
   holdProgress: 0
   flow: {fileID: 1414125273}
   pumpSound: {fileID: 0}
+  maxCarDistance: 5
 --- !u!65 &326636116
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9045,7 +9046,7 @@ Transform:
   m_GameObject: {fileID: 368529182}
   serializedVersion: 2
   m_LocalRotation: {x: 0.04360444, y: 0.026152037, z: -0.0011418225, w: 0.9987059}
-  m_LocalPosition: {x: 0.62, y: 0.65, z: 2.2}
+  m_LocalPosition: {x: 0.47000104, y: 0.64, z: 2.1299746}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -11331,6 +11332,8 @@ MonoBehaviour:
   playerChoiceColor: {r: 1, g: 0.69, b: 0, a: 1}
   voiceSource: {fileID: 434053623}
   npcTalking: {fileID: 8300000, guid: 41b88c6bff3de0b4baed17fe3579f8c5, type: 3}
+  readTimePerChar: 0.05
+  minReadTime: 1.5
 --- !u!82 &434053623
 AudioSource:
   m_ObjectHideFlags: 0
@@ -13960,7 +13963,7 @@ MonoBehaviour:
   fuelWarningLight: {fileID: 0}
   fuelWarningOn: {fileID: 2100000, guid: 7576b94c6253b0347ba43794b7354d45, type: 2}
   fuelWarningOff: {fileID: 2100000, guid: 9a46589b62cc3924884aa77c57878d79, type: 2}
-  wheelRadius: 0.32
+  wheelRadius: 0.372
   invertSteeringWheel: 0
   invertNeedles: 0
   fuel: 0.16
@@ -14089,7 +14092,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: -300, y: 0, z: 25.75}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 261344371}
@@ -14118,8 +14121,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.6, y: 0.45, z: 2.2}
-  m_Center: {x: 0, y: 1.25, z: -0.4}
+  m_Size: {x: 1.55, y: 0.42, z: 2.35}
+  m_Center: {x: 0, y: 1.17, z: -0.42}
 --- !u!65 &530337463
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14139,8 +14142,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.8, y: 0.9, z: 4.4}
-  m_Center: {x: 0, y: 0.75, z: 0}
+  m_Size: {x: 1.76, y: 0.86, z: 4.5}
+  m_Center: {x: 0, y: 0.7, z: -0.15}
 --- !u!54 &530337464
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -18135,7 +18138,7 @@ Transform:
   m_GameObject: {fileID: 654742059}
   serializedVersion: 2
   m_LocalRotation: {x: 0.04360444, y: -0.026152037, z: 0.0011418225, w: 0.9987059}
-  m_LocalPosition: {x: -0.62, y: 0.65, z: 2.2}
+  m_LocalPosition: {x: -0.4699996, y: 0.64, z: 2.1299746}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -22796,6 +22799,62 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3638661b68f87c74ba8eaa5f7d8f5ab3, type: 3}
   m_PrefabInstance: {fileID: 830168960}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &830940235
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 830940237}
+  - component: {fileID: 830940236}
+  m_Layer: 0
+  m_Name: DialogTest_F9
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &830940236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 830940235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed3196cc65ae6be42879d44a60099d0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueTrigger
+  dialogue: {fileID: 11400000, guid: 5e002df841b9b8948a27964a3e5c4896, type: 2}
+  startMode: 3
+  startDelay: 0
+  onlyOnce: 0
+  playerTag: Player
+  debugKey: 290
+  onDialogueEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  onDialogueEnd:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!4 &830940237
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 830940235}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &831221211
 GameObject:
   m_ObjectHideFlags: 0
@@ -37991,6 +38050,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1402560172}
   - component: {fileID: 1402560173}
+  - component: {fileID: 1402560174}
   m_Layer: 0
   m_Name: AmbientSound
   m_TagString: Untagged
@@ -38110,6 +38170,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1402560174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1402560171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe1dc4454750f66459f47f3a784087e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueDucking
+  fadeSpeed: 2
 --- !u!1 &1407582425
 GameObject:
   m_ObjectHideFlags: 0
@@ -55767,6 +55840,7 @@ MonoBehaviour:
   holdProgress: 0
   flow: {fileID: 1414125273}
   pumpSound: {fileID: 0}
+  maxCarDistance: 5
 --- !u!65 &2081183757
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -58071,3 +58145,4 @@ SceneRoots:
   - {fileID: 414970084}
   - {fileID: 530059029}
   - {fileID: 1374697567}
+  - {fileID: 830940237}
