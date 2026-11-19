@@ -18,8 +18,7 @@ public class PlayerInteractor : MonoBehaviour
 
     void Update()
     {
-        var dm = DialogueManager.Instance;
-        if (playerCamera == null || (dm != null && (dm.IsOpen || dm.ClosedFrame == Time.frameCount)))
+        if (playerCamera == null)
         {
             SetTarget(null);
             return;

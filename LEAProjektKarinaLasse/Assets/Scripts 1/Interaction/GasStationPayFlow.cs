@@ -6,8 +6,7 @@ using UnityEngine.Events;
 // TANKSTELLE - TANKEN UND BEZAHLEN
 // Läuft nach dem Aussteigen (GasStationIntro.onPlayerExitedCar -> Begin).
 //   1. Refuel: an einer Zapfsäule E halten
-//   2. Pay:    in den Shop gehen, mit dem Kassierer reden
-//              -> der Dialog muss irgendwo das Event "paid" auslösen
+//   2. Pay:    in den Shop gehen, beim Kassierer [E] drücken -> Pay()
 //   3. Done:   onPaid wird ausgelöst (Anschluss für den nächsten Teil)
 // =====================================================
 public class GasStationPayFlow : MonoBehaviour
@@ -29,9 +28,6 @@ public class GasStationPayFlow : MonoBehaviour
     [Header("Spieler-Sätze (leer = nichts sagen)")]
     public string lineAfterRefuel = "Full. Now I have to pay inside.";
     public string lineAfterPaid = "";
-
-    [Header("Event-Name im Dialog, der das Bezahlen bestätigt")]
-    public string paidEventName = "paid";
 
     [Header("Danach")]
     public UnityEvent onRefueled;
@@ -64,21 +60,16 @@ public class GasStationPayFlow : MonoBehaviour
         onRefueled?.Invoke();
     }
 
-    // ------- Events aus Dialogen (von CashierInteractable weitergereicht) -------
-    public void HandleDialogueEvent(string eventName)
+    // ------- Bezahlen (von CashierInteractable aufgerufen) -------
+    public void Pay()
     {
-        if (eventName == paidEventName && stage == Stage.Pay)
-        {
-            stage = Stage.Done;
-            StartCoroutine(AfterPaid());
-        }
+        if (stage != Stage.Pay) return;
+        stage = Stage.Done;
+        StartCoroutine(AfterPaid());
     }
 
     private IEnumerator AfterPaid()
     {
-        // warten, bis der Dialog zu ist
-        while (DialogueManager.Instance != null && DialogueManager.Instance.IsOpen) yield return null;
-
         if (intro != null)
         {
             if (string.IsNullOrEmpty(doneTask)) intro.HideTask(); else intro.ShowTask(doneTask);

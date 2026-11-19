@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -376,15 +376,29 @@ public class GasStationIntro : MonoBehaviour
     // Gleiche Darstellung wie im Supermarkt: orange, Buchstabe für Buchstabe
     public IEnumerator PlayerSay(string message)
     {
+        yield return SayLine(message, null, playerTalking);
+    }
+
+    // Andere Figur (z. B. Kassierer): gleiche Stelle, aber weiss - wie die Polizei in Story 1
+    public IEnumerator NpcSay(string message, AudioClip talking = null)
+    {
+        yield return SayLine(message, Color.white, talking);
+    }
+
+    private IEnumerator SayLine(string message, Color? color, AudioClip talking)
+    {
         if (dialogueText == null) yield break;
+
+        Color baseColor = dialogueText.color;
+        if (color.HasValue) dialogueText.color = color.Value;
 
         dialogueText.text = message;
         dialogueText.maxVisibleCharacters = 0;
         dialogueText.gameObject.SetActive(true);
 
-        if (playerVoiceAudioSource != null && playerTalking != null)
+        if (playerVoiceAudioSource != null && talking != null)
         {
-            playerVoiceAudioSource.clip = playerTalking;
+            playerVoiceAudioSource.clip = talking;
             playerVoiceAudioSource.loop = true;
             playerVoiceAudioSource.Play();
         }
@@ -401,5 +415,6 @@ public class GasStationIntro : MonoBehaviour
 
         yield return new WaitForSeconds(dialogueEndDelay + message.Length * 0.025f);
         dialogueText.gameObject.SetActive(false);
+        dialogueText.color = baseColor;
     }
 }
