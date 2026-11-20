@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class DoorInteraction : MonoBehaviour
@@ -12,6 +13,12 @@ public class DoorInteraction : MonoBehaviour
 
     // Optional: eigener Sound beim Schließen. Leer = doorSound wird benutzt.
     [SerializeField] private AudioClip closeSound;
+
+    [Header("Abgeschlossen")]
+    [Tooltip("Tür lässt sich nicht öffnen")]
+    [SerializeField] private bool isLocked = false;
+    [Tooltip("Optional: Rüttel-Sound, wenn man an der abgeschlossenen Tür zieht")]
+    [SerializeField] private AudioClip lockedSound;
 
     [Header("House Door")]
     [SerializeField] private bool isHouseDoor = false;
@@ -35,6 +42,19 @@ public class DoorInteraction : MonoBehaviour
 
     public bool IsOpen => isOpen;
 
+    // Andere Scripts können die Tür ab-/aufschließen
+    public bool IsLocked
+    {
+        get => isLocked;
+        set => isLocked = value;
+    }
+
+    // Wird aufgerufen, wenn jemand die abgeschlossene Tür öffnen will
+    public event Action OnLockedAttempt;
+
+    // Wird aufgerufen, sobald die Tür aufgeht
+    public event Action OnOpened;
+
     private void Start()
     {
         closedRotation = transform.localRotation;
@@ -54,6 +74,18 @@ public class DoorInteraction : MonoBehaviour
     // Drückt man während der Bewegung, dreht die Tür einfach um.
     public void Interact()
     {
+        // Abgeschlossen: nur Rütteln, Tür bleibt zu
+        if (!isOpen && isLocked)
+        {
+            if (audioSource != null && lockedSound != null)
+            {
+                audioSource.PlayOneShot(lockedSound);
+            }
+
+            OnLockedAttempt?.Invoke();
+            return;
+        }
+
         isOpen = !isOpen;
         targetRotation = isOpen ? openRotation : closedRotation;
         isMoving = true;
@@ -71,6 +103,11 @@ public class DoorInteraction : MonoBehaviour
         if (audioSource != null && clip != null)
         {
             audioSource.PlayOneShot(clip);
+        }
+
+        if (isOpen)
+        {
+            OnOpened?.Invoke();
         }
 
         // Haustür: Zusatz-Sound und Story nur beim ersten Öffnen
