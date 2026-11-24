@@ -15,6 +15,9 @@ public static class SceneLoader
 {
     private static bool isLoading;
 
+    // Wahr, solange eine Szene geladen wird (z.B. damit das Pausemenue nicht aufgeht)
+    public static bool IsLoading => isLoading;
+
     public static void Load(string sceneName)
     {
         if (isLoading)
@@ -118,7 +121,11 @@ public class SceneLoaderRunner : MonoBehaviour
             yield return null;
         }
 
-        // Neue Szene ist da – kurz warten, bis sie sich eingerichtet hat
+        // Neue Szene ist da – Zeit wieder normal laufen lassen
+        // (falls waehrend des Ladens pausiert wurde, wuerde die neue Szene sonst einfrieren)
+        Time.timeScale = 1f;
+
+        // kurz warten, bis sie sich eingerichtet hat
         yield return null;
         yield return null;
 

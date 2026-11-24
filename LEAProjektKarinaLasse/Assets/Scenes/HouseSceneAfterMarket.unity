@@ -167,7 +167,9 @@ MonoBehaviour:
   openSpeed: 3
   audioSource: {fileID: 2072936970}
   doorSound: {fileID: 8300000, guid: 07ed00bf43896874bbc8a51fb7ae07d8, type: 3}
-  closeSound: {fileID: 0}
+  closeSound: {fileID: 8300000, guid: 46768c8cc48479e458ea91fd604263ea, type: 3}
+  isLocked: 0
+  lockedSound: {fileID: 0}
   isHouseDoor: 0
   houseDoorSound: {fileID: 0}
 --- !u!1 &47514301
@@ -389,7 +391,9 @@ MonoBehaviour:
   openSpeed: 3
   audioSource: {fileID: 2072936970}
   doorSound: {fileID: 8300000, guid: 07ed00bf43896874bbc8a51fb7ae07d8, type: 3}
-  closeSound: {fileID: 0}
+  closeSound: {fileID: 8300000, guid: 46768c8cc48479e458ea91fd604263ea, type: 3}
+  isLocked: 0
+  lockedSound: {fileID: 0}
   isHouseDoor: 0
   houseDoorSound: {fileID: 0}
 --- !u!1 &219509680
@@ -3763,6 +3767,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4447947579971100666, guid: d6a0d044148e47d43b93e761ac695355, type: 3}
+    - {fileID: 9201070395360571779, guid: d6a0d044148e47d43b93e761ac695355, type: 3}
     m_RemovedGameObjects:
     - {fileID: 4759226724034958224, guid: d6a0d044148e47d43b93e761ac695355, type: 3}
     m_AddedGameObjects:
@@ -3970,7 +3975,9 @@ MonoBehaviour:
   openSpeed: 3
   audioSource: {fileID: 2072936970}
   doorSound: {fileID: 8300000, guid: 07ed00bf43896874bbc8a51fb7ae07d8, type: 3}
-  closeSound: {fileID: 0}
+  closeSound: {fileID: 8300000, guid: 46768c8cc48479e458ea91fd604263ea, type: 3}
+  isLocked: 0
+  lockedSound: {fileID: 0}
   isHouseDoor: 1
   houseDoorSound: {fileID: 8300000, guid: 3b642e55e552a484ba48d472fbcb481a, type: 3}
 --- !u!1 &300146751
@@ -4434,7 +4441,9 @@ MonoBehaviour:
   openSpeed: 3
   audioSource: {fileID: 2072936970}
   doorSound: {fileID: 8300000, guid: 07ed00bf43896874bbc8a51fb7ae07d8, type: 3}
-  closeSound: {fileID: 0}
+  closeSound: {fileID: 8300000, guid: 46768c8cc48479e458ea91fd604263ea, type: 3}
+  isLocked: 0
+  lockedSound: {fileID: 0}
   isHouseDoor: 0
   houseDoorSound: {fileID: 0}
 --- !u!1 &601366750 stripped
@@ -4458,7 +4467,9 @@ MonoBehaviour:
   openSpeed: 3
   audioSource: {fileID: 2072936970}
   doorSound: {fileID: 8300000, guid: 07ed00bf43896874bbc8a51fb7ae07d8, type: 3}
-  closeSound: {fileID: 0}
+  closeSound: {fileID: 8300000, guid: 46768c8cc48479e458ea91fd604263ea, type: 3}
+  isLocked: 0
+  lockedSound: {fileID: 0}
   isHouseDoor: 0
   houseDoorSound: {fileID: 0}
 --- !u!1 &655775314
@@ -5464,7 +5475,9 @@ MonoBehaviour:
   openSpeed: 3
   audioSource: {fileID: 2072936970}
   doorSound: {fileID: 8300000, guid: 07ed00bf43896874bbc8a51fb7ae07d8, type: 3}
-  closeSound: {fileID: 0}
+  closeSound: {fileID: 8300000, guid: 46768c8cc48479e458ea91fd604263ea, type: 3}
+  isLocked: 0
+  lockedSound: {fileID: 0}
   isHouseDoor: 0
   houseDoorSound: {fileID: 0}
 --- !u!64 &1164484364
@@ -5923,7 +5936,9 @@ MonoBehaviour:
   openSpeed: 3
   audioSource: {fileID: 2072936970}
   doorSound: {fileID: 8300000, guid: 07ed00bf43896874bbc8a51fb7ae07d8, type: 3}
-  closeSound: {fileID: 0}
+  closeSound: {fileID: 8300000, guid: 46768c8cc48479e458ea91fd604263ea, type: 3}
+  isLocked: 0
+  lockedSound: {fileID: 0}
   isHouseDoor: 0
   houseDoorSound: {fileID: 0}
 --- !u!64 &1643174834

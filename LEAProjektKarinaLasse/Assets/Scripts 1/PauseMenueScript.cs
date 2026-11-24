@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -87,12 +87,29 @@ public class PauseMenuScript : MonoBehaviour
         SceneLoader.Load(MainMenuSceneName);
     }
 
+    private int lastRebindFrame = -10;
+
     private void Update()
     {
+        // Wird gerade eine Taste neu belegt, bricht ESC nur das Belegen ab
+        if (ControlsMenu.IsRebinding) lastRebindFrame = Time.frameCount;
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if(!isPaused)
-                PauseGame();
+            if (Time.frameCount - lastRebindFrame <= 1)
+                return;
+
+            if (!isPaused)
+            {
+                // waehrend eines Ladebildschirms nicht pausieren
+                if (!SceneLoader.IsLoading)
+                    PauseGame();
+            }
+            else
+            {
+                // ESC schliesst das Pausemenue wieder
+                ResumeGame();
+            }
         }
     }
 

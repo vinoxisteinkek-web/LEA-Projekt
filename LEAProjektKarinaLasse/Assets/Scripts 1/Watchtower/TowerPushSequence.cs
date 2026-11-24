@@ -57,6 +57,15 @@ public class TowerPushSequence : MonoBehaviour
     [Header("Danach")]
     public string menuScene = "MenueScene";
 
+    [Header("Demo-Ende (Text auf Schwarz vor dem Menü)")]
+    public bool showDemoEnd = true;
+    public string demoEndTitle = "ENDE DER DEMO";
+    public string demoEndSubtitle = "Danke fürs Spielen!";
+    [Tooltip("Rote Zeile darunter, leer = keine")]
+    public string demoEndTeaser = "Er ist noch da draußen.";
+    [Tooltip("So lange bleibt die Karte stehen (oder bis eine Taste gedrückt wird)")]
+    public float demoEndSeconds = 9f;
+
     public bool IsRunning => running;
 
     private bool armed, running;
@@ -157,9 +166,69 @@ public class TowerPushSequence : MonoBehaviour
         yield return new WaitForSeconds(holdBlackSeconds);
 
         StoryProgress.CompleteStory2();
+        if (showDemoEnd) yield return DemoEndCard();
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         SceneLoader.Load(menuScene);
+    }
+
+    // =================================
+    // DEMO-ENDE: Text auf Schwarz, dann Hauptmenü
+    // =================================
+    private IEnumerator DemoEndCard()
+    {
+        var go = new GameObject("DemoEndCard", typeof(Canvas), typeof(UnityEngine.UI.CanvasScaler), typeof(CanvasGroup));
+        var canvas = go.GetComponent<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvas.sortingOrder = 900; // unter dem Ladebildschirm (1000)
+        var scaler = go.GetComponent<UnityEngine.UI.CanvasScaler>();
+        scaler.uiScaleMode = UnityEngine.UI.CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        scaler.referenceResolution = new Vector2(1920, 1080);
+        scaler.matchWidthOrHeight = 1f;
+        var group = go.GetComponent<CanvasGroup>();
+        group.alpha = 0f;
+
+        var bg = new GameObject("Black", typeof(RectTransform), typeof(UnityEngine.UI.Image));
+        bg.transform.SetParent(go.transform, false);
+        var br = (RectTransform)bg.transform;
+        br.anchorMin = Vector2.zero; br.anchorMax = Vector2.one; br.offsetMin = br.offsetMax = Vector2.zero;
+        bg.GetComponent<UnityEngine.UI.Image>().color = Color.black;
+
+        TMPro.TextMeshProUGUI Line(string text, float size, float y, float alpha, TMPro.FontStyles style)
+        {
+            var t = new GameObject("Text", typeof(RectTransform), typeof(TMPro.TextMeshProUGUI));
+            t.transform.SetParent(go.transform, false);
+            var r = (RectTransform)t.transform;
+            r.anchorMin = new Vector2(0f, 0.5f); r.anchorMax = new Vector2(1f, 0.5f);
+            r.anchoredPosition = new Vector2(0f, y); r.sizeDelta = new Vector2(0f, size * 1.6f);
+            var tmp = t.GetComponent<TMPro.TextMeshProUGUI>();
+            tmp.text = text; tmp.fontSize = size; tmp.fontStyle = style;
+            tmp.alignment = TMPro.TextAlignmentOptions.Center;
+            tmp.color = new Color(1f, 1f, 1f, alpha);
+            tmp.characterSpacing = 8f;
+            return tmp;
+        }
+        Line(demoEndTitle, 64, 60f, 1f, TMPro.FontStyles.Bold);
+        Line(demoEndSubtitle, 30, -20f, 0.75f, TMPro.FontStyles.Normal);
+        var teaser = Line(demoEndTeaser, 24, -110f, 0f, TMPro.FontStyles.Italic);
+        var hint = Line("Taste drücken zum Fortfahren", 18, -440f, 0f, TMPro.FontStyles.Normal);
+
+        // einblenden
+        for (float t = 0f; t < 1.5f; t += Time.unscaledDeltaTime) { group.alpha = t / 1.5f; yield return null; }
+        group.alpha = 1f;
+        // Teaser etwas später
+        for (float t = 0f; t < 1.5f; t += Time.unscaledDeltaTime) { teaser.color = new Color(0.8f, 0.15f, 0.15f, t / 1.5f); yield return null; }
+
+        // warten: Taste oder Zeit
+        float shown = 0f;
+        while (shown < demoEndSeconds)
+        {
+            shown += Time.unscaledDeltaTime;
+            if (shown > 2f) hint.color = new Color(1f, 1f, 1f, Mathf.Min(0.45f, (shown - 2f) * 0.5f));
+            if (shown > 2f && Input.anyKeyDown && !Input.GetKeyDown(KeyCode.Escape)) break;
+            yield return null;
+        }
+        // SceneLoader deckt den Wechsel mit Schwarz ab, die Karte verschwindet mit der Szene
     }
 
     private void Play(AudioClip clip)

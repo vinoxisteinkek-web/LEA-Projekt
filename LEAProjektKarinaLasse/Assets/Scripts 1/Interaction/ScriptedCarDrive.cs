@@ -84,7 +84,7 @@ public class ScriptedCarDrive : MonoBehaviour
         onFinished?.Invoke();
     }
 
-    private void SetLights(bool on)
+    public void SetLights(bool on)
     {
         foreach (var l in headlights) if (l != null) l.enabled = on;
         if (lightRenderers == null) return;

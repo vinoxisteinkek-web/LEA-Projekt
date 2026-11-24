@@ -92,9 +92,13 @@ public static class InputBindings
         return current[action];
     }
 
-    public static bool Get(GameAction action)     => Input.GetKey(GetKeyFor(action));
-    public static bool GetDown(GameAction action) => Input.GetKeyDown(GetKeyFor(action));
-    public static bool GetUp(GameAction action)   => Input.GetKeyUp(GetKeyFor(action));
+    // Im Pausemenü (timeScale = 0) zählen Spiel-Tasten nicht –
+    // sonst würde z.B. E eine Tür öffnen oder ein Mausklick ein Item benutzen.
+    public static bool Paused => Time.timeScale == 0f;
+
+    public static bool Get(GameAction action)     => !Paused && Input.GetKey(GetKeyFor(action));
+    public static bool GetDown(GameAction action) => !Paused && Input.GetKeyDown(GetKeyFor(action));
+    public static bool GetUp(GameAction action)   => !Paused && Input.GetKeyUp(GetKeyFor(action));
 
     // Pfeiltasten funktionieren immer zusaetzlich zur eigenen Belegung
     public static float GetHorizontal()

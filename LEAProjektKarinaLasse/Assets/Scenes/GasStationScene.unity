@@ -2171,37 +2171,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3638661b68f87c74ba8eaa5f7d8f5ab3, type: 3}
   m_PrefabInstance: {fileID: 85288469}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &88133348
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 88133349}
-  m_Layer: 0
-  m_Name: WP_05
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &88133349
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 88133348}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 45, y: 0, z: 25.8}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2131049937}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &88643821
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2805,7 +2774,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: 7a9b631009d2bff4ab2a086eacaee2b7, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -2953,9 +2922,9 @@ MonoBehaviour:
   lockedLine: It's locked.
   lockedLineCooldown: 3
   audioSource: {fileID: 100694994}
-  jumpscareSound: {fileID: 0}
+  jumpscareSound: {fileID: 8300000, guid: 9603681235b8b7e47a7906b8723c8ee0, type: 3}
   jumpscareVolume: 1
-  doorSlamSound: {fileID: 0}
+  doorSlamSound: {fileID: 8300000, guid: 146e02892a2902c43ac65716ef92ea22, type: 3}
   doorSlamVolume: 1
   scareDelay: 0.12
   pauseBeforeTalking: 0.8
@@ -3838,9 +3807,9 @@ MonoBehaviour:
   playerVoiceAudioSource: {fileID: 134682107}
   playerTalking: {fileID: 8300000, guid: 8e07a90daa39d1b4488cc78705cc0ac7, type: 3}
   startFadeDuration: 2.5
-  startSpeed: 13
+  startSpeed: 7
   controlsHintDuration: 6
-  lowFuelAfterSeconds: 7
+  lowFuelAfterSeconds: 5
   spotStationDistance: 120
   textSpeed: 0.045
   dialogueEndDelay: 1.5
@@ -7309,6 +7278,7 @@ GameObject:
   m_Component:
   - component: {fileID: 257789985}
   - component: {fileID: 257789984}
+  - component: {fileID: 257789986}
   m_Layer: 0
   m_Name: GasStationLeave
   m_TagString: Untagged
@@ -7339,6 +7309,7 @@ MonoBehaviour:
   gasStation: {fileID: 368551579072706031}
   nextScene: WatchtowerScene
   fadeDuration: 2
+  departure: {fileID: 257789986}
 --- !u!4 &257789985
 Transform:
   m_ObjectHideFlags: 0
@@ -7354,6 +7325,49 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &257789986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 257789983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60c8e57e15bb675489df0ddaa3ff0b44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GasStationDeparture
+  intro: {fileID: 134682106}
+  playerCar: {fileID: 530337459}
+  redCar: {fileID: 381023842}
+  redCarLights: {fileID: 381023843}
+  redCarEngine: {fileID: 381023844}
+  redCarExitPath:
+  - {fileID: 589263241}
+  - {fileID: 539733128}
+  - {fileID: 905636196}
+  roadCenterZ: 27.8
+  laneOffset: 2
+  roadEnterZ: 22.5
+  triggerDistance: 35
+  gasStation: {fileID: 368551579072706031}
+  redCarStartDistance: 35
+  playerLockSpeed: 6.5
+  playerAccel: 3
+  lookAhead: 9
+  maxTurnRate: 70
+  lotSpeed: 11
+  turnInSpeed: 9
+  redCarStartDelay: 0
+  overtakeSpeed: 30
+  overtakeAccel: 10
+  mergeAhead: 12
+  mergeDuration: 1.8
+  driveAwaySeconds: 4
+  lineOvertake: Whoa! ...Somebody's in a hurry.
+  endDelay: 0.4
+  fadeDuration: 1.4
+  nextScene: WatchtowerScene
 --- !u!1001 &261344370
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10276,9 +10290,9 @@ MonoBehaviour:
   - {fileID: 589263241}
   - {fileID: 539733128}
   - {fileID: 905636196}
-  - {fileID: 1173563062}
-  - {fileID: 88133349}
-  - {fileID: 1727952717}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   speed: 11
   acceleration: 4
   turnSpeed: 90
@@ -14377,7 +14391,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1491f58f6d7582747b83ae053f8cf413, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarController
-  maxSpeed: 16
+  maxSpeed: 10
   reverseMaxSpeed: 4
   acceleration: 5
   brakeForce: 12
@@ -33803,37 +33817,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1168117234}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &1173563061
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1173563062}
-  m_Layer: 0
-  m_Name: WP_04
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1173563062
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1173563061}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 14, y: 0, z: 25.6}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2131049937}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1174216423
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -40019,19 +40002,7 @@ MonoBehaviour:
   lineAfterPaid: 
   onRefueled:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 381023843}
-        m_TargetAssemblyTypeName: ScriptedCarDrive, Assembly-CSharp
-        m_MethodName: Drive
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   onPaid:
     m_PersistentCalls:
       m_Calls: []
@@ -42777,7 +42748,7 @@ MonoBehaviour:
   door: {fileID: 803924579}
   player: {fileID: 691648003}
   intro: {fileID: 134682106}
-  breathingSound: {fileID: 0}
+  breathingSound: {fileID: 8300000, guid: 8e24e4cf0f7adbf48a296ffdbfae0860, type: 3}
   maxVolume: 0.5
   hearRadius: 2.5
   fadeSpeed: 1.5
@@ -48656,37 +48627,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3638661b68f87c74ba8eaa5f7d8f5ab3, type: 3}
   m_PrefabInstance: {fileID: 1727094373}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1727952716
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1727952717}
-  m_Layer: 0
-  m_Name: WP_06
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1727952717
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1727952716}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 125, y: 0, z: 25.8}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2131049937}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1732220102
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -59210,9 +59150,6 @@ Transform:
   - {fileID: 589263241}
   - {fileID: 539733128}
   - {fileID: 905636196}
-  - {fileID: 1173563062}
-  - {fileID: 88133349}
-  - {fileID: 1727952717}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2131482588
@@ -60017,6 +59954,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 2711622408276766392, guid: 259c34dd6fa7c2a46b521ca0b2775b84, type: 3}
+      propertyPath: closeSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 46768c8cc48479e458ea91fd604263ea, type: 3}
     - target: {fileID: 3555096308444849632, guid: 259c34dd6fa7c2a46b521ca0b2775b84, type: 3}
       propertyPath: m_Name
       value: GasStation
@@ -60089,10 +60030,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 4261261561711689761, guid: 259c34dd6fa7c2a46b521ca0b2775b84, type: 3}
+      propertyPath: closeSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 46768c8cc48479e458ea91fd604263ea, type: 3}
+    - target: {fileID: 4261261561711689761, guid: 259c34dd6fa7c2a46b521ca0b2775b84, type: 3}
+      propertyPath: lockedSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 46768c8cc48479e458ea91fd604263ea, type: 3}
     - target: {fileID: 4816837762330080711, guid: 259c34dd6fa7c2a46b521ca0b2775b84, type: 3}
       propertyPath: isLocked
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4816837762330080711, guid: 259c34dd6fa7c2a46b521ca0b2775b84, type: 3}
+      propertyPath: closeSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 46768c8cc48479e458ea91fd604263ea, type: 3}
+    - target: {fileID: 4816837762330080711, guid: 259c34dd6fa7c2a46b521ca0b2775b84, type: 3}
+      propertyPath: lockedSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 46768c8cc48479e458ea91fd604263ea, type: 3}
+    - target: {fileID: 5320925600825364976, guid: 259c34dd6fa7c2a46b521ca0b2775b84, type: 3}
+      propertyPath: closeSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 46768c8cc48479e458ea91fd604263ea, type: 3}
     - target: {fileID: 5444990977701519208, guid: 259c34dd6fa7c2a46b521ca0b2775b84, type: 3}
       propertyPath: m_LocalPosition.z
       value: -8.01
@@ -60121,6 +60082,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 180
       objectReference: {fileID: 0}
+    - target: {fileID: 5655749169295949570, guid: 259c34dd6fa7c2a46b521ca0b2775b84, type: 3}
+      propertyPath: closeSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 46768c8cc48479e458ea91fd604263ea, type: 3}
+    - target: {fileID: 5655749169295949570, guid: 259c34dd6fa7c2a46b521ca0b2775b84, type: 3}
+      propertyPath: lockedSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 46768c8cc48479e458ea91fd604263ea, type: 3}
     - target: {fileID: 5766649605996161128, guid: 259c34dd6fa7c2a46b521ca0b2775b84, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

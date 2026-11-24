@@ -28,6 +28,8 @@ public class GasStationLeave : MonoBehaviour
     public Transform gasStation;
     public string nextScene = "WatchtowerScene";
     public float fadeDuration = 2f;
+    [Tooltip("Optional: Abfahrt-Sequenz. Wenn gesetzt, startet sie nach dem Einsteigen und lädt am Ende die nächste Szene.")]
+    public GasStationDeparture departure;
 
     public bool CanEnterCar => readyToLeave && !inCar;
 
@@ -67,6 +69,9 @@ public class GasStationLeave : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         yield return Fade(1f, 0f, 1f);
         if (intro != null && !string.IsNullOrEmpty(lineInCar)) StartCoroutine(intro.PlayerSay(lineInCar));
+
+        // Abfahrt-Sequenz (rotes Auto überholt) übernimmt ab hier
+        if (departure != null) { departure.Begin(); yield break; }
 
         Vector3 station = gasStation != null ? gasStation.position : Vector3.zero;
         while (true)
