@@ -3797,7 +3797,7 @@ MonoBehaviour:
   promptText: {fileID: 614107866}
   hintText: {fileID: 2067979058}
   blackScreen: {fileID: 1044654033}
-  playIntroStory: 1
+  playIntroStory: 0
   introText: {fileID: 1937595978}
   introStory: Nobody believed me when I told them what happened that night. It was
     November 1998, just a few weeks after that girl went missing in Emschurches.
@@ -14319,7 +14319,7 @@ GameObject:
   - component: {fileID: 530059029}
   - component: {fileID: 530059028}
   m_Layer: 0
-  m_Name: Camera Filter (VHS)
+  m_Name: Camera Filter (16mm Film)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14341,7 +14341,7 @@ MonoBehaviour:
   priority: 10
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: ccec82a7390552f4a9996e8d9f9a22ce, type: 2}
+  sharedProfile: {fileID: 11400000, guid: 8d92a1e43e231b643ab0755ec258ab77, type: 2}
 --- !u!4 &530059029
 Transform:
   m_ObjectHideFlags: 0
@@ -19761,6 +19761,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 3180871136461219171, guid: 1830a1f50f969064688a4cc8120ab670, type: 3}
+      propertyPath: woodClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 9e5485849bf94be41a88ec3194bab37b, type: 3}
+    - target: {fileID: 3180871136461219171, guid: 1830a1f50f969064688a4cc8120ab670, type: 3}
+      propertyPath: grassClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 2b73de5a472825142b8795d8ad6b9764, type: 3}
     - target: {fileID: 3180871136461219171, guid: 1830a1f50f969064688a4cc8120ab670, type: 3}
       propertyPath: walkingVolume
       value: 1
@@ -38956,7 +38964,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1374697566
 MonoBehaviour:
   m_ObjectHideFlags: 0

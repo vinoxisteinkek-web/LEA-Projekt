@@ -4255,6 +4255,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3180871136461219171, guid: 1830a1f50f969064688a4cc8120ab670, type: 3}
+      propertyPath: woodClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 9e5485849bf94be41a88ec3194bab37b, type: 3}
+    - target: {fileID: 3180871136461219171, guid: 1830a1f50f969064688a4cc8120ab670, type: 3}
+      propertyPath: grassClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 2b73de5a472825142b8795d8ad6b9764, type: 3}
+    - target: {fileID: 3180871136461219171, guid: 1830a1f50f969064688a4cc8120ab670, type: 3}
       propertyPath: playerSpeed
       value: 2.5
       objectReference: {fileID: 0}

@@ -1379,7 +1379,7 @@ MonoBehaviour:
   story2Label: {fileID: 1480665503}
   story2LockedHint: {fileID: 1033769751}
   story1Scene: HouseScene
-  story2Scene: GasStationScene
+  story2Scene: Story2HouseScene
   unlockedTextColor: {r: 0.577, g: 0.169, b: 0.169, a: 1}
   lockedTextColor: {r: 0.3, g: 0.3, b: 0.3, a: 1}
 --- !u!1 &638750290

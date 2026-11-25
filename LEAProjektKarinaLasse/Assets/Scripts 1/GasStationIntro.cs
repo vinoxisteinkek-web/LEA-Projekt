@@ -175,7 +175,7 @@ public class GasStationIntro : MonoBehaviour
 
         ShowTask("Das Auto volltanken");
         yield return new WaitForSeconds(0.8f);
-        yield return PlayerSay("Okay. Fill it up and get home. This place gives me the creeps.");
+        yield return PlayerSay("Okay. Fill it up and keep going. Emilia's waiting.");
 
         onPlayerExitedCar?.Invoke();
     }

@@ -5363,8 +5363,8 @@ MonoBehaviour:
   maxZoom: 3
   zoomSpeed: 0.25
   panSpeed: 0.5
-  openSound: {fileID: 0}
-  closeSound: {fileID: 0}
+  openSound: {fileID: 8300000, guid: a30ee726a708d1744b28f3fca0c27657, type: 3}
+  closeSound: {fileID: 8300000, guid: a30ee726a708d1744b28f3fca0c27657, type: 3}
   hint: "Mausrad - Zoom      Maus - Umsehen      [E] - Schlie\xDFen"
   player: {fileID: 0}
 --- !u!65 &194923633
@@ -7188,7 +7188,7 @@ MonoBehaviour:
   textSpeed: 0.045
   dialogueEndDelay: 1.5
   linesDriving:
-  - Almost home. Just a few more miles.
+  - Almost there. Just a few more miles.
   linesSpotRedCar:
   - Wait... isn't that the red car from the gas station?
   - Why would anyone park out here in the middle of the night?
@@ -14223,7 +14223,7 @@ GameObject:
   - component: {fileID: 530059029}
   - component: {fileID: 530059028}
   m_Layer: 0
-  m_Name: Camera Filter (VHS)
+  m_Name: Camera Filter (16mm Film)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14245,7 +14245,7 @@ MonoBehaviour:
   priority: 10
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: ccec82a7390552f4a9996e8d9f9a22ce, type: 2}
+  sharedProfile: {fileID: 11400000, guid: 8d92a1e43e231b643ab0755ec258ab77, type: 2}
 --- !u!4 &530059029
 Transform:
   m_ObjectHideFlags: 0
@@ -19519,6 +19519,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 3180871136461219171, guid: 1830a1f50f969064688a4cc8120ab670, type: 3}
+      propertyPath: woodClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 9e5485849bf94be41a88ec3194bab37b, type: 3}
+    - target: {fileID: 3180871136461219171, guid: 1830a1f50f969064688a4cc8120ab670, type: 3}
+      propertyPath: grassClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 2b73de5a472825142b8795d8ad6b9764, type: 3}
     - target: {fileID: 3180871136461219171, guid: 1830a1f50f969064688a4cc8120ab670, type: 3}
       propertyPath: walkingVolume
       value: 1
@@ -38936,7 +38944,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1374697566
 MonoBehaviour:
   m_ObjectHideFlags: 0

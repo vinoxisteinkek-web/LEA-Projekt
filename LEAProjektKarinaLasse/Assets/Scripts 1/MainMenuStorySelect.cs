@@ -22,7 +22,7 @@ public class MainMenuStorySelect : MonoBehaviour
 
     [Header("Szenen")]
     [SerializeField] private string story1Scene = "HouseScene";
-    [SerializeField] private string story2Scene = "GasStationScene";
+    [SerializeField] private string story2Scene = "Story2HouseScene";
 
     [Header("Farben")]
     [SerializeField] private Color unlockedTextColor = new Color(0.577f, 0.169f, 0.169f, 1f);

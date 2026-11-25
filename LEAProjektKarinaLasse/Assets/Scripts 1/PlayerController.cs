@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Schritte")]
     // Lauf-Sound (wird in einer Schleife abgespielt, solange der Spieler läuft)
+    // = Standard, z. B. Asphalt, Beton, Fliesen
     public AudioClip walkingClip;
 
     [Range(0f, 1f)]
@@ -35,7 +36,23 @@ public class PlayerController : MonoBehaviour
     // Wie schnell der Sound ein-/ausgeblendet wird (verhindert Knacken)
     public float footstepFadeSpeed = 8f;
 
+    [Header("Schritte je nach Boden")]
+    [Tooltip("Lauf-Sound auf Holz (leer = Standard-Sound)")]
+    public AudioClip woodClip;
+    [Range(0f, 2f)] public float woodVolume = 1f;
+    [Tooltip("Lauf-Sound auf Gras / Waldboden (leer = Standard-Sound)")]
+    public AudioClip grassClip;
+    [Range(0f, 2f)] public float grassVolume = 1f;
+    [Tooltip("Boden zählt als Holz, wenn Material- oder Objektname eines dieser Wörter enthält")]
+    public string[] woodKeywords = { "wood", "holz", "plank", "parkett" };
+    [Tooltip("Boden zählt als Gras, wenn Material- oder Objektname eines dieser Wörter enthält")]
+    public string[] grassKeywords = { "grass", "gras", "forest", "soil", "moss", "leaf", "lawn", "wiese" };
+    [Tooltip("Wie oft (Sekunden) der Boden geprüft wird")]
+    public float surfaceCheckInterval = 0.15f;
+
     private AudioSource footstepSource;
+    private float surfaceTimer;
+    private float surfaceVolume = 1f;
 
 
     // =========================
@@ -150,13 +167,13 @@ public class PlayerController : MonoBehaviour
 
     private void SetupFootsteps()
     {
-        if (walkingClip == null)
+        if (walkingClip == null && woodClip == null && grassClip == null)
             return;
 
         // Eigene AudioSource nur für die Schritte,
         // damit sich nichts mit anderen Sounds (z. B. Stimme) überschneidet
         footstepSource = gameObject.AddComponent<AudioSource>();
-        footstepSource.clip = walkingClip;
+        footstepSource.clip = walkingClip != null ? walkingClip : (grassClip != null ? grassClip : woodClip);
         footstepSource.loop = true;
         footstepSource.playOnAwake = false;
         footstepSource.spatialBlend = 0f; // 2D – kommt vom Spieler selbst
@@ -179,7 +196,18 @@ public class PlayerController : MonoBehaviour
             velocity.sqrMagnitude > 0.25f &&
             IsGrounded();
 
-        float targetVolume = isWalking ? walkingVolume : 0f;
+        // Boden prüfen und passenden Sound wählen
+        if (isWalking)
+        {
+            surfaceTimer -= Time.deltaTime;
+            if (surfaceTimer <= 0f)
+            {
+                surfaceTimer = surfaceCheckInterval;
+                ChooseFootstepClip();
+            }
+        }
+
+        float targetVolume = isWalking ? walkingVolume * surfaceVolume : 0f;
 
         footstepSource.volume = Mathf.MoveTowards(
             footstepSource.volume,
@@ -200,6 +228,99 @@ public class PlayerController : MonoBehaviour
         {
             footstepSource.Pause();
         }
+    }
+
+    // Welcher Boden ist unter dem Spieler? -> Holz, Gras oder Standard
+    // Zum Nachschauen: welcher Boden zuletzt erkannt wurde und welcher Sound läuft
+    public string CurrentSurface { get; private set; } = "-";
+    public AudioClip CurrentFootstepClip => footstepSource != null ? footstepSource.clip : null;
+
+    // Boden sofort neu prüfen (sonst alle surfaceCheckInterval Sekunden beim Laufen)
+    public void RefreshFootstepSurface() { if (footstepSource != null) ChooseFootstepClip(); }
+
+    private void ChooseFootstepClip()
+    {
+        AudioClip clip = walkingClip;
+        float vol = 1f;
+
+        string surface = GetSurfaceName();
+        if (surface != null)
+        {
+            if (woodClip != null && ContainsAny(surface, woodKeywords)) { clip = woodClip; vol = woodVolume; }
+            else if (grassClip != null && ContainsAny(surface, grassKeywords)) { clip = grassClip; vol = grassVolume; }
+        }
+        if (clip == null) clip = footstepSource.clip;
+        surfaceVolume = vol;
+        CurrentSurface = surface ?? "-";
+
+        if (clip != footstepSource.clip)
+        {
+            bool wasPlaying = footstepSource.isPlaying;
+            footstepSource.clip = clip;
+            // nicht jedes Mal am Anfang starten, klingt sonst gleich
+            footstepSource.time = Random.Range(0f, clip.length * 0.5f);
+            if (wasPlaying) footstepSource.Play();
+        }
+    }
+
+    // Materialname der Fläche direkt unter dem Spieler (sonst Objektname), klein geschrieben
+    private string GetSurfaceName()
+    {
+        if (groundCheckCapsule == null)
+            groundCheckCapsule = GetComponent<CapsuleCollider>();
+        Vector3 origin = groundCheckCapsule != null ? groundCheckCapsule.bounds.center : transform.position + Vector3.up;
+        float dist = groundCheckCapsule != null ? groundCheckCapsule.bounds.extents.y + 0.8f : 2.5f;
+
+        RaycastHit best = default;
+        float bestDist = float.MaxValue;
+        foreach (var h in Physics.RaycastAll(origin, Vector3.down, dist, ~0, QueryTriggerInteraction.Ignore))
+        {
+            if (h.collider.transform.IsChildOf(transform)) continue;
+            if (h.distance < bestDist) { bestDist = h.distance; best = h; }
+        }
+        if (best.collider == null) return null;
+
+        // eigene Markierung hat Vorrang
+        var marker = best.collider.GetComponentInParent<FootstepSurface>();
+        if (marker != null) return marker.surface.ToString().ToLowerInvariant();
+
+        if (best.collider is TerrainCollider) return "grass terrain";
+
+        string name = best.collider.name;
+        var r = best.collider.GetComponent<Renderer>();
+        if (r != null)
+        {
+            Material m = r.sharedMaterial;
+            // Mesh mit mehreren Materialien: das Material der getroffenen Fläche nehmen
+            var mc = best.collider as MeshCollider;
+            var mats = r.sharedMaterials;
+            if (mc != null && mc.sharedMesh != null && mats.Length > 1 && best.triangleIndex >= 0)
+            {
+                Mesh mesh = mc.sharedMesh;
+                int index = best.triangleIndex * 3;
+                for (int i = 0; i < mesh.subMeshCount && i < mats.Length; i++)
+                {
+                    var sm = mesh.GetSubMesh(i);
+                    if (sm.topology == MeshTopology.Triangles && index >= sm.indexStart && index < sm.indexStart + sm.indexCount)
+                    {
+                        m = mats[i];
+                        break;
+                    }
+                }
+            }
+            // Das Material entscheidet (ein Objekt "grass_soil" kann auch einen Betonweg enthalten),
+            // der Objektname zählt nur, wenn es kein Material gibt
+            if (m != null) name = m.name;
+        }
+        return name.ToLowerInvariant();
+    }
+
+    private static bool ContainsAny(string text, string[] words)
+    {
+        if (words == null) return false;
+        foreach (var w in words)
+            if (!string.IsNullOrEmpty(w) && text.Contains(w.ToLowerInvariant())) return true;
+        return false;
     }
 
     [Header("Kanten")]

@@ -807,7 +807,7 @@ private void ShowEndingScreen()
 
         Cursor.lockState = CursorLockMode.None;
         // Weiter mit Story 2 (Tankstelle)
-        SceneLoader.Load("GasStationScene");
+        SceneLoader.Load("Story2HouseScene"); // Story 2 beginnt in Jacobs Haus
 
     }
 }
