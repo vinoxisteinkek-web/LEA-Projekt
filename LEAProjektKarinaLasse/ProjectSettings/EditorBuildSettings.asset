@@ -6,25 +6,25 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/MenueScene.unity
+    path: Assets/Scenes/Menu/MenueScene.unity
     guid: a6a0591119bf55c4797e9b34240ae774
   - enabled: 1
-    path: Assets/Scenes/HouseScene.unity
+    path: Assets/Scenes/Story1/HouseScene.unity
     guid: 967e60536b40d8c42ad3c0d25f81f027
   - enabled: 1
-    path: Assets/Scenes/SupermarketScene.unity
+    path: Assets/Scenes/Story1/SupermarketScene.unity
     guid: c4777a0a224a37c41b26c8b59401fd5f
   - enabled: 1
-    path: Assets/Scenes/HouseSceneAfterMarket.unity
+    path: Assets/Scenes/Story1/HouseSceneAfterMarket.unity
     guid: 63d76e4e114c23148a396d0d7911666e
   - enabled: 1
-    path: Assets/Scenes/Story2HouseScene.unity
+    path: Assets/Scenes/Story2/Story2HouseScene.unity
     guid: f71a9b05146fc4444ba3eb4bbd489be7
   - enabled: 1
-    path: Assets/Scenes/GasStationScene.unity
+    path: Assets/Scenes/Story2/GasStationScene.unity
     guid: 95379103f1d7ed545889494f4ea2842d
   - enabled: 1
-    path: Assets/Scenes/WatchtowerScene.unity
+    path: Assets/Scenes/Story2/WatchtowerScene.unity
     guid: 68762beae2d6aa643bf9be2bf788d258
   m_configObjects:
     com.unity.dt.app-ui: {fileID: 11400000, guid: 1b1c20d82303e4b5781c3ef50ac1449f, type: 2}
