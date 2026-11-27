@@ -4,7 +4,7 @@ public class AfterMarketEndingInteraction : MonoBehaviour
 {
     private enum EndingType
     {
-        Phone,
+        Phone,      // Police-Ending entfernt - Wert bleibt, damit die Szene ihre Einstellungen behaelt
         Bed,
         KillerDoor
     }
@@ -22,8 +22,7 @@ public class AfterMarketEndingInteraction : MonoBehaviour
         {
             case EndingType.Phone:
 
-                StoryManagerAfterMarket.Instance
-                    .InteractWithPhone();
+                // Das Telefon ist nur noch Deko (kein Ending mehr).
 
                 break;
 

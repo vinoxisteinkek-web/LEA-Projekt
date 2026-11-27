@@ -33,7 +33,7 @@ public class GasStationIntro : MonoBehaviour
     public string introStory =
         "Nobody believed me when I told them what happened that night. " +
         "It was November 1998, just a few weeks after that girl went missing in Emschurches. " +
-        "I was driving home late on the old country road... and I never should have stopped.";
+        "I was on my way to see Emilia, driving the old country road... and I never should have stopped.";
     public float introTypeSpeed = 0.035f;
     public float introHoldAfterTyping = 3.5f;
 

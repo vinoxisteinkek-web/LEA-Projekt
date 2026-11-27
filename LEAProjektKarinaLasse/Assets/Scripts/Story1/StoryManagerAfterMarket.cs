@@ -17,28 +17,28 @@ public class StoryManagerAfterMarket : MonoBehaviour
 
 
     // ==================================================
-    // ENDING 1 - PHONE
+    // TELEFON (klingelt am naechsten Morgen, in beiden Endings)
     // ==================================================
 
-    [Header("Ending 1 - Phone")]
+    [Header("Telefon (klingelt am naechsten Morgen)")]
     [SerializeField] private AudioSource phoneEndingAudioSource;
     [SerializeField] private AudioClip phoneEndingSound;
 
 
     // ==================================================
-    // ENDING 2 - BED
+    // ENDING 1 - BED
     // ==================================================
 
-    [Header("Ending 2 - Bed")]
+    [Header("Ending 1 - Bed")]
     [SerializeField] private AudioSource bedEndingAudioSource;
     [SerializeField] private AudioClip bedEndingSound;
 
 
     // ==================================================
-    // ENDING 3 - KILLER DOOR
+    // ENDING 2 - KILLER DOOR
     // ==================================================
 
-    [Header("Ending 3 - Killer Door")]
+    [Header("Ending 2 - Killer Door")]
     [SerializeField] private AudioSource killerDoorEndingAudioSource;
     [SerializeField] private AudioClip killerDoorEndingSound;
 
@@ -271,105 +271,9 @@ public class StoryManagerAfterMarket : MonoBehaviour
 
 
     // ==================================================
-    // PHONE
+    // TELEFON: Police-Ending (frueher Ending 1) wurde entfernt.
+    // Das Telefon im Haus ist nur noch Deko.
     // ==================================================
-
-    public void InteractWithPhone()
-    {
-        if (endingTriggered)
-            return;
-
-        endingTriggered = true;
-
-        StopAmbientSounds();
-
-        Debug.Log("ENDING 1 - PHONE");
-
-        StartCoroutine(PhoneEnding());
-    }
-
-
-    private IEnumerator PhoneEnding()
-    {
-        ShowEndingScreen();
-        SetEndingDialoguePosition();
-
-
-        yield return new WaitForSeconds(1f);
-        
-
-        yield return StartCoroutine(
-            PlayerSay(
-                "Hello? Is anyone there?"
-            )
-        );
-
-        yield return new WaitForSeconds(1f);
-
-        yield return StartCoroutine(
-            PoliceSay(
-                "Hello, this is the police. How can we help you"
-            )
-        );
-
-        yield return new WaitForSeconds(1f);
-
-        yield return StartCoroutine(
-            PlayerSay(
-                "I feel like theres a intruder in my House"
-            )
-        );
-
-        yield return StartCoroutine(
-            PoliceSay(
-                "We will send a unit to your location immediately"
-            )
-        );
-
-        yield return new WaitForSeconds(1f);
-
-        PlaySound(
-            phoneEndingAudioSource,
-            phoneEndingSound
-        );
-        
-        yield return new WaitForSeconds(1f);
-
-        yield return StartCoroutine(
-            PoliceSay(
-                    "We found a broken window in your house, it seems like the Intruder managed to escape."
-                )
-            );
-
-        yield return new WaitForSeconds(1f);
-
-        yield return StartCoroutine(
-            PoliceSay(
-                 "but we will continue to search the surrounding area."
-                )
-            );
-
-        yield return new WaitForSeconds(1f);
-
-        yield return StartCoroutine(
-            PlayerSay(
-                "I drove to my mother that night and stayed there for a while"
-            )
-        );
-
-        yield return new WaitForSeconds(1f);
-
-        yield return StartCoroutine(
-            PlayerSay(
-                "Ending 1/3"
-            )
-        );
-
-        yield return new WaitForSeconds(2f);
-
-
-        restartGame();
-    }
 
 
     // ==================================================
@@ -385,7 +289,7 @@ public class StoryManagerAfterMarket : MonoBehaviour
 
         StopAmbientSounds();
 
-        Debug.Log("ENDING 2 - BED");
+        Debug.Log("ENDING 1 - BED");
 
         StartCoroutine(BedEnding());
     }
@@ -440,7 +344,7 @@ public class StoryManagerAfterMarket : MonoBehaviour
 
         yield return StartCoroutine(
             PlayerSay(
-                "Ending 2/3"
+                "Ending 1/2"
             )
         );
 
@@ -462,7 +366,7 @@ public class StoryManagerAfterMarket : MonoBehaviour
 
         StopAmbientSounds();
 
-        Debug.Log("ENDING 3 - KILLER DOOR");
+        Debug.Log("ENDING 2 - KILLER DOOR");
 
         StartCoroutine(KillerDoorEndingWithStalker());
     }
@@ -543,7 +447,7 @@ public class StoryManagerAfterMarket : MonoBehaviour
 
         yield return StartCoroutine(
             PlayerSay(
-                "Ending 3/3"
+                "Ending 2/2"
             )
         );
 

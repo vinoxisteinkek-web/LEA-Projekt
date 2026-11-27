@@ -14223,7 +14223,7 @@ GameObject:
   - component: {fileID: 530059029}
   - component: {fileID: 530059028}
   m_Layer: 0
-  m_Name: Camera Filter (16mm Film)
+  m_Name: Camera Filter (PSX Retro)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14245,7 +14245,7 @@ MonoBehaviour:
   priority: 10
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: 8d92a1e43e231b643ab0755ec258ab77, type: 2}
+  sharedProfile: {fileID: 11400000, guid: a66cb20cae1e4924abccfb569148c7b1, type: 2}
 --- !u!4 &530059029
 Transform:
   m_ObjectHideFlags: 0

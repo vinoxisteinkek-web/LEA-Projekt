@@ -45,7 +45,7 @@ public class WatchtowerStory : MonoBehaviour
     public float dialogueEndDelay = 1.5f;
 
     [Header("Texte (Spieler)")]
-    public string[] linesDriving = { "Almost home. Just a few more miles." };
+    public string[] linesDriving = { "Almost there. Just a few more miles." };
     public string[] linesSpotRedCar = { "Wait... isn't that the red car from the gas station?", "Why would anyone park out here in the middle of the night?" };
     public string[] linesAfterExit = { "Hello? Anyone here?", "...The hood is still warm. Where did the driver go?" };
     public string[] linesAtFence = { "The gate is chained shut.", "There has to be another way in." };

@@ -2,7 +2,7 @@
 using UnityEngine;
 
 /// <summary>
-/// Ending 3 (Killer Door):
+/// Ending 2 (Killer Door):
 /// Die Schranktür geht auf und der Stalker greift aus dem Schrank nach dem Spieler.
 /// Wird von StoryManagerAfterMarket gestartet. Danach läuft das normale Ending
 /// (schwarzer Bildschirm, Schrei, Texte) weiter.
